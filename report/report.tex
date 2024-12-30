@@ -16,6 +16,19 @@
 	\end{center}
 	\section{Introduction}
 	\section{Analysis}
+	\begin{table}[htb]
+		\caption{Model comparison for different models}
+		\label{tab:model-comparison}
+		\begin{tabular}{lccc}
+		\toprule
+		Model & Deviance & AIC & Model DF \\
+		\midrule
+		\texttt{same\_side + failures $\sim$ 1} & 483.45 & 2076.00 & 0 \\
+		\texttt{same\_side + failures $\sim$ 1 + C(person)} & 217.47 & 1902.02 & 46 \\
+		\texttt{same\_side + failures $\sim$ 1 + C(person) + C(coin)} & 151.08 & 1919.63 & 88 \\
+		\bottomrule
+		\end{tabular}
+	\end{table}
 	\section{Discussion}
 	\section{Conclusion}
 	\section*{Aknowledgements}
