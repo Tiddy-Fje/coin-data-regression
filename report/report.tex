@@ -6,9 +6,9 @@
 %%%
 	\begin{center}
 	    \Large
-	    \textbf{Coin Data Statistical Study}
-	    \vspace{0.4cm}
-		\newline
+	    \textbf{Coin Data Statistical Study}\\
+	    %\vspace{0.4cm}
+		%\newline
 	    \large
 		Regression Methods Project \\
 	    By Rayan Harfouche \& Tara Fjellman \\
@@ -17,6 +17,16 @@
 	\section{Introduction}
 	\lipsum[1]
 	\section{Analysis}
+		\subsection{Model Comparison}
+			\subsubsection{WLS Approach}
+
+			\subsubsection{GLM Approach}
+
+		\subsection{Unusual Observations}
+
+		\subsection{Learning Effects ??}
+
+		\subsection{Memory Effects ??}
 	\lipsum[1]
 	\begin{table}[htb]
 		\centering
@@ -26,10 +36,10 @@
 		\toprule
 		Model & Deviance & AIC & Model DF \\
 		\midrule
-		1 & 3943.48 & 173.97 & 0 \\
-		1+C(person) & 3677.51 & 0.00 & 46 \\
-		1+C(person)+C(coin) & 3611.12 & 17.61 & 88 \\
-		1+C(person)+C(coin)+C(person):C(coin) & 3460.03 & 108.53 & 209 \\
+		\texttt{1} & 3943.48 & 173.97 & 0 \\
+		\texttt{1+C(person)} & 3677.51 & 0.00 & 46 \\
+		\texttt{1+C(person)+C(coin)} & 3611.12 & 17.61 & 88 \\
+		\texttt{1+C(person)+C(coin)+C(person):C(coin)} & 3460.03 & 108.53 & 209 \\
 		\bottomrule
 		\end{tabular}
 	\end{table}
@@ -49,9 +59,9 @@
 		\toprule
 		Tested model & Restricted model & $p$-value \\
 		\midrule
-		1+C(person) & 1 & 0.00e+00 \\
-		1+C(person)+C(coin) & 1+C(person) & 9.61e-03 \\
-		1+C(person)+C(coin)+C(person):C(coin) & 1+C(person)+C(coin) & 3.32e-02 \\
+		\texttt{1+C(person)} & \texttt{1} & 0.00e+00 \\
+		\texttt{1+C(person)+C(coin)} & \texttt{1+C(person)} & 9.61e-03 \\
+		\texttt{1+C(person)+C(coin)+C(person):C(coin)} & \texttt{1+C(person)+C(coin)} & 3.32e-02 \\
 		\bottomrule
 		\end{tabular}
 	\end{table}
