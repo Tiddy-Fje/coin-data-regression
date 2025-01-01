@@ -21,50 +21,62 @@
 			\subsubsection{WLS Approach}
 
 			\subsubsection{GLM Approach}
-
+			\lipsum[1]
+			\begin{table}[htb]
+				\centering
+				\caption{Model comparison for different models.}
+				\label{tab:model-comparison}
+				\begin{tabular}{lccc}
+				\toprule
+				Model & Deviance & AIC & Model DF \\
+				\midrule
+				\texttt{1} & 3943.48 & 173.97 & 0 \\
+				\texttt{1+C(person)} & 3677.51 & 0.00 & 46 \\
+				\texttt{1+C(person)+C(coin)} & 3611.12 & 17.61 & 88 \\
+				\texttt{1+C(person)+C(coin)+C(person)/C(coin)} & 3460.03 & 108.53 & 209 \\
+				\bottomrule
+				\end{tabular}
+			\end{table}
+			\lipsum[1]
+			\begin{figure}[htb]
+				\centering
+				\includegraphics[width=0.85\textwidth]{GLM_diagnostics.png}
+				\caption{Diagnostics for the selected GLM model. (a).}
+				\label{fig:glm-diagnostic}
+			\end{figure}
+			\lipsum[1]
+			\begin{table}[htb]
+				\centering
+				\caption{Likelihood ratio tests between models.}
+				\label{tab:llr-comparison}
+				\begin{tabular}{llc}
+				\toprule
+				Tested model & Restricted model & $p$-value \\
+				\midrule
+				\texttt{1+C(person)} & \texttt{1} & 0.00e+00 \\
+				\texttt{1+C(person)+C(coin)} & \texttt{1+C(person)} & 9.61e-03 \\
+				\texttt{1+C(person)+C(coin)+C(person)/C(coin)} & \texttt{1+C(person)+C(coin)} & 3.32e-02 \\
+				\bottomrule
+				\end{tabular}
+			\end{table}
 		\subsection{Unusual Observations}
+		\begin{figure}[htb]
+			\centering
+			\includegraphics[width=0.85\textwidth]{dev_resid_vs_covariates.png}
+			\caption{Dev-resid as a function of (a) person and (b) coin.}
+			\label{fig:dev-resid-vs-covariates}
+		\end{figure}
 
-		\subsection{Learning Effects ??}
-
+		\subsection{Learning Effects}
+		\lipsum[1]
+		\begin{figure}[htb]
+			\centering
+			\includegraphics[width=0.5\textwidth]{learning_effects.png}
+			\caption{Learning effects.}
+			\label{fig:learning-effects}
+		\end{figure}
 		\subsection{Memory Effects ??}
-	\lipsum[1]
-	\begin{table}[htb]
-		\centering
-		\caption{Model comparison for different models.}
-		\label{tab:model-comparison}
-		\begin{tabular}{lccc}
-		\toprule
-		Model & Deviance & AIC & Model DF \\
-		\midrule
-		\texttt{1} & 3943.48 & 173.97 & 0 \\
-		\texttt{1+C(person)} & 3677.51 & 0.00 & 46 \\
-		\texttt{1+C(person)+C(coin)} & 3611.12 & 17.61 & 88 \\
-		\texttt{1+C(person)+C(coin)+C(person):C(coin)} & 3460.03 & 108.53 & 209 \\
-		\bottomrule
-		\end{tabular}
-	\end{table}
-	\lipsum[1]
-	\begin{figure}[htb]
-		\centering
-		\includegraphics[width=0.85\textwidth]{GLM_diagnostics.png}
-		\caption{Diagnostics for the selected GLM model. (a).}
-		\label{fig:glm-diagnostic}
-	\end{figure}
-	\lipsum[1]
-	\begin{table}[htb]
-		\centering
-		\caption{Likelihood ratio tests between models.}
-		\label{tab:llr-comparison}
-		\begin{tabular}{llc}
-		\toprule
-		Tested model & Restricted model & $p$-value \\
-		\midrule
-		\texttt{1+C(person)} & \texttt{1} & 0.00e+00 \\
-		\texttt{1+C(person)+C(coin)} & \texttt{1+C(person)} & 9.61e-03 \\
-		\texttt{1+C(person)+C(coin)+C(person):C(coin)} & \texttt{1+C(person)+C(coin)} & 3.32e-02 \\
-		\bottomrule
-		\end{tabular}
-	\end{table}
+
 	\section{Discussion}
 	\section{Conclusion}
 	\section*{Acknowledgements}
