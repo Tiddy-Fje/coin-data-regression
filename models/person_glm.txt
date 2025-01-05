@@ -1,0 +1,64 @@
+Iteration:3
+Deviance trajectory:[inf, np.float64(1018.6139991574054), np.float64(3677.5137734472182), np.float64(3677.5075740998864), np.float64(3677.5075740994253)]
+                     Generalized Linear Model Regression Results                      
+======================================================================================
+Dep. Variable:     ['same_side', 'diff_side']   No. Observations:                 3410
+Model:                                    GLM   Df Residuals:                     3363
+Model Family:                        Binomial   Df Model:                           46
+Link Function:                          Logit   Scale:                          1.0000
+Method:                                  IRLS   Log-Likelihood:                -10452.
+Date:                        Sun, 05 Jan 2025   Deviance:                       3677.5
+Time:                                14:18:44   Pearson chi2:                 3.66e+03
+No. Iterations:                             3   Pseudo R-squ. (CS):            0.07503
+Covariance Type:                    nonrobust                                         
+====================================================================================================
+                                       coef    std err          z      P>|z|      [0.025      0.975]
+----------------------------------------------------------------------------------------------------
+Intercept                            0.0622      0.023      2.673      0.008       0.017       0.108
+C(person)[T.AdrianKarami]           -0.0045      0.041     -0.109      0.913      -0.086       0.077
+C(person)[T.AndreeaZetea]           -0.0930      0.038     -2.455      0.014      -0.167      -0.019
+C(person)[T.AntonZoubek]            -0.0354      0.031     -1.154      0.249      -0.096       0.025
+C(person)[T.ArneJohn]               -0.0755      0.040     -1.908      0.056      -0.153       0.002
+C(person)[T.BohanFu]                -0.0295      0.049     -0.606      0.544      -0.125       0.066
+C(person)[T.ChrisGabrielIslam]      -0.0748      0.031     -2.438      0.015      -0.135      -0.015
+C(person)[T.EJ]                     -0.0417      0.039     -1.071      0.284      -0.118       0.035
+C(person)[T.FelipeFontanaVieira]    -0.0824      0.031     -2.685      0.007      -0.142      -0.022
+C(person)[T.FranziskaAssion]         0.1013      0.040      2.533      0.011       0.023       0.180
+C(person)[T.FranziskaNippold]       -0.0661      0.030     -2.187      0.029      -0.125      -0.007
+C(person)[T.FrederikAust]           -0.0740      0.030     -2.437      0.015      -0.134      -0.014
+C(person)[T.HannahArmstrong]        -0.0288      0.043     -0.666      0.505      -0.114       0.056
+C(person)[T.JanYang]                 0.2007      0.054      3.697      0.000       0.094       0.307
+C(person)[T.JasonNak]               -0.0610      0.034     -1.808      0.071      -0.127       0.005
+C(person)[T.JoycePang]              -0.1039      0.048     -2.176      0.030      -0.198      -0.010
+C(person)[T.KarolineH]              -0.0542      0.036     -1.521      0.128      -0.124       0.016
+C(person)[T.KatharinaKarnbach]      -0.0440      0.038     -1.155      0.248      -0.119       0.031
+C(person)[T.KoenDerks]               0.0060      0.034      0.175      0.861      -0.061       0.073
+C(person)[T.MagdaMatetovici]        -0.0314      0.037     -0.855      0.392      -0.103       0.041
+C(person)[T.MalteZoubek]            -0.0407      0.030     -1.354      0.176      -0.100       0.018
+C(person)[T.MaraBialas]              0.0120      0.045      0.269      0.788      -0.076       0.100
+C(person)[T.MichelleDonzallaz]       0.0067      0.038      0.174      0.862      -0.069       0.082
+C(person)[T.RietvanBork]            -0.0611      0.041     -1.502      0.133      -0.141       0.019
+C(person)[T.RoyMichaelMoore]         0.0096      0.040      0.244      0.808      -0.068       0.087
+C(person)[T.SaraShabani]            -0.0534      0.031     -1.740      0.082      -0.114       0.007
+C(person)[T.SjoerdTerpstra]         -0.0542      0.037     -1.480      0.139      -0.126       0.018
+C(person)[T.TheresaLeidinger]       -0.0405      0.041     -0.986      0.324      -0.121       0.040
+C(person)[T.ThomasBastelica]        -0.0302      0.037     -0.824      0.410      -0.102       0.042
+C(person)[T.TianqiPeng]              0.3463      0.045      7.685      0.000       0.258       0.435
+C(person)[T.TingPan]                 0.0103      0.042      0.244      0.807      -0.073       0.093
+C(person)[T.VincentOtt]             -0.0418      0.037     -1.134      0.257      -0.114       0.030
+C(person)[T.XiaochangZhao]           0.0857      0.041      2.082      0.037       0.005       0.166
+C(person)[T.XiaoyiLin]              -0.1122      0.055     -2.034      0.042      -0.220      -0.004
+C(person)[T.adamF]                   0.0200      0.032      0.625      0.532      -0.043       0.083
+C(person)[T.alexandraS]              0.0212      0.028      0.762      0.446      -0.033       0.076
+C(person)[T.amirS]                  -0.0750      0.028     -2.638      0.008      -0.131      -0.019
+C(person)[T.davidKL]                 0.0432      0.028      1.521      0.128      -0.012       0.099
+C(person)[T.davidV]                 -0.0391      0.028     -1.376      0.169      -0.095       0.017
+C(person)[T.frantisekB]             -0.0427      0.027     -1.569      0.117      -0.096       0.011
+C(person)[T.henrikG]                -0.0487      0.028     -1.750      0.080      -0.103       0.006
+C(person)[T.irmaT]                  -0.0479      0.079     -0.606      0.544      -0.203       0.107
+C(person)[T.jillR]                  -0.0439      0.034     -1.290      0.197      -0.111       0.023
+C(person)[T.jonasP]                 -0.0294      0.031     -0.957      0.338      -0.090       0.031
+C(person)[T.kaleemU]                -0.0918      0.029     -3.205      0.001      -0.148      -0.036
+C(person)[T.madlenH]                 0.0258      0.033      0.775      0.438      -0.039       0.091
+C(person)[T.pierreG]                -0.0606      0.028     -2.132      0.033      -0.116      -0.005
+====================================================================================================
