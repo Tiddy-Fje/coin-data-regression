@@ -15,9 +15,34 @@
 	    \small{Fall 2024}
 	\end{center}
 	\section{Introduction}
-	\lipsum[1]
+	\begin{itemize}
+		\item unbalanced dataset 
+		\item number of people and coins
+		\item few people with many coins and few coins with many people
+		\item inspection of same side rates show sign of possible person, coin and person-coin dependence
+		\item Learning effects investigated 
+	\end{itemize}
+
+
 	\section{Analysis}
 		\subsection{Model Comparison}
+			In this section, we introduce and compare different models for the same side success rate. 
+
+			Some GLMs with binomial responses and some WLS ones based on the ... approximation.
+			
+			Should explain no a priori response transformation ...
+			
+			For each, the considered formulas in terms of the covariates are:
+			\begin{itemize}
+				\item \texttt{1}, corresponding to a constant model.
+				\item \texttt{1+C(person)}, corresponding to a model with the person as a covariate.
+				\item \texttt{1+C(person)+C(coin)}, corresponding to a model with the person and the coin as covariates.
+				\item \texttt{1+C(person)+C(coin)+C(person):C(coin)}, corresponding to a model with the person, the coin, and the interaction between the person and the coin as covariates.
+			\end{itemize}
+			* model 4 could seem redundant due to nesting-main effect, but we ....
+			*  
+
+			Should explain why eliminated some covariates ...
 			\subsubsection{WLS Approach}
 
 			\subsubsection{GLM Approach}
@@ -33,7 +58,6 @@
 				\texttt{1} & 3943.48 & 173.97 & 0 \\
 				\texttt{1+C(person)} & 3677.51 & 0.00 & 46 \\
 				\texttt{1+C(person)+C(coin)} & 3611.12 & 17.61 & 88 \\
-				\texttt{1+C(person)+C(coin)+C(person)/C(coin)} & 3460.03 & 108.53 & 209 \\
 				\bottomrule
 				\end{tabular}
 			\end{table}
@@ -55,7 +79,6 @@
 				\midrule
 				\texttt{1+C(person)} & \texttt{1} & 0.00e+00 \\
 				\texttt{1+C(person)+C(coin)} & \texttt{1+C(person)} & 9.61e-03 \\
-				\texttt{1+C(person)+C(coin)+C(person)/C(coin)} & \texttt{1+C(person)+C(coin)} & 3.32e-02 \\
 				\bottomrule
 				\end{tabular}
 			\end{table}
