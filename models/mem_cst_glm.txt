@@ -1,18 +1,18 @@
 Iteration:4
-Deviance trajectory:[inf, np.float64(109992.36358121388), np.float64(264934.86375677574), np.float64(264930.80997957377), np.float64(264930.80997952237), np.float64(264930.80997952266)]
+Deviance trajectory:[inf, np.float64(196920.10468567887), np.float64(474385.35787636), np.float64(474381.5435810815), np.float64(474381.54358106817), np.float64(474381.5435810681)]
                  Generalized Linear Model Regression Results                  
 ==============================================================================
-Dep. Variable:              same_side   No. Observations:               191170
-Model:                            GLM   Df Residuals:                   191169
+Dep. Variable:              same_side   No. Observations:               342253
+Model:                            GLM   Df Residuals:                   342252
 Model Family:                Binomial   Df Model:                            0
 Link Function:                  Logit   Scale:                          1.0000
-Method:                          IRLS   Log-Likelihood:            -1.3247e+05
-Date:                Mon, 06 Jan 2025   Deviance:                   2.6493e+05
-Time:                        16:08:24   Pearson chi2:                 1.91e+05
-No. Iterations:                     4   Pseudo R-squ. (CS):         -8.882e-16
+Method:                          IRLS   Log-Likelihood:            -2.3719e+05
+Date:                Mon, 06 Jan 2025   Deviance:                   4.7438e+05
+Time:                        17:29:26   Pearson chi2:                 3.42e+05
+No. Iterations:                     4   Pseudo R-squ. (CS):         -2.220e-16
 Covariance Type:            nonrobust                                         
 ==============================================================================
                  coef    std err          z      P>|z|      [0.025      0.975]
 ------------------------------------------------------------------------------
-Intercept      0.0427      0.005      9.331      0.000       0.034       0.052
+Intercept      0.0309      0.003      9.047      0.000       0.024       0.038
 ==============================================================================
