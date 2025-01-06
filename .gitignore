@@ -6,6 +6,7 @@
 *.blg
 *.bcf
 *.log
+*.toc
 *.out
 *.synctex.gz
 *.run.xml

@@ -1,19 +1,19 @@
 Iteration:4
-Deviance trajectory:[inf, np.float64(109992.36358121388), np.float64(264934.05463773647), np.float64(264929.96177149506), np.float64(264929.9617714363), np.float64(264929.96177143627)]
+Deviance trajectory:[inf, np.float64(196920.10468567887), np.float64(474384.5854019043), np.float64(474380.733562459), np.float64(474380.7335624437), np.float64(474380.73356244375)]
                  Generalized Linear Model Regression Results                  
 ==============================================================================
-Dep. Variable:              same_side   No. Observations:               191170
-Model:                            GLM   Df Residuals:                   191168
+Dep. Variable:              same_side   No. Observations:               342253
+Model:                            GLM   Df Residuals:                   342251
 Model Family:                Binomial   Df Model:                            1
 Link Function:                  Logit   Scale:                          1.0000
-Method:                          IRLS   Log-Likelihood:            -1.3246e+05
-Date:                Mon, 06 Jan 2025   Deviance:                   2.6493e+05
-Time:                        16:08:25   Pearson chi2:                 1.91e+05
-No. Iterations:                     4   Pseudo R-squ. (CS):          4.437e-06
+Method:                          IRLS   Log-Likelihood:            -2.3719e+05
+Date:                Mon, 06 Jan 2025   Deviance:                   4.7438e+05
+Time:                        17:29:28   Pearson chi2:                 3.42e+05
+No. Iterations:                     4   Pseudo R-squ. (CS):          2.367e-06
 Covariance Type:            nonrobust                                         
 ==============================================================================
                  coef    std err          z      P>|z|      [0.025      0.975]
 ------------------------------------------------------------------------------
-Intercept      0.0384      0.007      5.869      0.000       0.026       0.051
-hop1_mem       0.0084      0.009      0.921      0.357      -0.010       0.026
+Intercept      0.0278      0.005      5.706      0.000       0.018       0.037
+hop1_mem       0.0062      0.007      0.900      0.368      -0.007       0.020
 ==============================================================================

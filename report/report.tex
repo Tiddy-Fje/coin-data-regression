@@ -14,10 +14,12 @@
 	\pagenumbering{arabic}
 	\setcounter{page}{1}
 	\section*{Abstract}
-	\begin{itemize}
-		\item context of the original paper (with their claims) 
-		\item our addition/contribution/comment about it
-	\end{itemize}
+		context of the original paper (with their claims). The paper that won the 2024 IgNobel Prize in Probability took a Bayesian approach to studying the statistics behind the coin-flipping process. Its main goal was to confirm a prediction made by a physical model of human coin tossing developed by Diaconis, Holmes, and Montgomery (DHM; 2007); i.e. that when people flip an ordinary coin, the probability of it landing on the same side it started is about 51\%. 
+		It also revealed considerable between-people variation in the degree of this same-side bias, as well as its decrease as more coins were flipped. 
+
+		The goal of this report is two fold. On the one side, we aim to investigate similar questions with a regression approach : 
+		is there evidence for between-person, between-coin, or even person-coin pair differences ? To what extent does flipping experience affect the observed same-side bias ?
+		In addition, we also investigate the differences between GLM and WLS approaches; as well as muscle memory effects (through outcomes of recent flips). 
 	\section{Introduction}
 		Before diving into the analysis, we provide a brief overview of the datasets main features and the models we consider. Our exploratory analysis is available as a Jupyter notebook, and provides more detail. 
 
@@ -136,7 +138,24 @@
 			\label{fig:learning-effects}
 		\end{figure}
 		\subsection{Memory Effects}
-		In this section we focus .
+		In this section we shift our focus to memory effects. We do so motivated by the fact that we deem it probable a priori that successive throws are more similar to each other than randomly selected ones. Indeed, one could imagine that after two same-side throws, the next could end being a same-side one two with a probability higher than the base rate. 
+		
+		To test this we start by considering the data consisting of individual throw outcomes. To this, we add columns corresponding to 
+		\begin{itemize}
+			\item same-side indicator variables,
+			\item same-side indicator variables for the penultimate throw,
+			\item same-side indicator variables for the antepenultimate throw.
+		\end{itemize}
+		To deal with the boundary effects between sequences of flips, we removed the two first entries of each sequence. 
+		%To speed up the computations
+		
+		We then define the models 
+		\begin{itemize}
+			\item \texttt{1}, same-side indicator variables,
+			\item \texttt{1+hop1\_mem}, same-side indicator variables for the penultimate throw,
+			\item \texttt{1+hop1\_mem+hop2\_mem}, same-side indicator variables for the antepenultimate throw.
+		\end{itemize}
+		and carry out an analysis of deviance. The results associated are found in \ref{tab:memory-model-comparison}. Given the uni-directionality of these results, no further analysis was made.  
 		\begin{table}[htb]
 			\centering
 			\caption{Model comparison for models including : no memory, 1-hop memory and 2-hop memory.}
@@ -145,14 +164,20 @@
 			\toprule
 			Model & Deviance & AIC & Model DF \\
 			\midrule
-			\texttt{1} & 264930.81 & 0.00 & 0 \\
-			\texttt{1+hop1\_mem} & 264929.96 & 1.15 & 1 \\
-			\texttt{1+hop1\_mem+hop2\_mem} & 264929.07 & 2.26 & 2 \\
+			\texttt{1} & 474381.54 & 0.00 & 0 \\
+			\texttt{1+hop1\_mem} & 474380.73 & 1.19 & 1 \\
+			\texttt{1+hop1\_mem+hop2\_mem} & 474380.53 & 2.98 & 2 \\
 			\bottomrule
 			\end{tabular}
 		\end{table}
-
 	\section{Discussion}
+
+
+	\subsection{Memory effects}
+	Looking at \ref{tab:memory-model-comparison}, we see there is no support in favour of memory effects relative to the constant model. The deviance decreases by around .8 due to the introduction of the penultimate throw memory and only a further .2 when including memory of the antepenultimate throw. Another factor that shows this is the increase by $>$1 and $\approx 3$ respectively in AIC compared to the constant model.
+	The fact that memory about antepenultimate outcome seems to matter even less than memory about the penultimate outcome does make nonetheless intuitive sense. 
+
+	This (non-) finding can in itself be regarded as reassuring in a way. Specifically, it might contribute to rule out concerns of the authors of the original paper regarding the potential same-side bias induced by participants knowing about the goal of the study. Indeed it seems far-fetched that someone could bias their throws without relying on muscle memory. 
 	\section{Conclusion}
 	\section*{Acknowledgements}
 	\section*{References}
