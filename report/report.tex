@@ -53,6 +53,30 @@
 			\end{itemize}
 			\subsubsection{WLS Approach}
 
+			In this section, we consider the normal approximation for the binomial variable $R$ with denominator $m$. Having that the success probability is fairly close to 0.5 we get $p(1-p)$ approximately equal to 1/4. Hence we end up with: $R/m \sim N(p,1/(4m))$. 
+
+			We then make a linear fit using weighted least squares, where  weight associated to each entry is proportional to the inverse of the variance, that only depending on $m$.
+
+			We consider different models, starting with a constant model, then adding in the following order the 
+
+			\begin{table}[htb]
+				\centering
+				\caption{Model comparison based on AIC values.}
+				\label{tab:model-comparison}
+				\begin{tabular}{lc}
+				\toprule
+				Model Formula (RHS) & AIC \\
+				\midrule
+				1 & 159.76 \\
+				1 + C(person) & 12.89 \\
+				1 + C(person) + agg & 0.00 \\
+				1 + C(person) + agg + C(coin) & 29.21 \\
+				1 + C(person) + agg + C(person):C(coin) & 123.98 \\
+				\bottomrule
+				\end{tabular}
+				\end{table}
+
+
 			\subsubsection{GLM Approach}
 			\lipsum[1]
 			\begin{table}[htb]
