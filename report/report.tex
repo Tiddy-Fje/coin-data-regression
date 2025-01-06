@@ -111,7 +111,22 @@
 			\caption{Learning effects.}
 			\label{fig:learning-effects}
 		\end{figure}
-		\subsection{Memory Effects ??}
+		\subsection{Memory Effects}
+		In this section we focus .
+		\begin{table}[htb]
+			\centering
+			\caption{Model comparison for models including : no memory, 1-hop memory and 2-hop memory.}
+			\label{tab:memory-model-comparison}
+			\begin{tabular}{lccc}
+			\toprule
+			Model & Deviance & AIC & Model DF \\
+			\midrule
+			\texttt{1} & 264930.81 & 0.00 & 0 \\
+			\texttt{1+hop1\_mem} & 264929.96 & 1.15 & 1 \\
+			\texttt{1+hop1\_mem+hop2\_mem} & 264929.07 & 2.26 & 2 \\
+			\bottomrule
+			\end{tabular}
+		\end{table}
 
 	\section{Discussion}
 	\section{Conclusion}
