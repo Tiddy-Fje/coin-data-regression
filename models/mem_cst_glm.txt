@@ -1,0 +1,18 @@
+Iteration:4
+Deviance trajectory:[inf, np.float64(109992.36358121388), np.float64(264934.86375677574), np.float64(264930.80997957377), np.float64(264930.80997952237), np.float64(264930.80997952266)]
+                 Generalized Linear Model Regression Results                  
+==============================================================================
+Dep. Variable:              same_side   No. Observations:               191170
+Model:                            GLM   Df Residuals:                   191169
+Model Family:                Binomial   Df Model:                            0
+Link Function:                  Logit   Scale:                          1.0000
+Method:                          IRLS   Log-Likelihood:            -1.3247e+05
+Date:                Mon, 06 Jan 2025   Deviance:                   2.6493e+05
+Time:                        15:16:10   Pearson chi2:                 1.91e+05
+No. Iterations:                     4   Pseudo R-squ. (CS):         -8.882e-16
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          z      P>|z|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept      0.0427      0.005      9.331      0.000       0.034       0.052
+==============================================================================
