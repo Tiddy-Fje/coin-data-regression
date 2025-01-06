@@ -1,0 +1,11 @@
+\contentsline {section}{\numberline {1}Introduction}{1}{section.1}%
+\contentsline {section}{\numberline {2}Analysis}{1}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Model Comparison}{1}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}Tools For Selection}{1}{subsubsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.2}WLS Approach}{2}{subsubsection.2.1.2}%
+\contentsline {subsubsection}{\numberline {2.1.3}GLM Approach}{2}{subsubsection.2.1.3}%
+\contentsline {subsection}{\numberline {2.2}Unusual Observations}{3}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Zoom on Learning Effects}{3}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Memory Effects ??}{4}{subsection.2.4}%
+\contentsline {section}{\numberline {3}Discussion}{4}{section.3}%
+\contentsline {section}{\numberline {4}Conclusion}{4}{section.4}%
