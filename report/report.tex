@@ -19,14 +19,13 @@
 		\item our addition/contribution/comment about it
 	\end{itemize}
 	\section{Introduction}
-	\begin{itemize}
-		\item unbalanced dataset 
-		\item number of people and coins
-		\item few people with many coins and few coins with many people
-		\item inspection of same side rates show sign of possible person, coin and person-coin dependence
-		\item mention the datasets that we used (with information in them)
-		\item brief mention of types of models (GLM vs WLS and person-coin etc.). no formula, but description
-	\end{itemize}
+		Before diving into the analysis, we provide a brief overview of the datasets main features and the models we consider. Our exploratory analysis is available as a Jupyter notebook, and provides more detail. 
+
+		The dataset is composed of throws from 48 people using 44 coins in total. Given the study did not impose strict guidelines for coins to be used, the design is heavily unbalanced. Eighteen coins have only been thrown by a single person, while some of them have been thrown by more than 20 people. Also, more than half the people have only flipped 5 or less different coins, while someone threw 11 different ones. As for the the person-coin pairs, most have fewer or equal to 1000 throws, while some have around 10000 ones. This severe unbalance must be kept in mind during the study, given it can pose challenges during model interpretation. 
+
+		After plotting the same-side rates across people, coin and person-coin combinations, we deemed it relevant to investigate models considering both person and coin as covariates, as well as individual person-coin pairs. Following the advice given on the project statement, we also branched our analysis in Binomial-response GLM and WLS approaches. 
+
+		Motivated by impacts of muscle-memory on the flipping, we additionally investigated aspects such as time-varying same-side rates and memory between successive throws.
 	\section{Analysis}
 		\subsection{Model Comparison}
 			In this section, we introduce and compare different models for the same side success rate. 
@@ -117,7 +116,6 @@
 	\section{Discussion}
 	\section{Conclusion}
 	\section*{Acknowledgements}
->>>>>>> 89d664ea2c5b851e9bd4b8dc11130acbb147cce6
 	\section*{References}
 	%\appendix
 	%	\section{Runtime Estimation}\label{appendix:runtime_estimation}
