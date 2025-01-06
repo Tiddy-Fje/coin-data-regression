@@ -2,6 +2,10 @@ import pandas as pd
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 import matplotlib.pyplot as plt
+from matplotlib.gridspec import GridSpec
+import seaborn as sb
+import numpy as np
+
 
 FACTOR = 1.2
 SMALL_SIZE = 8 * FACTOR
@@ -86,3 +90,45 @@ def deviance_analysis( data, formula, filename, summary=False, force=False ):
         print(results.summary())
 
     return dic, results
+
+
+def residual_vs_covariate( results, data, ax=None, is_wls=False ):
+    if ax is None : 
+        fig = plt.figure(figsize=(15, 15), layout='tight')
+
+        gs = GridSpec(11, 1, figure=fig, )
+        ax1 = fig.add_subplot(gs[0:2,0])
+        ax2 = fig.add_subplot(gs[3:6,0])
+        ax3 = fig.add_subplot(gs[8:,0])
+        ax = [ax1, ax2, ax3]
+
+    influence_inst = results.get_influence()
+    leverage = influence_inst.hat_matrix_diag
+    resid_pea = results.resid_pearson / np.sqrt(1-leverage)
+    if is_wls:
+        davison_resid = resid_pea
+    else:
+        resid_dev = results.resid_deviance / np.sqrt(1-leverage)
+        davison_resid = resid_dev + np.log( resid_pea / resid_dev ) / resid_dev
+    
+
+    for i, (col,lab) in enumerate( zip( ['agg', 'person', 'coin'], ['a','b','c'] ) ):
+        df_resid = pd.DataFrame({'davison_resid': davison_resid, col: data[col]})
+        grouped_resid = df_resid.groupby(col)
+        
+        if col == 'agg':
+            ax[i].scatter(data[col]*100, davison_resid)
+            ax[i].set_xlabel('Number of Throws')
+        else:
+            xticks = []
+            for name, group in grouped_resid:
+                sb.boxplot(x=group[col], y=group['davison_resid'], ax=ax[i])
+                xticks.append(name)
+
+            ax[i].set_xticks(xticks)
+            ax[i].set_xticklabels(xticks, rotation=90)
+            ax[i].set_xlabel('')
+        ax[i].set_ylabel('Deviance Residuals')
+        ax[i].set_title(f'$({lab})$', pad=15)
+
+    return ax
