@@ -79,6 +79,25 @@
 				\end{table}
 
 
+
+			Table of comparison of the models using the likelihood ratio tests. 
+
+			\begin{table}[htb]
+				\caption{LRTs table}
+				\label{tab:LRT-model-comparison}
+				\begin{tabular}{lcc}
+				\toprule
+				Tested model & Restricted Model & p-value \\
+				\midrule
+				1 + C(person) & 1 & 0.00 \\
+				1 + C(person) + agg & 1 + C(person) & 0.00 \\
+				1 + C(person) + agg + C(coin) & 1 + C(person) + agg & 0.09 \\
+				1 + C(person) + agg + C(person):C(coin) & 1 + C(person) + agg & 0.02 \\
+				\bottomrule
+				\end{tabular}
+				\end{table}
+
+
 			\subsubsection{GLM Approach}
 			\lipsum[1]
 			\begin{table}[htb]
