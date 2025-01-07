@@ -3,6 +3,7 @@ import statsmodels.api as sm
 import statsmodels.formula.api as smf
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
+from statsmodels.stats.outliers_influence import OLSInfluence
 import seaborn as sb
 import numpy as np
 
@@ -57,7 +58,7 @@ def process_data( data_type = 'df-time-agg', drop_ingeborg = True, keep_coins=10
 
     return data, info
 
-
+'''
 def deviance_analysis( data, formula, filename, summary=False, force=False ):
     def fit_model():
         model = smf.glm(formula=formula, data=data, family=sm.families.Binomial())
@@ -90,7 +91,7 @@ def deviance_analysis( data, formula, filename, summary=False, force=False ):
         print(results.summary())
 
     return dic, results
-
+'''
 
 def residual_vs_covariate( results, data, ax=None, is_wls=False ):
     if ax is None : 
@@ -102,7 +103,7 @@ def residual_vs_covariate( results, data, ax=None, is_wls=False ):
         ax3 = fig.add_subplot(gs[8:,0])
         ax = [ax1, ax2, ax3]
 
-    influence_inst = results.get_influence()
+    influence_inst = OLSInfluence(results) 
     leverage = influence_inst.hat_matrix_diag
     resid_pea = results.resid_pearson / np.sqrt(1-leverage)
     if is_wls:
@@ -128,7 +129,7 @@ def residual_vs_covariate( results, data, ax=None, is_wls=False ):
             ax[i].set_xticks(xticks)
             ax[i].set_xticklabels(xticks, rotation=90)
             ax[i].set_xlabel('')
-        ax[i].set_ylabel('Deviance Residuals')
+        ax[i].set_ylabel('Standardized Residuals')
         ax[i].set_title(f'$({lab})$', pad=15)
 
     return ax

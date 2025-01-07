@@ -94,6 +94,24 @@
 				\bottomrule
 				\end{tabular}
 			\end{table}
+
+			Table of comparison of the models using the likelihood ratio tests. 
+
+			\begin{table}[htb]
+				\caption{LRTs table}
+				\label{tab:LRT-model-comparison}
+				\begin{tabular}{lcc}
+				\toprule
+				Tested model & Restricted Model & p-value \\
+				\midrule
+				1 + C(person) & 1 & 0.00 \\
+				1 + C(person) + agg & 1 + C(person) & 0.00 \\
+				1 + C(person) + agg + C(coin) & 1 + C(person) + agg & 0.09 \\
+				1 + C(person) + agg + C(person):C(coin) & 1 + C(person) + agg & 0.02 \\
+				\bottomrule
+				\end{tabular}
+				\end{table}
+
 			\subsubsection{GLM Approach}
 			In this section, instead of relying on an approximation to fit a Least Squares models, we take into account the nature of the data by using a GLM. Indeed, given the binomial nature of aggregated data, using a binomial-response GLM seems natural. 
 			\begin{table}[htb]
@@ -143,18 +161,14 @@
 		\subsection{Unusual Observations}
 
 		\subsection{Zoom on Learning Effects}
-		\begin{itemize}
-			\item bias comes from start
-			\item amount of bias (considerable)
-			\item wobble interpretation (consistent with physical model, citing the paper)
-		\end{itemize}
-		\lipsum[1]
-		\begin{figure}[htb]
-			\centering
-			\includegraphics[width=0.5\textwidth]{learning_effects.png}
-			\caption{Learning effects.}
-			\label{fig:learning-effects}
-		\end{figure}
+			We now give a closer look at the learning effects associated to the \texttt{agg} term in the model. We do this by representing the observed and predicted person-averaged same-side rate as a function of the number of throws.  Note that the confidence interval on the prediction was derived in Monte Carlo fashion as the variance between people was found to be larger than that resulting from the uncertainty on the estimated coefficients. 
+			The corresponding figure is \ref{fig:learning-effects}. 
+			\begin{figure}[htb]
+				\centering
+				\includegraphics[width=0.5\textwidth]{learning_effects.png}
+				\caption{Learning effects.}
+				\label{fig:learning-effects}
+			\end{figure}
 		\subsection{Memory Effects}
 		In this section we shift our focus to memory effects. We do so motivated by the fact that we deem it probable a priori that successive throws are more similar to each other than randomly selected ones. Indeed, one could imagine that after two same-side throws, the next could end being a same-side one two with a probability higher than the base rate. 
 		
@@ -208,6 +222,11 @@
 		\subsection{Unusual Observations}
 
 		\subsection{Zoom on Learning Effects}\label{sec:disc-learning-effects}
+			Analysing \ref{fig:learning-effects}, we see that the averaged same-side rate seems to start at a value around 51\%, and then decreases to reach values closer to 50\%. The observed uncertainty/spread can however no be neglected, given the limited number of people involved in the study. 
+			
+			This would be consistent with the fact that the physical model [CITATION NEEDED] predicts a same-side bias due to the ``wobble'' in people's throws. Indeed, we can imagine that with practice, participants progressively reduce the amount of ``wobble'', until they reach perfect throw, for which there is no bias. 
+
+			As for the type of dependence. 
 		\subsection{Memory Effects}
 		Looking at \ref{tab:memory-model-comparison}, we see there is no support in favour of memory effects relative to the constant model. The deviance decreases by around .8 due to the introduction of the penultimate throw memory and only a further .2 when including memory of the antepenultimate throw. Another factor that shows this is the increase by $>$1 and $\approx 3$ respectively in AIC compared to the constant model.
 		The fact that memory about antepenultimate outcome seems to matter even less than memory about the penultimate outcome does make nonetheless intuitive sense. 
