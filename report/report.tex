@@ -9,10 +9,7 @@
 	\clearpage
 	\tableofcontents
 	\thispagestyle{empty}
-	% Add table of contents
-	\clearpage
-	\pagenumbering{arabic}
-	\setcounter{page}{1}
+	\vspace{2cm}
 	\section*{Abstract}
 		context of the original paper (with their claims). The paper that won the 2024 IgNobel Prize in Probability took a Bayesian approach to studying the statistics behind the coin-flipping process. Its main goal was to confirm a prediction made by a physical model of human coin tossing developed by Diaconis, Holmes, and Montgomery (DHM; 2007); i.e. that when people flip an ordinary coin, the probability of it landing on the same side it started is about 51\%. 
 		It also revealed considerable between-people variation in the degree of this same-side bias, as well as its decrease as more coins were flipped. 
@@ -20,6 +17,9 @@
 		The goal of this report is two fold. On the one side, we aim to investigate similar questions with a regression approach : 
 		is there evidence for between-person, between-coin, or even person-coin pair differences ? To what extent does flipping experience affect the observed same-side bias ?
 		In addition, we also investigate the differences between GLM and WLS approaches; as well as muscle memory effects (through outcomes of recent flips). 
+	\clearpage
+	\pagenumbering{arabic}
+	\setcounter{page}{1}
 	\section{Introduction}
 		Before diving into the analysis, we provide a brief overview of the datasets main features and the models we consider. Our exploratory analysis is available as a Jupyter notebook, and provides more detail. 
 
@@ -32,19 +32,18 @@
 		\subsection{Model Comparison}
 			In this section, we introduce and compare different models for the same-side rate. 
 
-			Should explain no a priori response transformation ...
+			Before thinking about models, we thought about whether transforming the response was needed. Given the same-side rates where clustered around 50\% with few changes by at most factors of locally 0.66 and 1.5, we did not see any reason a priori to apply a transformation to the response.
 			
-			For each, the considered formulas in terms of the covariates are:
-			\begin{itemize}
-				\item \texttt{1}, corresponding to a constant model.
-				\item \texttt{1+C(person)}, corresponding to a model with the person as a covariate.
-				\item \texttt{1+C(person)+C(coin)}, corresponding to a model with the person and the coin as covariates.
-				\item \texttt{1+C(person)+C(coin)+C(person):C(coin)}, corresponding to a model with the person, the coin, and the interaction between the person and the coin as covariates.
-			\end{itemize}
-			* model 4 could seem redundant due to nesting-main effect, but we ....
-			*  
-
-			Should explain why eliminated some covariates ...
+			As for the covariates we considered in our models, we of course included the person throwing and the coin being thrown as categorical covariates. Due to the mention in the original paper of the existence of learning effects, and the potential we saw in these to alias with coin effects (see discussion in [ref section]), we also wanted to include time dependence in the dataset. This was done by considering the version of the data that is composed of ordered sequences of 100 (or so) throws at a time. Considering this data also allowed us to try and consider effects of coins nested within people, trying to capture subjectivity in how people perceive given coins. Indeed, doing this on the averaged data would have yielded a saturated model. 
+			%\begin{itemize}
+			%	\item \texttt{1}, corresponding to a constant model.
+			%	\item \texttt{1+C(person)}, corresponding to a model with the person as a covariate.
+			%	\item \texttt{1+C(person)+C(coin)}, corresponding to a model with the person and the coin as covariates.
+			%	\item \texttt{1+C(person)+C(coin)+C(person):C(coin)}, corresponding to a model with the person, the coin, and the interaction between the person and the coin as covariates.
+			%\end{itemize}
+			%* model 4 could seem redundant due to nesting-main effect, but we ....
+			
+			[explain why eliminated some covariates ...??]
 
 			In the next section, we start by introducing the theory on which we base our model selection. 
 			\subsubsection{Tools For Selection}
@@ -62,6 +61,8 @@
 					\overset{H_0}{\sim} \chi^2_{p_A-p_B},
 				\end{gather}
 				where $\Theta_A\supset\Theta_B$ respectively are the parameters spaces (of dimension $p_a>p_b$) associated to models $A$ and $B$, and $H_0$ is the null hypothesis : $\theta^*\in\Theta_B$. Given this definition, LRTs are used to shed light on whether extra degrees of freedom improve the model significantly better than chance. This has applications in explanatory models, but might be of limited use in the context of model selection due to being prone to overfitting. This is particularly true when testing many models, as tests become correlated and give rise to spurious results [cite davison slides ?].
+
+				[MAYBE MENTION DEVIANCE??]
 			\subsubsection{Diagnostic Plots}
 				In this report, the diagnostics we decided to include where 
 				\begin{itemize}
@@ -118,8 +119,8 @@
 			In this section, instead of relying on an approximation to fit a Least Squares models, we take into account the nature of the data by using a GLM. Indeed, given the binomial nature of aggregated data, using a binomial-response GLM seems natural. 
 			\begin{table}[htb]
 				\centering
-				\caption{Model comparison for different models.}
-				\label{tab:model-comparison}
+				\caption{Analysis of deviance comparing different GLM models.}
+				\label{tab:glm-model-comparison}
 				\begin{tabular}{lccc}
 				\toprule
 				Model & Deviance & AIC & Model DF \\
@@ -134,8 +135,8 @@
 			More specifically, we consider a Logit link as it leads to easily interpretable results, meaning we model $\mathbb{E}[y\mid x]=\exp\left(\sum_i \beta_i x_i\right)$ with binomial errors. We expect this to lead to more accurate results than the WLS approximation, especially for entries having $R/M\not\approx 1/2$.
 			\begin{table}[htb]
 				\centering
-				\caption{Likelihood ratio tests between models.}
-				\label{tab:llr-comparison}
+				\caption{Likelihood ratio tests comparing different GLM models.}
+				\label{tab:glm-lrt-comparison}
 				\begin{tabular}{llc}
 				\toprule
 				Tested model & Restricted model & $p$-value \\
@@ -146,7 +147,7 @@
 				\bottomrule
 				\end{tabular}
 			\end{table}
-			As for the considered covariates, we follow what is done for the WLS approach. The only difference being in the interpretation of the coefficients and the in the fact that we omit the model with coins nested within people. Indeed, even the \texttt{0+person:coin} model did not give any signs of convergence after 100 IRLS iterations. We tried fitting it with BFGS, but did not succeed either as the hessian resulted to be non-full rank. The analysis of deviance and LRT tables for the models that converged are \ref{tab:model-comparison} and \ref{tab:llr-comparison}.
+			As for the considered covariates, we follow what is done for the WLS approach. The only difference being in the interpretation of the coefficients and the in the fact that we omit the model with coins nested within people. Indeed, even the \texttt{0+person:coin} model did not give any signs of convergence after 100 IRLS iterations. We tried fitting it with BFGS, but did not succeed either as the hessian resulted to be non-full rank. The analysis of deviance and LRT tables for the models that converged are \ref{tab:glm-model-comparison} and \ref{tab:glm-lrt-comparison}.
 			\begin{figure}[htb]
 				\centering
 				\includegraphics[width=0.85\textwidth]{GLM_diagnostics.png}
@@ -183,13 +184,7 @@
 		To deal with the boundary effects between sequences of flips, we removed the two first entries of each sequence. 
 		%To speed up the computations
 		
-		We then define the models 
-		\begin{itemize}
-			\item \texttt{1}, same-side indicator variables,
-			\item \texttt{1+hop1\_mem}, same-side indicator variables for the penultimate throw,
-			\item \texttt{1+hop1\_mem+hop2\_mem}, same-side indicator variables for the antepenultimate throw.
-		\end{itemize}
-		and carry out an analysis of deviance. The results associated are found in \ref{tab:memory-model-comparison}. Given the uni-directionality of these results, no further analysis was made.  
+		We then define the constant model \texttt{1}, the model including memory about the penultimate throw \texttt{1+hop1\_mem}, and the one including memory about the two previous throws \texttt{1+hop1\_mem+hop2\_mem}. The analysis of deviance associated to these models is found in \ref{tab:memory-model-comparison}. Given the uni-directionality of these results, no further analysis was made.  
 		\begin{table}[htb]
 			\centering
 			\caption{Model comparison for models including : no memory, 1-hop memory and 2-hop memory.}
@@ -213,9 +208,9 @@
 		Likelihood ratio tests have also been reported (table \ref{tab:WLS_LRT}), leading to a different selection. LRT results show that model \texttt{1+C(person)+C(agg)} is preffered compared to the more simple models tested \texttt{1} and \texttt{1+C(person)}. However, LRT
 
 		\subsubsection{GLM Approach}
-		We first consider the model comparison tables \ref{tab:model-comparison} and \ref{tab:llr-comparison}. 
-		Upon inspection of these, we see that the evidence for between-person variations is extremely strong. The deviance decreases by more than 5.5 points per degree of freedom on average, and the AIC drops by more than 170. As previously, there is strong evidence for time-dependence in the same-side bias. By itself, the term for example yields a deviance decrease of 15. A closer look at this contribution is given in the \ref{sec:disc-learning-effects}. As in the WLS model, evidence of between-coin differences is very weak as it yeilds an increase in AIC. The associated LRT is around .05, meaning coin-effects might still help in explaining part of the deviance. A better evaluation of this could probably be obtained by considering a smaller scale, balanced-design study. Indeed, in the considered dataset, coin and time effects where aliased\footnote{Adding \texttt{coin} to the \texttt{1+person} model explained around 10 units of deviance more than when it was added in the \texttt{1+person+agg} model.}. This was a result of there being a strong time effect on same-side bias, and some coins being flipped many more times than others. 
-		Given these elements, one would definitely prefer the \texttt{1+person+agg} model for prediction purposes.  
+			We first consider the model comparison tables \ref{tab:glm-model-comparison} and \ref{tab:glm-lrt-comparison}. 
+			Upon inspection of these, we see that the evidence for between-person variations is extremely strong. The deviance decreases by more than 5.5 points per degree of freedom on average, and the AIC drops by more than 170. Similarly, there is overwhelming evidence for time-dependence in the same-side bias. By itself, the term for example yields a deviance decrease of 15. A closer look at this contribution is given in the \ref{sec:disc-learning-effects}. When it comes to between-coin differences, the evidence is nowhere near as strong. Indeed, AIC increases by around 25 when compared to the \texttt{1+person+agg} model, reflecting clear overfitting. The associated LRT is around .05, meaning coin-effects might still help in explaining part of the deviance. A better evaluation of this could probably be obtained by considering a smaller scale, balanced-design study. Indeed, in the considered dataset, coin and time effects where aliased\footnote{Adding \texttt{coin} to the \texttt{1+person} model explained around 10 units of deviance more than when it was added in the \texttt{1+person+agg} model.}. This was a result of there being a strong time effect on same-side bias, and some coins being flipped many more times than others. 
+			Given these elements, one would definitely prefer the \texttt{1+person+agg} model for prediction purposes.  
 
 		We now move to analysing the diagnostics of the selected model. Looking at (a) and (b) of \ref{fig:glm-diagnostic}, we see that the residuals are for the most part appropriately normal and homoschedastic. Slight anomalies are observed in the QQ plot for the largest and smallest residuals, as well as for the residuals associated to the largest fitted same-side rate. Looking up the entries associated to the largest Cooks distances, we notice these are associated to sequences of throws where [TO FILL]
 			\begin{itemize}
@@ -233,7 +228,7 @@
 			
 			This would be consistent with the fact that the physical model [CITATION NEEDED] predicts a same-side bias due to the ``wobble'' in people's throws. Indeed, we can imagine that with practice, participants progressively reduce the amount of ``wobble'', until they reach perfect throw, for which there is no bias. 
 
-			As for the type of dependence. 
+			As for the type of dependence, the simple linear term at the exponential seems to provide a good fit.  
 		\subsection{Memory Effects}
 		Looking at \ref{tab:memory-model-comparison}, we see there is no support in favour of memory effects relative to the constant model. The deviance decreases by around .8 due to the introduction of the penultimate throw memory and only a further .2 when including memory of the antepenultimate throw. Another factor that shows this is the increase by $>$1 and $\approx 3$ respectively in AIC compared to the constant model.
 		The fact that memory about antepenultimate outcome seems to matter even less than memory about the penultimate outcome does make nonetheless intuitive sense. 
@@ -242,6 +237,10 @@
 	\section{Conclusion}
 	\section*{Acknowledgements}
 	\section*{References}
+		\noindent[1] F. Bartoš et al., `Fair coins tend to land on the same side they started: Evidence from 350,757 flips', Jun. 02, 2024, arXiv: arXiv:2310.04153. doi: 10.48550/arXiv.2310.04153.
+		\newline[2] Anthony Davison, `Regression Methods'. Accessed: Jan. 07, 2025. [Online]. Available: \url{https://moodle.epfl.ch/pluginfile.php/3309119/mod_resource/content/6/RMNotes.pdf}
+		\newline[3] nzcoops, `Anova - Type I/II/III SS explained - R-bloggers'. Accessed: Jan. 07, 2025. [Online]. Available: \newline\url{https://www.r-bloggers.com/2011/03/anova-\%e2\%80\%93-type-iiiiii-ss-explained/} 
+		\newline[4] Ø. Langsrud, `ANOVA for unbalanced data: Use Type II instead of Type III sums of squares', Statistics and Computing, vol. 13, no. 2, pp. 163--167, Apr. 2003, doi: 10. 1023/A:1023260610025.
 	%\appendix
 	%	\section{Runtime Estimation}\label{appendix:runtime_estimation}
 %%%

@@ -30,8 +30,6 @@ def process_data( data_type = 'df-time-agg', drop_ingeborg = True, keep_coins=10
     data_agg = pd.read_csv(f'../data/data-agg.csv')
 
     info = {}
-    lone_coin = data_agg.groupby('coin').filter(lambda x: x['person'].count() <= 1)
-    lone_person = data_agg.groupby('person').filter(lambda x: x['coin'].count() <= 1)
     c_grouped_filt = data_agg.groupby('coin').filter(lambda x: x['person'].count() >= keep_coins)
     info['common_coins'] = c_grouped_filt['coin'].unique()
     p_grouped_filt = data_agg.groupby('person').filter(lambda x: x['coin'].count() >= keep_persons)
@@ -41,7 +39,8 @@ def process_data( data_type = 'df-time-agg', drop_ingeborg = True, keep_coins=10
     if data_type == 'df-time-agg':
         data = data[(data['person'] != 'adamF') | (data['coin'] != '0.05EUR') | (data['agg'] != 84)]
     if drop_lonely:
-        # remove lone coins and persons
+        lone_coin = data_agg.groupby('coin').filter(lambda x: x['person'].count() <= 1)
+        lone_person = data_agg.groupby('person').filter(lambda x: x['coin'].count() <= 1)
         data = data[~data['coin'].isin(lone_coin['coin'])]
         data = data[~data['person'].isin(lone_person['person'])]
 
@@ -55,10 +54,9 @@ def process_data( data_type = 'df-time-agg', drop_ingeborg = True, keep_coins=10
         data = data[data['person']!='ingeborgR'] # -> adds both a person and a coin (100 throws, can remove her)
 
     #print(len(info['common_coins']), len(info['common_persons']))
-
     return data, info
 
-'''
+
 def deviance_analysis( data, formula, filename, summary=False, force=False ):
     def fit_model():
         model = smf.glm(formula=formula, data=data, family=sm.families.Binomial())
@@ -67,8 +65,8 @@ def deviance_analysis( data, formula, filename, summary=False, force=False ):
         summ = results.summary()
         with open(f'../models/{filename}.txt', 'w') as f:
             fit_history = results.fit_history
-            f.write( f'Iteration:{fit_history['iteration']}\n' )
-            f.write( f'Deviance trajectory:{fit_history['deviance']}\n' )
+            f.write( f'Iteration:{fit_history["iteration"]}\n' ) # different use of ' and " is done
+            f.write( f'Deviance trajectory:{fit_history["deviance"]}\n' ) # to avoid problems on Mac OS
             f.write(summ.as_text())
         return summ, results
 
@@ -91,7 +89,7 @@ def deviance_analysis( data, formula, filename, summary=False, force=False ):
         print(results.summary())
 
     return dic, results
-'''
+
 
 def residual_vs_covariate( results, data, ax=None, is_wls=False ):
     if ax is None : 
