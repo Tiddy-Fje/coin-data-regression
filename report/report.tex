@@ -74,40 +74,42 @@
 			\subsubsection{WLS Approach}
 			In this section, we consider the normal approximation for the binomial variable $R$ with denominator $m$. Having that the success probability is fairly close to 0.5 we get $p(1-p)$ approximately equal to 1/4. Hence we end up with: $R/m \sim N(p,1/(4m))$. 
 
-			We then make a linear fit using weighted least squares, where  weight associated to each entry is proportional to the inverse of the variance, that only depending on $m$.
+			We then make a linear fit using weighted least squares, where  weight associated to each entry is proportional to the inverse of the variance, that only depends on $m$.
 
-			We consider different models, starting with a constant model, then adding in the following order the 
+			We consider different models and report their AIC values in table \ref{tab:WLS_AIC}. As we are only interested in their relative values, the minimimum AIC value among the models compared is substracted from all the other AIC values. 
 
 			\begin{table}[htb]
 				\centering
 				\caption{Model comparison based on AIC values.}
-				\label{tab:model-comparison}
+				\label{tab:WLS_AIC}
 				\begin{tabular}{lc}
 				\toprule
 				Model Formula (RHS) & AIC \\
 				\midrule
-				1 & 159.76 \\
-				1 + C(person) & 12.89 \\
-				1 + C(person) + agg & 0.00 \\
-				1 + C(person) + agg + C(coin) & 29.21 \\
-				1 + C(person) + agg + C(person):C(coin) & 123.98 \\
+				\texttt{1} & 159.76 \\
+				\texttt{1 + C(person)} & 12.89 \\
+				\texttt{1 + C(person) + agg} & 0.00 \\
+				\texttt{1 + C(person) + agg + C(coin)} & 29.21 \\
+				\texttt{1 + C(person) + agg + C(person):C(coin)} & 123.98 \\
 				\bottomrule
 				\end{tabular}
 			\end{table}
+
+			The AIC table indicates that the best model is \texttt{1+C(person)+agg}. 
 
 			Table of comparison of the models using the likelihood ratio tests. 
 
 			\begin{table}[htb]
 				\caption{LRTs table}
-				\label{tab:LRT-model-comparison}
+				\label{tab:WLS_LRT}
 				\begin{tabular}{lcc}
 				\toprule
 				Tested model & Restricted Model & p-value \\
 				\midrule
-				1 + C(person) & 1 & 0.00 \\
-				1 + C(person) + agg & 1 + C(person) & 0.00 \\
-				1 + C(person) + agg + C(coin) & 1 + C(person) + agg & 0.09 \\
-				1 + C(person) + agg + C(person):C(coin) & 1 + C(person) + agg & 0.02 \\
+				\texttt{1 + C(person)} & \texttt{1} & 0.00 \\
+				\texttt{1 + C(person) + agg} & \texttt{1 + C(person)} & 0.00 \\
+				\texttt{1 + C(person) + agg + C(coin)} & \texttt{1 + C(person) + agg} & 0.09 \\
+				\texttt{1 + C(person) + agg + C(person):C(coin)} & \texttt{1 + C(person) + agg} & 0.02 \\
 				\bottomrule
 				\end{tabular}
 				\end{table}
@@ -205,12 +207,17 @@
 	\section{Discussion}
 		\subsection{Model Comparison}
 		\subsubsection{WLS Approach}
-		\subsubsection{GLM Approach}
-			We first consider the model comparison tables \ref{tab:model-comparison} and \ref{tab:llr-comparison}. 
-			Upon inspection of these, we see that the evidence for between-person variations is extremely strong. The deviance decreases by more than 5.5 points per degree of freedom on average, and the AIC drops by more than 170. Similarly, there is overwhelming evidence for time-dependence in the same-side bias. By itself, the term for example yields a deviance decrease of 15. A closer look at this contribution is given in the \ref{sec:disc-learning-effects}. When it comes to between-coin differences, the evidence is nowhere near as strong. Indeed, AIC increases by around 25 when compared to the \texttt{1+person+agg} model, reflecting clear overfitting. The associated LRT is around .05, meaning coin-effects might still help in explaining part of the deviance. A better evaluation of this could probably be obtained by considering a smaller scale, balanced-design study. Indeed, in the considered dataset, coin and time effects where aliased\footnote{Adding \texttt{coin} to the \texttt{1+person} model explained around 10 units of deviance more than when it was added in the \texttt{1+person+agg} model.}. This was a result of there being a strong time effect on same-side bias, and some coins being flipped many more times than others. 
-			Given these elements, one would definitely prefer the \texttt{1+person+agg} model for prediction purposes.  
+		Examining table \ref{tab:WLS_AIC}, we see that there is a drop of AIC by 3 points per degree of freedom on average which strongly suggests the existence of differences between persons. Similarly, there is overwhelming evidence for time-dependence in the same-side bias. Indeed, the addition of the \text{agg} covariate allows a drop by 12 points in the AIC. When it comes to between-coin differences, the evidence is nowhere near as strong. Indeed, AIC increases by around 30 when compared to the \texttt{1+person+agg} model, reflecting clear overfitting.
+		The same way, including the coefficients \texttt{C(person):C(coin)} yields an increase in the AIC value of the model. 
+		Overall, among the models reported in table \ref{tab:WLS_AIC}, the selection based on AIC leads to the model \texttt{1+C(person)+agg}. 
+		Likelihood ratio tests have also been reported (table \ref{tab:WLS_LRT}), leading to a different selection. LRT results show that model \texttt{1+C(person)+C(agg)} is preffered compared to the more simple models tested \texttt{1} and \texttt{1+C(person)}. However, LRT
 
-			We now move to analysing the diagnostics of the selected model. Looking at (a) and (b) of \ref{fig:glm-diagnostic}, we see that the residuals are for the most part appropriately normal and homoschedastic. Slight anomalies are observed in the QQ plot for the largest and smallest residuals, as well as for the residuals associated to the largest fitted same-side rate. Looking up the entries associated to the largest Cooks distances, we notice these are associated to sequences of throws where [TO FILL]
+		\subsubsection{GLM Approach}
+		We first consider the model comparison tables \ref{tab:model-comparison} and \ref{tab:llr-comparison}. 
+		Upon inspection of these, we see that the evidence for between-person variations is extremely strong. The deviance decreases by more than 5.5 points per degree of freedom on average, and the AIC drops by more than 170. As previously, there is strong evidence for time-dependence in the same-side bias. By itself, the term for example yields a deviance decrease of 15. A closer look at this contribution is given in the \ref{sec:disc-learning-effects}. As in the WLS model, evidence of between-coin differences is very weak as it yeilds an increase in AIC. The associated LRT is around .05, meaning coin-effects might still help in explaining part of the deviance. A better evaluation of this could probably be obtained by considering a smaller scale, balanced-design study. Indeed, in the considered dataset, coin and time effects where aliased\footnote{Adding \texttt{coin} to the \texttt{1+person} model explained around 10 units of deviance more than when it was added in the \texttt{1+person+agg} model.}. This was a result of there being a strong time effect on same-side bias, and some coins being flipped many more times than others. 
+		Given these elements, one would definitely prefer the \texttt{1+person+agg} model for prediction purposes.  
+
+		We now move to analysing the diagnostics of the selected model. Looking at (a) and (b) of \ref{fig:glm-diagnostic}, we see that the residuals are for the most part appropriately normal and homoschedastic. Slight anomalies are observed in the QQ plot for the largest and smallest residuals, as well as for the residuals associated to the largest fitted same-side rate. Looking up the entries associated to the largest Cooks distances, we notice these are associated to sequences of throws where [TO FILL]
 			\begin{itemize}
 				\item best model (AIC vs LRT) + interpretation of significance (wobble )
 				\item discussion of diagnostics 
