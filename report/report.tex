@@ -30,10 +30,8 @@
 		Motivated by impacts of muscle-memory on the flipping, we additionally investigated aspects such as time-varying same-side rates and memory between successive throws.
 	\section{Analysis}
 		\subsection{Model Comparison}
-			In this section, we introduce and compare different models for the same side success rate. 
+			In this section, we introduce and compare different models for the same-side rate. 
 
-			Some GLMs with binomial responses and some WLS ones based on the ... approximation.
-			
 			Should explain no a priori response transformation ...
 			
 			For each, the considered formulas in terms of the covariates are:
@@ -47,18 +45,32 @@
 			*  
 
 			Should explain why eliminated some covariates ...
+
+			In the next section, we start by introducing the theory on which we base our model selection. 
 			\subsubsection{Tools For Selection}
-			\begin{itemize}
-				\item when to use AIC vs LRT ?
-				\item citing a few things about LRT not miting overfitting 
-				\item 
-			\end{itemize}
+				Following the suggestion in the project statement, we compare candidate models both with help of Akaike's Information Criterion (AIC) and Likelihood Ratio Tests (LRTs). 
+
+				We recall that AIC is defined as 
+				\begin{gather}
+					\text{AIC}:=2p-2\ln(\hat L),
+				\end{gather}
+				with $p$ the number of degreas of freedom of the model and $\hat L$ the value of the maximised likelihood function for the model. By minimising AIC over candidate models, one is therefore rewarding model fit, while penalising by a $2p$ term to counter overfitting. Its goal is therefore to yield parsimonious predictive models. It does not make any assumption about models being of similar interpretation or nested. 
+
+				In contrast, LRT is specifically designed for comparing a model $A$ with a nested (or restricted) one $B$. It is based on the fact that 
+				\begin{gather}
+					\lambda_{LR}=-2\ln\left[\frac{\sup_{\theta\in\Theta_B}\mathcal{L(\theta)}}{\sup_{\theta\in\Theta_A}\mathcal{L(\theta)}}\right]
+					\overset{H_0}{\sim} \chi^2_{p_A-p_B},
+				\end{gather}
+				where $\Theta_A\supset\Theta_B$ respectively are the parameters spaces (of dimension $p_a>p_b$) associated to models $A$ and $B$, and $H_0$ is the null hypothesis : $\theta^*\in\Theta_B$. Given this definition, LRTs are used to shed light on whether extra degrees of freedom improve the model significantly better than chance. This has applications in explanatory models, but might be of limited use in the context of model selection due to being prone to overfitting. This is particularly true when testing many models, as tests become correlated and give rise to spurious results [cite davison slides ?].
 			\subsubsection{Diagnostic Plots}
-			\begin{itemize}
-				\item describe the plots we choose 
-				\item explain what normal behaviour looks like on them
-				\item explain what problematic behaviour looks like on them
-			\end{itemize}
+				In this report, the diagnostics we decided to include where 
+				\begin{itemize}
+					\item A QQ plot to check normality of normalised residuals. Pearson studentized residuals were used for WLS models while the presented $r^*$ were used for GLM models. Normality corresponds to a roughly straight line, while outliers, skewness and heavy tails are easily spotted as deviations from it.
+					\item A scatter plot of residuals as a function of fitted values, to assess linearity and homoscedasticity. [TO FILL] were used for WLS models, while deviance residuals where used for GLM models. Linearity corresponds to residuals that stay centred around 0 across the fitted values, while homoscedasticity corresponds to errors whose spread is constant across the fitted values.
+					\item Cook's distance as a function of data index to reveal highly influential data points. Points over the $8/(n-2p)$ threshold are given a closer look (in order of importance). 
+					\item Scatter plots (resp. box plots for categorical covariates) of residuals as a function of the covariates of interest. These are used to check for independence between residuals and the covariates. If there is independence, the residuals look uncorrelated to the covariates. 
+				\end{itemize}
+				This decision was motivated by our understanding of section 1.4 about diagnostics found in [CITE DAVISON SLIDES]. 
 			\subsubsection{WLS Approach}
 			In this section, we consider the normal approximation for the binomial variable $R$ with denominator $m$. Having that the success probability is fairly close to 0.5 we get $p(1-p)$ approximately equal to 1/4. Hence we end up with: $R/m \sim N(p,1/(4m))$. 
 
@@ -181,7 +193,7 @@
 		\subsubsection{WLS Approach}
 		\subsubsection{GLM Approach}
 			We first consider the model comparison tables \ref{tab:model-comparison} and \ref{tab:llr-comparison}. 
-			Upon inspection of these, we see that the evidence for between-person variations is extremely strong. The deviance decreases by more than 5.5 points per degree of freedom on average, and the AIC drops by more than 170. Similarly, there is overwhelming evidence for time-dependence in the same-side bias. By itself, the term for example yields a deviance decrease of 15. A closer look at this contribution is given in the \ref{sec:disc-learning-effects}. When it comes to between-coin differences, the evidence is nowhere near as strong. Indeed, AIC increases by around 25 when compared to the \texttt{1+person+agg} model, reflecting clear overfitting. The associated LRT is around .05, meaning coin-effects might still help in explaining part of the deviance. A better evaluation of this could probably be obtained by considering a smaller scale, balanced-design study. Indeed, in the considered dataset, coin and time effects where aliased. This was a result of there being a strong time effect on same-side bias, and some coins being flipped many more times than others. 
+			Upon inspection of these, we see that the evidence for between-person variations is extremely strong. The deviance decreases by more than 5.5 points per degree of freedom on average, and the AIC drops by more than 170. Similarly, there is overwhelming evidence for time-dependence in the same-side bias. By itself, the term for example yields a deviance decrease of 15. A closer look at this contribution is given in the \ref{sec:disc-learning-effects}. When it comes to between-coin differences, the evidence is nowhere near as strong. Indeed, AIC increases by around 25 when compared to the \texttt{1+person+agg} model, reflecting clear overfitting. The associated LRT is around .05, meaning coin-effects might still help in explaining part of the deviance. A better evaluation of this could probably be obtained by considering a smaller scale, balanced-design study. Indeed, in the considered dataset, coin and time effects where aliased\footnote{Adding \texttt{coin} to the \texttt{1+person} model explained around 10 units of deviance more than when it was added in the \texttt{1+person+agg} model.}. This was a result of there being a strong time effect on same-side bias, and some coins being flipped many more times than others. 
 			Given these elements, one would definitely prefer the \texttt{1+person+agg} model for prediction purposes.  
 
 			We now move to analysing the diagnostics of the selected model. Looking at (a) and (b) of \ref{fig:glm-diagnostic}, we see that the residuals are for the most part appropriately normal and homoschedastic. Slight anomalies are observed in the QQ plot for the largest and smallest residuals, as well as for the residuals associated to the largest fitted same-side rate. Looking up the entries associated to the largest Cooks distances, we notice these are associated to sequences of throws where [TO FILL]
