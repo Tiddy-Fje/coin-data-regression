@@ -180,10 +180,22 @@
 		\subsection{Model Comparison}
 		\subsubsection{WLS Approach}
 		\subsubsection{GLM Approach}
+			We first consider the model comparison tables \ref{tab:model-comparison} and \ref{tab:llr-comparison}. 
+			Upon inspection of these, we see that the evidence for between-person variations is extremely strong. The deviance decreases by more than 5.5 points per degree of freedom on average, and the AIC drops by more than 170. Similarly, there is overwhelming evidence for time-dependence in the same-side bias. By itself, the term for example yields a deviance decrease of 15. A closer look at this contribution is given in the \ref{sec:disc-learning-effects}. When it comes to between-coin differences, the evidence is nowhere near as strong. Indeed, AIC increases by around 25 when compared to the \texttt{1+person+agg} model, reflecting clear overfitting. The associated LRT is around .05, meaning coin-effects might still help in explaining part of the deviance. A better evaluation of this could probably be obtained by considering a smaller scale, balanced-design study. Indeed, in the considered dataset, coin and time effects where aliased. This was a result of there being a strong time effect on same-side bias, and some coins being flipped many more times than others. 
+			Given these elements, one would definitely prefer the \texttt{1+person+agg} model for prediction purposes.  
+
+			We now move to analysing the diagnostics of the selected model. Looking at (a) and (b) of \ref{fig:glm-diagnostic}, we see that the residuals are for the most part appropriately normal and homoschedastic. Slight anomalies are observed in the QQ plot for the largest and smallest residuals, as well as for the residuals associated to the largest fitted same-side rate. Looking up the entries associated to the largest Cooks distances, we notice these are associated to sequences of throws where [TO FILL]
+			\begin{itemize}
+				\item best model (AIC vs LRT) + interpretation of significance (wobble )
+				\item discussion of diagnostics 
+				\item (rational of including agg, presentation of used residuals with assumptions)
+				\item 
+				\item comparison with WLS (coefs ?? accuracy ?)
+			\end{itemize}
 
 		\subsection{Unusual Observations}
 
-		\subsection{Zoom on Learning Effects}
+		\subsection{Zoom on Learning Effects}\label{sec:disc-learning-effects}
 		\subsection{Memory Effects}
 		Looking at \ref{tab:memory-model-comparison}, we see there is no support in favour of memory effects relative to the constant model. The deviance decreases by around .8 due to the introduction of the penultimate throw memory and only a further .2 when including memory of the antepenultimate throw. Another factor that shows this is the increase by $>$1 and $\approx 3$ respectively in AIC compared to the constant model.
 		The fact that memory about antepenultimate outcome seems to matter even less than memory about the penultimate outcome does make nonetheless intuitive sense. 
