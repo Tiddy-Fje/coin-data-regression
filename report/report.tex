@@ -9,10 +9,7 @@
 	\clearpage
 	\tableofcontents
 	\thispagestyle{empty}
-	% Add table of contents
-	\clearpage
-	\pagenumbering{arabic}
-	\setcounter{page}{1}
+	\vspace{2cm}
 	\section*{Abstract}
 		context of the original paper (with their claims). The paper that won the 2024 IgNobel Prize in Probability took a Bayesian approach to studying the statistics behind the coin-flipping process. Its main goal was to confirm a prediction made by a physical model of human coin tossing developed by Diaconis, Holmes, and Montgomery (DHM; 2007); i.e. that when people flip an ordinary coin, the probability of it landing on the same side it started is about 51\%. 
 		It also revealed considerable between-people variation in the degree of this same-side bias, as well as its decrease as more coins were flipped. 
@@ -20,6 +17,9 @@
 		The goal of this report is two fold. On the one side, we aim to investigate similar questions with a regression approach : 
 		is there evidence for between-person, between-coin, or even person-coin pair differences ? To what extent does flipping experience affect the observed same-side bias ?
 		In addition, we also investigate the differences between GLM and WLS approaches; as well as muscle memory effects (through outcomes of recent flips). 
+	\clearpage
+	\pagenumbering{arabic}
+	\setcounter{page}{1}
 	\section{Introduction}
 		Before diving into the analysis, we provide a brief overview of the datasets main features and the models we consider. Our exploratory analysis is available as a Jupyter notebook, and provides more detail. 
 
@@ -32,19 +32,18 @@
 		\subsection{Model Comparison}
 			In this section, we introduce and compare different models for the same-side rate. 
 
-			Should explain no a priori response transformation ...
+			Before thinking about models, we thought about whether transforming the response was needed. Given the same-side rates where clustered around 50\% with few changes by at most factors of locally 0.66 and 1.5, we did not see any reason a priori to apply a transformation to the response.
 			
-			For each, the considered formulas in terms of the covariates are:
-			\begin{itemize}
-				\item \texttt{1}, corresponding to a constant model.
-				\item \texttt{1+C(person)}, corresponding to a model with the person as a covariate.
-				\item \texttt{1+C(person)+C(coin)}, corresponding to a model with the person and the coin as covariates.
-				\item \texttt{1+C(person)+C(coin)+C(person):C(coin)}, corresponding to a model with the person, the coin, and the interaction between the person and the coin as covariates.
-			\end{itemize}
-			* model 4 could seem redundant due to nesting-main effect, but we ....
-			*  
-
-			Should explain why eliminated some covariates ...
+			As for the covariates we considered in our models, we of course included the person throwing and the coin being thrown as categorical covariates. Due to the mention in the original paper of the existence of learning effects, and the potential we saw in these to alias with coin effects (see discussion in [ref section]), we also wanted to include time dependence in the dataset. This was done by considering the version of the data that is composed of ordered sequences of 100 (or so) throws at a time. Considering this data also allowed us to try and consider effects of coins nested within people, trying to capture subjectivity in how people perceive given coins. Indeed, doing this on the averaged data would have yielded a saturated model. 
+			%\begin{itemize}
+			%	\item \texttt{1}, corresponding to a constant model.
+			%	\item \texttt{1+C(person)}, corresponding to a model with the person as a covariate.
+			%	\item \texttt{1+C(person)+C(coin)}, corresponding to a model with the person and the coin as covariates.
+			%	\item \texttt{1+C(person)+C(coin)+C(person):C(coin)}, corresponding to a model with the person, the coin, and the interaction between the person and the coin as covariates.
+			%\end{itemize}
+			%* model 4 could seem redundant due to nesting-main effect, but we ....
+			
+			[explain why eliminated some covariates ...??]
 
 			In the next section, we start by introducing the theory on which we base our model selection. 
 			\subsubsection{Tools For Selection}
@@ -62,6 +61,8 @@
 					\overset{H_0}{\sim} \chi^2_{p_A-p_B},
 				\end{gather}
 				where $\Theta_A\supset\Theta_B$ respectively are the parameters spaces (of dimension $p_a>p_b$) associated to models $A$ and $B$, and $H_0$ is the null hypothesis : $\theta^*\in\Theta_B$. Given this definition, LRTs are used to shed light on whether extra degrees of freedom improve the model significantly better than chance. This has applications in explanatory models, but might be of limited use in the context of model selection due to being prone to overfitting. This is particularly true when testing many models, as tests become correlated and give rise to spurious results [cite davison slides ?].
+
+				[MAYBE MENTION DEVIANCE??]
 			\subsubsection{Diagnostic Plots}
 				In this report, the diagnostics we decided to include where 
 				\begin{itemize}
@@ -181,13 +182,7 @@
 		To deal with the boundary effects between sequences of flips, we removed the two first entries of each sequence. 
 		%To speed up the computations
 		
-		We then define the models 
-		\begin{itemize}
-			\item \texttt{1}, same-side indicator variables,
-			\item \texttt{1+hop1\_mem}, same-side indicator variables for the penultimate throw,
-			\item \texttt{1+hop1\_mem+hop2\_mem}, same-side indicator variables for the antepenultimate throw.
-		\end{itemize}
-		and carry out an analysis of deviance. The results associated are found in \ref{tab:memory-model-comparison}. Given the uni-directionality of these results, no further analysis was made.  
+		We then define the constant model \texttt{1}, the model including memory about the penultimate throw \texttt{1+hop1\_mem}, and the one including memory about the two previous throws \texttt{1+hop1\_mem+hop2\_mem}. The analysis of deviance associated to these models is found in \ref{tab:memory-model-comparison}. Given the uni-directionality of these results, no further analysis was made.  
 		\begin{table}[htb]
 			\centering
 			\caption{Model comparison for models including : no memory, 1-hop memory and 2-hop memory.}
@@ -226,7 +221,7 @@
 			
 			This would be consistent with the fact that the physical model [CITATION NEEDED] predicts a same-side bias due to the ``wobble'' in people's throws. Indeed, we can imagine that with practice, participants progressively reduce the amount of ``wobble'', until they reach perfect throw, for which there is no bias. 
 
-			As for the type of dependence. 
+			As for the type of dependence, the simple linear term at the exponential seems to provide a good fit.  
 		\subsection{Memory Effects}
 		Looking at \ref{tab:memory-model-comparison}, we see there is no support in favour of memory effects relative to the constant model. The deviance decreases by around .8 due to the introduction of the penultimate throw memory and only a further .2 when including memory of the antepenultimate throw. Another factor that shows this is the increase by $>$1 and $\approx 3$ respectively in AIC compared to the constant model.
 		The fact that memory about antepenultimate outcome seems to matter even less than memory about the penultimate outcome does make nonetheless intuitive sense. 
