@@ -67,9 +67,9 @@
 				In this report, the diagnostics we decided to include where 
 				\begin{itemize}
 					\item A QQ plot to check normality of normalised residuals. Pearson studentized residuals were used for WLS models while the presented $r^*$ were used for GLM models. Normality corresponds to a roughly straight line, while outliers, skewness and heavy tails are easily spotted as deviations from it.
-					\item A scatter plot of residuals as a function of fitted values, to assess linearity and homoscedasticity. [TO FILL] were used for WLS models, while deviance residuals where used for GLM models. Linearity corresponds to residuals that stay centred around 0 across the fitted values, while homoscedasticity corresponds to errors whose spread is constant across the fitted values.
+					\item A scatter plot of residuals as a function of fitted values, to assess linearity and homoscedasticity. Pearson studentized residuals were used for WLS models, while deviance residuals where used for GLM models. Linearity corresponds to residuals that stay centred around 0 across the fitted values, while homoscedasticity corresponds to errors whose spread is constant across the fitted values.
 					\item Cook's distance as a function of data index to reveal highly influential data points. Points over the $8/(n-2p)$ threshold are given a closer look (in order of importance). 
-					\item Scatter plots (resp. box plots for categorical covariates) of residuals as a function of the covariates of interest. These are used to check for independence between residuals and the covariates. If there is independence, the residuals look uncorrelated to the covariates. 
+					\item Scatter plots (resp. box plots for categorical covariates) of Pearson residuals as a function of the covariates of interest. These are used to check for independence between residuals and the covariates. If there is independence, the residuals look uncorrelated to the covariates. 
 				\end{itemize}
 				This decision was motivated by our understanding of section 1.4 about diagnostics found in [CITE DAVISON SLIDES]. 
 			\subsubsection{WLS Approach}
@@ -80,9 +80,6 @@
 			The models we consider in this part are all nested in the model \texttt{1+person+agg+coin+person:coin}. As explained in (name of ref ???), if interaction terms are not present, one should consider ANOVA of type II when dealing with unbalanced datasets. Results show that the AIC of the model \texttt{1+person+agg+coin+person:coin} is greater of the one of the model \texttt{1+person+agg+coin} by 95 points. We thus keep the model without interactions and make use of an ANOVA type II. 
 			
 			We consider different models and report their AIC values in table \ref{tab:WLS_AIC} also with the table containing the ANOVA (type II) of the model \texttt{1+person+agg+coin}. As we are only interested in their relative values, the minimimum AIC value among the models compared is substracted from all the other AIC values. 
-			
-
-
 			\begin{table}[htb]
 				\centering
 				\caption{ANOVA (type II) and AIC values}
@@ -185,8 +182,31 @@
 				\caption{Dev-resid as a function of (a) person and (b) coin.}
 				\label{fig:dev-resid-vs-covariates}
 			\end{figure}	
+		\newpage
 		\subsection{Unusual Observations}
+		\begin{wrapfigure}[15]{r}{0.6\textwidth}
+			\vspace{-2em}
+			\centering
+			\includegraphics[width=0.55\textwidth]{unusual_people.png}
+			\caption{Distribution inspection for estimated person-parameters in the \texttt{1+person+coin} GLM model.}
+			\label{fig:unusual-persons}
+		\end{wrapfigure}
+		In this section we present the results whose goal is to provide answers to questions such as ``are there unusual coins or people ?''. 
+		
+		We considered ``unusual'' to mean that it seems to come from a different distribution compared to most of the other constituents of its population. We however recognise this is a broad question in principle, and could for example entail aspects such as ``do some people have really little same-side bias ?'' or ``are some people associated to surprisingly large (resp. small) variances between sequences ?''.
 
+		Given our interpretation of the question, we decided to compile normal QQ-plots for the coefficients, as well as box-plots to help identify outliers. The advantage of the box-plots is they allow for comparison under the assumption that the base distributions is not necessarily gaussian. 
+		\begin{wrapfigure}[16]{r}{0.6\textwidth}
+			\vspace{-1em}
+			\centering
+			\includegraphics[width=0.55\textwidth]{unusual_coins.png}
+			\caption{Distribution inspection for estimated coin-parameters in the \texttt{1+person+coin} GLM model.}
+			\label{fig:unusual-coins}
+		\end{wrapfigure}
+		It also is advantageous in terms of the fact that it allows us to represent the uncertainty associated to the outliers, and therefore draw more accurate conclusions. Indeed, given the data is unbalanced, some outliers could be associated to much greater uncertainties, even as big as to make unwise to actually interpret them as outliers. 
+		
+		The plots are can be found in \ref{fig:unusual-persons} and \ref{fig:unusual-coins} for persons and coins respectively. Note we decided to include coins in the analysis because there could in principle still have been some that behaved differently from the rest (even if coins as a whole were found not to have much impact). 
+		Another important detail is that we did not require people (resp. coins) to have been associated to multiple coins (resp. people) for them to be considered in this analysis. Indeed, since no evidence was found for coins nested within people, even the same-side behaviour of a person with a single coin should tell us something about that person's peculiarity.
 		\subsection{Zoom on Learning Effects}
 			We now give a closer look at the learning effects associated to the \texttt{agg} term in the model. We do this by representing the observed and predicted person-averaged same-side rate as a function of the number of throws.  Note that the confidence interval on the prediction was derived in Monte Carlo fashion as the variance between people was found to be larger than that resulting from the uncertainty on the estimated coefficients. 
 			The corresponding figure is \ref{fig:learning-effects}. 
@@ -252,7 +272,11 @@
 			\end{itemize}
 
 		\subsection{Unusual Observations}
+			Looking at \ref{fig:unusual-persons} and \ref{fig:unusual-coins}, we immediately notice they look really different. Indeed, in the case of coins, the parameters align quite well on the QQ plot, showing that a gaussian could be a good match. In the box-plot, there is a single outlier (associated to 0.02 EUR) and it is not significant. In the person case however : the QQ plot displays really poor fit and  many outliers are present. The most significant are (in order) JanYang, TianqiPeng and adamF. 
 
+			In general, the observed variation in the parameter uncertainties confirm our approach accounting for uncertainty was worth our time. 
+			%[COULD ADD EXAMPLE OF IMPACT in terms of flips]
+			%\item  person distribution being asymmetric (could be a thing ?)
 		\subsection{Zoom on Learning Effects}\label{sec:disc-learning-effects}
 			Analysing \ref{fig:learning-effects}, we see that the averaged same-side rate seems to start at a value around 51\%, and then decreases to reach values closer to 50\%. The observed uncertainty/spread can however no be neglected, given the limited number of people involved in the study. 
 			

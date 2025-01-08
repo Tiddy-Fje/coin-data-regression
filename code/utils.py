@@ -51,7 +51,6 @@ def process_data( data_type = 'df-time-agg', drop_ingeborg = True, keep_coins=10
     if drop_ingeborg:
         data = data[data['person']!='ingeborgR'] # -> adds both a person and a coin (100 throws, can remove her)
 
-    #print(len(info['common_coins']), len(info['common_persons']))
     return data, info
 
 
