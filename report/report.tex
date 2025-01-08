@@ -72,16 +72,16 @@
 
 			We then make a linear fit using weighted least squares, where  weight associated to each entry is proportional to the inverse of the variance, that only depends on $m$. As the weights are only relevant up to a factor,  we normalize them by the average of the weights of all the entries. This does not change the result of the regression. 
 
-			The models we consider in this part are all nested in the model \texttt{1+person+agg+coin+person:coin}. As explained in (name of ref ???), if interaction terms are not present, one should consider ANOVA of type II when dealing with unbalanced datasets. 
+			The models we consider in this part are all nested in the model \texttt{1+person+agg+coin+person:coin}. As explained in (name of ref ???), if interaction terms are not present, one should consider ANOVA of type II when dealing with unbalanced datasets. Results show that the AIC of the model \texttt{1+person+agg+coin+person:coin} is greater of the one of the model \texttt{1+person+agg+coin} by 95 points. We thus keep the model without interactions and make use of an ANOVA type II. 
 			
 			We consider different models and report their AIC values in table \ref{tab:WLS_AIC} also with the table containing the ANOVA (type II) of the model \texttt{1+person+agg+coin}. As we are only interested in their relative values, the minimimum AIC value among the models compared is substracted from all the other AIC values. 
 			\begin{table}[htb]
 				\centering
-				\caption{ANOVA (type II)}
+				\caption{ANOVA (type II) and AIC values}
 				\label{tab:WLS_AIC}
 				\begin{tabular}{lccccc}
 				\toprule
-				Term & RSS & df & F & P($\ge F$) & Delta AIC \\
+				Term & RSS & df & F & P($\ge F$) & AIC \\
 				\midrule
 				\texttt{1} & - & - & - & - & 159.76  \\
 				\texttt{person} & 213.78 & 46.00 & 4.31 & 4.47e-20 & 12.89 \\
@@ -114,7 +114,7 @@
 
 
 
-			Diagnostic plots for the model \texttt{1+person+agg} are reported in \ref{fig:wls-diagnostic} and \ref{fig:wls-diagnostic-time-coefs}. 
+			Diagnostic plots for the model \texttt{1+person+agg} are reported in \ref{fig:wls-diagnostic} and \ref{fig:wls-diagnostic-time-coefs}. In \ref{fig:wls-diagnostic}, 1.5\% of the entries have a Cook's distance larger than the threshold fixed to be equal $8/(n-2*p)$. 
 
 			\begin{figure}[htb]
 				\centering
@@ -243,8 +243,14 @@
 		\subsubsection{WLS Approach}
 		Examining table \ref{tab:WLS_AIC}, we see that there is a drop of AIC by 3 points per degree of freedom on average which strongly suggests the existence of differences between persons. Similarly, there is overwhelming evidence for time-dependence in the same-side bias. Indeed, the addition of the \text{agg} covariate allows a drop by 12 points in the AIC. When it comes to between-coin differences, the evidence is nowhere near as strong. Indeed, AIC increases by around 30 when compared to the \texttt{1+person+agg} model, reflecting clear overfitting.
 		The same way, including the coefficients \texttt{C(person):C(coin)} yields an increase in the AIC value of the model. 
-		Overall, among the models reported in table \ref{tab:WLS_AIC}, the selection based on AIC leads to the model \texttt{1+C(person)+agg}. 
-		Likelihood ratio tests have also been reported (table \ref{tab:WLS_LRT}), leading to a different selection. LRT results show that model \texttt{1+C(person)+C(agg)} is preffered compared to the more simple models tested \texttt{1} and \texttt{1+C(person)}. However, LRT
+		Overall, among the models reported in table \ref{tab:WLS_AIC}, the selection based on AIC leads to the model \texttt{1+person+agg}. 
+		Likelihood ratio tests have also been reported (table \ref{tab:WLS_LRT}), leading to a different selection. On the other hand, LRT results show that model \texttt{1+person} is prefered compared to the constant model \texttt{1}, and the model \texttt{1+person+agg} is prefered to the model \texttt{1+Cperson}. The last line in \ref{tab:WLS_LRT} shows that the model including the coins {1+person+agg+coin} is rejected when tested against the restricted model {1+person+agg}. 
+		
+		??? inclure que lorseque j'ajoute coin dedans alors c'est significant ou pas ???
+
+		We now move to analysing the diagnostics of the selected model. Figures (a) and (b) in \ref{fig:wls-diagnostic} reveal healthy diagnostic plots. Indeed, the QQ plot shows a reasonably normal distriubtion of the residuals, with a small fat tail on the left for the smallest residuals. The plot (b) shows that no trend of residuals is observed with respect to the fitted values. 
+		Plot (c) shows the cooks distance of each entry.Only a small fraction of entries (1.5\%) have a Cook's distance exceeding the threshold. Analyzing the 10 entries with the highest Cook's distances reveals that they all belong to individuals with relatively few throws. Ranking individuals in descending order by their number of throws shows that the 15 largest Cook's distances are associated with the 10 lowest-ranked (in terms of number of throws) individuals. According to the definition of Cook's distance, it increases with leverage, which is higher for entries corresponding to individuals with fewer throws. This likely explains the large Cook's distances observed in these cases.
+
 
 		\subsubsection{GLM Approach}
 			We first consider the model comparison tables \ref{tab:glm-model-comparison} and \ref{tab:glm-lrt-comparison}. 
