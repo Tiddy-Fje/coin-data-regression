@@ -61,20 +61,15 @@
 			\subsubsection{Diagnostic Plots}
 				To asses the quality of the models, the diagnostics we decided to use are 
 				\begin{itemize}
-					\item A QQ plot to check normality of normalised residuals. Pearson studentized residuals were used for WLS models while the presented $r^*$ were used for GLM models. Normality corresponds to a roughly straight line, while outliers, skewness and heavy tails are easily spotted as deviations from it.
-					\item A scatter plot of residuals as a function of fitted values, to assess linearity and homoscedasticity. Pearson studentized residuals were used for WLS models, while deviance residuals where used for GLM models. Linearity corresponds to residuals that stay centred around 0 across the fitted values, while homoscedasticity corresponds to errors whose spread is constant across the fitted values.
+					\item A QQ plot to check normality of normalised residuals. Pearson studentized residuals were used for WLS models while the $r_j^*=r_{D j}+r_{D j}^{-1} \log \left(r_{P j} / r_{D j}\right) \dot{\sim} N(0,1)$ residuals were used for GLM models (where $r_{P j},r_{D j}$ refer to normalised versions of Pearson and deviance residuals). Normality corresponds to a roughly straight line, while outliers, skewness and heavy tails are easily spotted as deviations from it.
+					\item A scatter plot of residuals as a function of fitted values, to assess linearity and homoscedasticity. Pearson studentized residuals were used for WLS models, while deviance residuals were used for GLM models. Linearity corresponds to residuals that stay centred around 0 across the fitted values, while homoscedasticity corresponds to residuals whose spread is constant across the fitted values.
 					\item Cook's distance as a function of data index to reveal highly influential data points. Points over the $8/(n-2p)$ threshold are given a closer look (in order of importance). 
-					\item Scatter plots (resp. box plots for categorical covariates) of Pearson residuals as a function of the covariates of interest. These are used to check for independence between residuals and the covariates. If there is independence, the residuals look uncorrelated to the covariates. 
+					\item Scatter plots (resp. box-plots for categorical covariates) of Pearson residuals as a function of the covariates of interest. These are used to check for independence between residuals and the covariates. If there is independence, the residuals look uncorrelated with respect to the covariates. 
 				\end{itemize}
-				This decision was motivated by our understanding of section 1.4 about diagnostics found in [CITE DAVISON SLIDES]. 
+				These choices were motivated by our understanding of section 1.4 about diagnostics found in [2]. 
 			\subsubsection{WLS Approach}
-			In this section, we consider the normal approximation for the binomial variable $R$ with denominator $m$. Having that the success probability is fairly close to 0.5 we get $p(1-p)$ approximately equal to 1/4. Hence we end up with: $R/m \sim N(p,1/(4m))$. 
-
-			We then make a linear fit using weighted least squares, where  weight associated to each entry is proportional to the inverse of the variance, that only depends on $m$. As the weights are only relevant up to a factor,  we normalize them by the average of the weights of all the entries. This does not change the result of the regression. 
-
-			The models we consider in this part are all nested in the model \texttt{1+person+agg+coin+person:coin}. As explained in (name of ref ???), if interaction terms are not present, one should consider ANOVA of type II when dealing with unbalanced datasets. Results show that the AIC of the model \texttt{1+person+agg+coin+person:coin} is greater of the one of the model \texttt{1+person+agg+coin} by 95 points. We thus keep the model without interactions and make use of an ANOVA type II. 
-			
-			We consider different models and report their AIC values in table \ref{tab:WLS_AIC} also with the table containing the ANOVA (type II) of the model \texttt{1+person+agg+coin}. As we are only interested in their relative values, the minimimum AIC value among the models compared is substracted from all the other AIC values. 
+			In this section, we consider the normal approximation for the binomial variable $R$ with denominator $m$ [WE SHOULD EXPLAIN WHAT THESE VARIABLES ARE IN THE DATA]. 
+			Having that the success probability is fairly close to 0.5 we get $p(1-p)\approx1/4$. Hence we end up with: $R/m \sim N(p,1/(4m))$. 
 			\begin{table}[htb]
 				\centering
 				\caption{ANOVA (type II) and AIC values}
@@ -91,11 +86,8 @@
 				\bottomrule
 				\end{tabular}
 			\end{table}
-
-			The AIC table indicates that the best model is \texttt{1+C(person)+agg}. 
-
-			Table of comparison of the models using the likelihood ratio tests. 
-
+			
+			We then fit a linear model using weighted least squares, where the  weight associated to each entry is proportional to the inverse of the variance, that only depends on $m$. As the weights are only relevant up to a common factor, we normalize them by the average of the weights of all the entries. This does not change the result of the regression. 
 			\begin{table}[htb]
 				\centering
 				\caption{LRTs table}
@@ -110,19 +102,26 @@
 				% \texttt{1 + C(person) + agg + C(person):C(coin)} & \texttt{1 + C(person) + agg} & 0.02 \\
 				\bottomrule
 				\end{tabular}
-				\end{table}
-
-
-
-			Diagnostic plots for the model \texttt{1+person+agg} are reported in \ref{fig:wls-diagnostic} and \ref{fig:wls-diagnostic-time-coefs}. In \ref{fig:wls-diagnostic}, 1.5\% of the entries have a Cook's distance larger than the threshold fixed to be equal $8/(n-2*p)$. 
-
+			\end{table}
+			
+			The models we consider in this part are all nested in the model \texttt{1+person+agg+coin+person:coin}. As explained in [3], if interaction terms are not present, one should consider ANOVA of type II when dealing with unbalanced datasets.
 			\begin{figure}[htb]
 				\centering
-				\includegraphics[width=0.85\textwidth]{WLS_diagnostics.png}
+				\includegraphics[width=0.8\textwidth]{WLS_diagnostics.png}
 				\caption{Diagnostics for the selected WLS model.}
 				\label{fig:wls-diagnostic}
 			\end{figure}
+			
+			Results show that the AIC of the model \texttt{1+person+agg+coin+person:coin} is greater of the one of the model \texttt{1+person+agg+coin} by 95 points. We thus keep the model without interactions and make use of an ANOVA type II to analyse main effects. 
 
+			We consider different models and report their AIC values in \ref{tab:WLS_AIC} in addition to the output of the ANOVA (type II) for the \texttt{1+person+agg+coin} model. As we are only interested in their relative values, the minimum AIC value among the models compared is subtracted from all the other AIC values. 
+
+			The AIC table indicates that the best model is \texttt{1+C(person)+agg}. 
+
+			Table of comparison of the models using the likelihood ratio tests. 
+
+
+			Diagnostic plots for the model \texttt{1+person+agg} are reported in \ref{fig:wls-diagnostic} and \ref{fig:wls-diagnostic-time-coefs}. In \ref{fig:wls-diagnostic}, 1.5\% of the entries have a Cook's distance larger than the threshold fixed to be equal $8/(n-2*p)$. 
 
 			\begin{figure}[htb]
 				\centering
@@ -130,7 +129,6 @@
 				\caption{Diagnostics for the selected WLS model.}
 				\label{fig:wls-diagnostic-time-coefs}
 			\end{figure}
-
 			\subsubsection{GLM Approach}
 			In this section, instead of relying on an approximation to fit a Least Squares models, we take into account the nature of the data by using a GLM. Indeed, given the binomial nature of aggregated data, using a binomial-response GLM seems natural. 
 			\begin{table}[htb]
