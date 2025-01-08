@@ -75,10 +75,11 @@
 			\subsubsection{WLS Approach}
 			In this section, we consider the normal approximation for the binomial variable $R$ with denominator $m$. Having that the success probability is fairly close to 0.5 we get $p(1-p)$ approximately equal to 1/4. Hence we end up with: $R/m \sim N(p,1/(4m))$. 
 
-			We then make a linear fit using weighted least squares, where  weight associated to each entry is proportional to the inverse of the variance, that only depends on $m$.
-			
+			We then make a linear fit using weighted least squares, where  weight associated to each entry is proportional to the inverse of the variance, that only depends on $m$. As the weights are only relevant up to a factor,  we normalize them by the average of the weights of all the entries. This does not change the result of the regression. 
 
-			We consider different models and report their AIC values in table \ref{tab:WLS_AIC}. As we are only interested in their relative values, the minimimum AIC value among the models compared is substracted from all the other AIC values. 
+			The models we consider in this part are all nested in the model \texttt{1+person+agg+coin+person:coin}. As explained in (name of ref ???), if interaction terms are not present, one should consider ANOVA of type II when dealing with unbalanced datasets. 
+			
+			We consider different models and report their AIC values in table \ref{tab:WLS_AIC} also with the table containing the ANOVA (type II) of the model \texttt{1+person+agg+coin}. As we are only interested in their relative values, the minimimum AIC value among the models compared is substracted from all the other AIC values. 
 			
 
 
@@ -104,6 +105,7 @@
 			Table of comparison of the models using the likelihood ratio tests. 
 
 			\begin{table}[htb]
+				\centering
 				\caption{LRTs table}
 				\label{tab:WLS_LRT}
 				\begin{tabular}{lcc}
@@ -113,7 +115,7 @@
 				\texttt{1 + C(person)} & \texttt{1} & 0.00 \\
 				\texttt{1 + C(person) + agg} & \texttt{1 + C(person)} & 0.00 \\
 				\texttt{1 + C(person) + agg + C(coin)} & \texttt{1 + C(person) + agg} & 0.09 \\
-				\texttt{1 + C(person) + agg + C(person):C(coin)} & \texttt{1 + C(person) + agg} & 0.02 \\
+				% \texttt{1 + C(person) + agg + C(person):C(coin)} & \texttt{1 + C(person) + agg} & 0.02 \\
 				\bottomrule
 				\end{tabular}
 				\end{table}
@@ -129,11 +131,10 @@
 				\label{fig:wls-diagnostic}
 			\end{figure}
 
-			??? Rayan, replace by the right one here 
 
 			\begin{figure}[htb]
 				\centering
-				\includegraphics[width=0.85\textwidth]{WLS_diagnostics.png}
+				\includegraphics[width=0.85\textwidth]{wls_resid_vs_covariates.png}
 				\caption{Diagnostics for the selected WLS model.}
 				\label{fig:wls-diagnostic-time-coefs}
 			\end{figure}
