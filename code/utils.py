@@ -3,10 +3,8 @@ import statsmodels.api as sm
 import statsmodels.formula.api as smf
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
-from statsmodels.stats.outliers_influence
 import seaborn as sb
 import numpy as np
-
 
 FACTOR = 1.2
 SMALL_SIZE = 8 * FACTOR
