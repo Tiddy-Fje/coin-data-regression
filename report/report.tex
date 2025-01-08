@@ -21,20 +21,20 @@
 	\pagenumbering{arabic}
 	\setcounter{page}{1}
 	\section{Introduction}
-		Before diving into the analysis, we provide a brief overview of the datasets main features and the models we consider. Our exploratory analysis is available as a Jupyter notebook, and provides more detail. 
+		Before diving into the analysis, we provide a brief overview of the datasets' main features and the models we consider. Our exploratory analysis is available as a Jupyter notebook, and provides more detail. 
 
 		The dataset is composed of throws from 48 people using 44 coins in total. Given the study did not impose strict guidelines for coins to be used, the design is heavily unbalanced. Eighteen coins have only been thrown by a single person, while some of them have been thrown by more than 20 people. Also, more than half the people have only flipped 5 or fewer different coins, while someone threw 11 different ones. As for the the person-coin pairs, most have fewer or equal to 1000 throws, while some have around 10000 ones. This severe unbalance must be kept in mind during the study, given it restricts the methods that can be used and poses challenges during model interpretation. 
 
-		After plotting the same-side rates across people, coin and person-coin combinations, we deemed it relevant to investigate models considering both person and coin as covariates, as well as individual person-coin pairs. Following the advice given on the project statement, we also branched our analysis in Binomial-response GLM and WLS approaches, with the goal of comparing the results. 
+		After plotting the same-side proportion across people, coin and person-coin combinations, we deemed it relevant to investigate models considering both person and coin as covariates, as well as individual person-coin pairs. Following the advice given on the project statement, we also branched our analysis in Binomial-response GLM and WLS approaches, with the goal of comparing the results. 
 
-		Motivated by impacts of muscle-memory on the flipping, we additionally investigated time-varying same-side rates and memory between successive throws.
+		Motivated by impacts of muscle-memory on the flipping, we additionally investigated time-varying same-side proportions and memory between successive throws.
 	\section{Analysis}
 		\subsection{Model Comparison}
-			In this section, we introduce and compare different models for the same-side rate. 
+			In this section, we introduce and compare different models for the same-side proportion. 
 
 			Before thinking about models, we thought about whether transforming the response was relevant. Given the same-side rates where clustered around 50\% with little change around it, we did not see any reason a priori to apply a transformation to the response. Diagnostic plots were of course later inspected to confirm this intuition.
 			
-			As for the covariates we considered in our models, we of course included the person throwing and the coin being thrown as categorical covariates. Due to the potential we saw in time-effects to alias with coin effects (see discussion in [ref section]), we preferred including time in this analysis instead of relegating it to a small independent part. This was done by considering the version of the data that is composed of ordered sequences of 100 (or so) throws at a time. Considering this data also allowed us to try and consider effects of coins nested within people, trying to capture subjectivity in how people perceive given coins. Indeed, doing this on the averaged data would have yielded a saturated model. 
+			As for the covariates we considered in our models, we of course included the person throwing and the coin being thrown as categorical covariates. Due to the potential we saw in time-effects to alias with coin effects (see discussion in [ref section]), we preferred including time in this analysis instead of relegating it to a independent part. This was done by considering the version of the data that is composed of ordered sequences/entries of 100 (or so) throws at a time. Considering this data also allowed us to try and consider effects of coins nested within people, trying to capture subjectivity in how people perceive given coins. Indeed, doing this on the averaged data would have yielded a saturated model. 
 
 			In the next section, we start by introducing the theory on which we base our model selection. 
 			\subsubsection{Tools For Selection}
@@ -68,11 +68,11 @@
 				\end{itemize}
 				These choices were motivated by our understanding of section 1.4 about diagnostics found in [2]. 
 			\subsubsection{WLS Approach}
-			In this section, we consider the normal approximation for the binomial variable $R$ with denominator $m$ [WE SHOULD EXPLAIN WHAT THESE VARIABLES ARE IN THE DATA]. 
-			Having that the success probability is fairly close to 0.5 we get $p(1-p)\approx1/4$. Hence we end up with: $R/m \sim N(p,1/(4m))$. 
+			In this section, we consider the normal approximation for the binomial variable $R$ (the same-side flips within a sequence) with denominator $m$ (number of flips within a sequence). 
+			Having that the success probability is fairly close to 0.5 we get $p(1-p)\approx1/4$. Hence we end up with the approximation $R/m \sim N(p,1/(4m))$. 
 			\begin{table}[htb]
 				\centering
-				\caption{ANOVA (type II) and AIC values}
+				\caption{ANOVA (type II) of individual terms and AIC values of cumulative terms.}
 				\label{tab:WLS_AIC}
 				\begin{tabular}{lccccc}
 				\toprule
@@ -87,7 +87,7 @@
 				\end{tabular}
 			\end{table}
 			
-			We then fit a linear model using weighted least squares, where the  weight associated to each entry is proportional to the inverse of the variance, that only depends on $m$. As the weights are only relevant up to a common factor, we normalize them by the average of the weights of all the entries. This does not change the result of the regression. 
+			We fit a linear model using weighted least squares, where the  weight associated to each entry is proportional to the inverse of the variance, that only depends on $m$. As the weights are only relevant up to a common factor, we normalise them by the average of the weights of all the entries. This does not change the result of the regression. 
 			\begin{table}[htb]
 				\centering
 				\caption{LRTs table}
@@ -99,7 +99,7 @@
 				\texttt{1 + C(person)} & \texttt{1} & 0.00 \\
 				\texttt{1 + C(person) + agg} & \texttt{1 + C(person)} & 0.00 \\
 				\texttt{1 + C(person) + agg + C(coin)} & \texttt{1 + C(person) + agg} & 0.09 \\
-				% \texttt{1 + C(person) + agg + C(person):C(coin)} & \texttt{1 + C(person) + agg} & 0.02 \\
+				\texttt{1 + C(person) + agg + C(person):C(coin)} & \texttt{1 + C(person) + agg} & 0.02 \\
 				\bottomrule
 				\end{tabular}
 			\end{table}
@@ -111,9 +111,9 @@
 				\caption{Diagnostics for the selected WLS model.}
 				\label{fig:wls-diagnostic}
 			\end{figure}
-			Results show that the AIC of the model \texttt{1+person+agg+coin+person:coin} is greater of the one of the model \texttt{1+person+agg+coin} by 95 points. We thus keep the model without interactions and make use of an ANOVA type II to analyse main effects. 
+			Results show that the AIC of the model \texttt{1+person+agg+coin+person:coin} is greater than the one of model \texttt{1+person+agg+coin} by 95 points. We thus keep the model without interactions and make use of an ANOVA type II to analyse the main effects. 
 
-			We consider different models and report their AIC values in \ref{tab:WLS_AIC} in addition to the output of the ANOVA (type II) for the \texttt{1+person+agg+coin} model. As we are only interested in their relative values, the minimum AIC value among the models compared is subtracted from all the other AIC values. 
+			We consider different models and report their AIC values in \ref{tab:WLS_AIC} (at each line the AIC reported is the one of the model composed of all the terms preceeding that line including the term present on that line itself) in addition to the output of the ANOVA (type II) for the \texttt{1+person+agg+coin} model. As we are only interested in their relative values, the minimum AIC value among the models compared is subtracted from all the AIC values. 
 			\begin{figure}[htb]
 				\centering
 				\includegraphics[width=0.85\textwidth]{wls_resid_vs_covariates.png}
@@ -139,7 +139,7 @@
 				\bottomrule
 				\end{tabular}
 			\end{table}
-			More specifically, we consider a Logit link as it leads to easily interpretable results, meaning we model $\mathbb{E}[y\mid x]=\exp\left(\sum_i \beta_i x_i\right)$ with binomial errors. We expect this to lead to more accurate results than the WLS approximation, especially for entries having $R/M\not\approx 1/2$.
+			More specifically, we consider a Logit link as it leads to easily interpretable results, meaning we model $\mathbb{E}[y\mid x]=\exp\left(\sum_i \beta_i x_i\right)$ with binomial response distribution. We expect this to lead to more accurate results than the WLS approximation, especially for entries having $R/M\not\approx 1/2$.
 			\begin{table}[htb]
 				\centering
 				\caption{Likelihood ratio tests comparing different GLM models.}
@@ -195,10 +195,10 @@
 		The plots are found in \ref{fig:unusual-params}. Note we decided to include coins in the analysis because there could in principle still have been some that behaved differently from the rest (even if coins as a whole were found not to have much impact). 
 		Another important detail is that we did not require people (resp. coins) to have been associated to multiple coins (resp. people) for them to be considered in this analysis. Indeed, since no evidence was found for coins nested within people, even the same-side behaviour of a person with a single coin should tell us something about that person's peculiarity.
 		\subsection{Zoom on Learning Effects}
-			We now give a closer look at the learning effects associated to the \texttt{agg} term in the model. We do this by representing the observed and predicted person-averaged same-side rate as a function of the number of throws.  Note that the confidence interval on the prediction was derived in Monte Carlo fashion as the variance between people was found to be larger than that resulting from the uncertainty on the estimated coefficients. 
+			We now give a closer look at the learning effects associated to the \texttt{agg} term in the model. We do this by representing the observed and predicted person-averaged same-side rate as a function of the number of throws preceeding the observation.  Note that the confidence interval on the prediction was derived in Monte Carlo fashion as the variance between people was found to be larger than that resulting from the uncertainty on the estimated coefficients. 
 			The corresponding figure is \ref{fig:learning-effects}. 
 		\subsection{Memory Effects}
-		In this section we shift our focus to memory effects. We do so motivated by the fact that we deem it probable a priori that successive throws are more similar to each other than randomly selected ones. Indeed, one could imagine that after two same-side throws, the next could end being a same-side one two with a probability higher than the base rate. 
+		In this section we shift our focus to memory effects. We do so motivated by the fact that we deem it probable a priori that successive throws are more similar to each other than randomly selected ones. Indeed, one could imagine that after two same-side throws, the next could end being a same-side one too with a probability higher than the base rate (e.g. because of muscle memory effects). 
 		
 		To test this we start by considering the data consisting of individual throw outcomes. To this, we add columns corresponding to 
 		\begin{itemize}
@@ -227,22 +227,22 @@
 	\section{Discussion}
 		\subsection{Model Comparison}
 		\subsubsection{WLS Approach}
-		Examining table \ref{tab:WLS_AIC}, we see that there is a drop of AIC by 3 points per degree of freedom on average which strongly suggests the existence of differences between persons. Similarly, there is overwhelming evidence for time-dependence in the same-side bias. Indeed, the addition of the \text{agg} covariate allows a drop by 12 points in the AIC. When it comes to between-coin differences, the evidence is nowhere near as strong. Indeed, AIC increases by around 30 when compared to the \texttt{1+person+agg} model, reflecting clear overfitting.
-		The same way, including the coefficients \texttt{C(person):C(coin)} yields an increase in the AIC value of the model. 
+		Examining table \ref{tab:WLS_AIC}, we see that there is a drop of AIC by 3 points per degree of freedom on average when adding the term \texttt{person} to the constant model, which strongly suggests the existence of differences between persons. Similarly, there is overwhelming evidence for time-dependence in the same-side bias. Indeed, the addition of the \text{agg} covariate allows a drop by 12 points in the AIC. When it comes to between-coin differences, the evidence is nowhere near as strong. Indeed, AIC increases by around 30 when compared to the \texttt{1+person+agg} model, reflecting clear overfitting.
+		The same way, including the coefficients \texttt{person:coin} yields an increase in the AIC value of the model. 
 		Overall, among the models reported in table \ref{tab:WLS_AIC}, the selection based on AIC leads to the model \texttt{1+person+agg}. 
-		Likelihood ratio tests have also been reported (table \ref{tab:WLS_LRT}), leading to a different selection. On the other hand, LRT results show that model \texttt{1+person} is prefered compared to the constant model \texttt{1}, and the model \texttt{1+person+agg} is prefered to the model \texttt{1+Cperson}. The last line in \ref{tab:WLS_LRT} shows that the model including the coins {1+person+agg+coin} is rejected when tested against the restricted model {1+person+agg}. 
+		Likelihood ratio tests have also been reported (table \ref{tab:WLS_LRT}), leading to the same selected model. LRT results show that model \texttt{1+person} is prefered compared to the constant model \texttt{1}, and the model \texttt{1+person+agg} is prefered to the model \texttt{1+Cperson}. The last line in \ref{tab:WLS_LRT} shows that the model including the coins {1+person+agg+coin} is rejected when tested against the restricted model {1+person+agg}. 
 		
-		??? inclure que lorseque j'ajoute coin dedans alors c'est significant ou pas ???
-		
-		The AIC table indicates that the best model is \texttt{1+C(person)+agg}. 
+		Interestingly, the model \texttt{1+person+agg+person:coin} tested against the model \texttt{1+person+agg} yields a p-value of 0.02 meaning that person coin interaction effects might still help in explaining part of the variance, even though the AIC-based selection rejected them.
 
 		We now move to analysing the diagnostics of the selected model. Figures (a) and (b) in \ref{fig:wls-diagnostic} reveal healthy diagnostic plots. Indeed, the QQ plot shows a reasonably normal distriubtion of the residuals, with a small fat tail on the left for the smallest residuals. The plot (b) shows that no trend of residuals is observed with respect to the fitted values. 
-		Plot (c) shows the cooks distance of each entry.Only a small fraction of entries (1.5\%) have a Cook's distance exceeding the threshold. Analyzing the 10 entries with the highest Cook's distances reveals that they all belong to individuals with relatively few throws. Ranking individuals in descending order by their number of throws shows that the 15 largest Cook's distances are associated with the 10 lowest-ranked (in terms of number of throws) individuals. According to the definition of Cook's distance, it increases with leverage, which is higher for entries corresponding to individuals with fewer throws. This likely explains the large Cook's distances observed in these cases.
-
+		Plot (c) shows the cooks distance of each entry. Only a small fraction of entries (1.5\%) have a Cook's distance exceeding the threshold. Analyzing the 15 entries with the highest Cook's distances reveals that they all belong to individuals with relatively few throws. Ranking individuals in descending order by their number of throws shows that the 15 largest Cook's distances are associated with the 10 lowest-ranked (in terms of number of throws) individuals. According to the definition of Cook's distance, it increases with leverage. Leverage is higher for entries corresponding to individuals with fewer throws as it intuitively represents the "novelty" of the entry in terms of its position in the covariates space. This likely explains the large Cook's distances observed in these cases.
+		Figure \ref{fig:wls-diagnostic-time-coefs} displays the Pearson residuals with respect to the covariates.
+		Diagnostic plot (a) shows no discernible trend in Pearson residuals relative to the number of preceding throws, supporting the assumption of linearity.
+		Diagnostic plot (b) indicates that residuals are fairly uniform across individuals, with means close to zero and no standout anomalies. Diagnostic plot (c) suggests no significant differences among coins, though it does reveal slightly greater variability, with some means deviating further from zero.
 
 		\subsubsection{GLM Approach}
 			We first consider the model comparison tables \ref{tab:glm-model-comparison} and \ref{tab:glm-lrt-comparison}. 
-			Upon inspection of these, we see that the evidence for between-person variations is extremely strong. The deviance decreases by more than 5.5 points per degree of freedom on average, and the AIC drops by more than 170. Similarly, there is overwhelming evidence for time-dependence in the same-side bias. By itself, the term for example yields a deviance decrease of 15. A closer look at this contribution is given in the \ref{sec:disc-learning-effects}. When it comes to between-coin differences, the evidence is nowhere near as strong. Indeed, AIC increases by around 25 when compared to the \texttt{1+person+agg} model, reflecting clear overfitting. The associated LRT is around .05, meaning coin-effects might still help in explaining part of the deviance. A better evaluation of this could probably be obtained by considering a smaller scale, balanced-design study. Indeed, in the considered dataset, coin and time effects where aliased\footnote{Adding \texttt{coin} to the \texttt{1+person} model explained around 10 units of deviance more than when it was added in the \texttt{1+person+agg} model.}. This was a result of there being a strong time effect on same-side bias, and some coins being flipped many more times than others. 
+			Upon inspection of these, we see that the evidence for between-person variations is extremely strong. The deviance decreases by more than 5.5 points per degree of freedom on average, and the AIC drops by more than 170. Similarly as in the WLS approach, there is overwhelming evidence for time-dependence in the same-side bias. By itself, the term for example yields a deviance decrease of 15. A closer look at this contribution is given in the \ref{sec:disc-learning-effects}. Between-coin differences are not significant. Indeed, AIC increases by around 25 when compared to the \texttt{1+person+agg} model, reflecting overfitting. The associated LRT is around .05, meaning coin-effects might still help in explaining part of the deviance. A better evaluation of this could probably be obtained by considering a smaller scale, balanced-design study. Indeed, in the considered dataset, coin and time effects where aliased\footnote{Adding \texttt{coin} to the \texttt{1+person} model explained around 10 units of deviance more than when it was added in the \texttt{1+person+agg} model.}. This was a result of there being a strong time effect on same-side bias, and some coins being flipped many more times than others. 
 			Given these elements, one would definitely prefer the \texttt{1+person+agg} model for prediction purposes.  
 
 		We now move to analysing the diagnostics of the selected model. Looking at (a) and (b) of \ref{fig:glm-diagnostic}, we see that the residuals are for the most part appropriately normal and homoschedastic. Slight anomalies are observed in the QQ plot for the largest and smallest residuals, as well as for the residuals associated to the largest fitted same-side rate. Looking up the entries associated to the largest Cooks distances, we notice these are associated to sequences of throws where [TO FILL]
