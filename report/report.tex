@@ -173,8 +173,6 @@
 		In this section we present the results whose goal is to provide answers to questions such as ``are there unusual coins or people ?''. 
 		
 		We considered ``unusual'' to mean that it seems to come from a different distribution compared to most of the other constituents of its population. We however recognise this is a broad question in principle, and could for example entail aspects such as ``do some people have really little same-side bias ?'' or ``are some people associated to surprisingly large (resp. small) variances between sequences ?''.
-
-		Given our interpretation of the question, we decided to compile normal QQ-plots for the coefficients, as well as box-plots to help identify outliers. The advantage of the box-plots is they allow for comparison under the assumption that the base distributions is not necessarily gaussian. 
 		\begin{figure}[htb]%{r}{0.6\textwidth}
 			\vspace{-4em}
 			\centering
@@ -182,19 +180,23 @@
 			\caption{Distribution inspection for estimated parameters in the \texttt{1+person+coin} GLM model.}
 			\label{fig:unusual-params}
 		\end{figure}
+		\newpage
+
+		Given our interpretation of the question, we decided to compile normal QQ-plots for the coefficients, as well as box-plots to help identify outliers. The advantage of the box-plots is they allow for comparison under the assumption that the base distributions is not necessarily gaussian. 
 		It also is advantageous in terms of the fact that it allows us to represent the uncertainty associated to the outliers, and therefore draw more accurate conclusions. Indeed, given the data is unbalanced, some outliers could be associated to much greater uncertainties, even as big as to make unwise to actually interpret them as outliers. 
 		
+		\begin{wrapfigure}[12]{r}{.6\textwidth}
+			\vspace{-1em}
+			\centering
+			\includegraphics[width=0.5\textwidth]{learning_effects.png}
+			\caption{Learning effects.}
+			\label{fig:learning-effects}
+		\end{wrapfigure}
 		The plots are found in \ref{fig:unusual-params}. Note we decided to include coins in the analysis because there could in principle still have been some that behaved differently from the rest (even if coins as a whole were found not to have much impact). 
 		Another important detail is that we did not require people (resp. coins) to have been associated to multiple coins (resp. people) for them to be considered in this analysis. Indeed, since no evidence was found for coins nested within people, even the same-side behaviour of a person with a single coin should tell us something about that person's peculiarity.
 		\subsection{Zoom on Learning Effects}
 			We now give a closer look at the learning effects associated to the \texttt{agg} term in the model. We do this by representing the observed and predicted person-averaged same-side rate as a function of the number of throws.  Note that the confidence interval on the prediction was derived in Monte Carlo fashion as the variance between people was found to be larger than that resulting from the uncertainty on the estimated coefficients. 
 			The corresponding figure is \ref{fig:learning-effects}. 
-			\begin{wrapfigure}[15]{r}{.6\textwidth}
-				\centering
-				\includegraphics[width=0.5\textwidth]{learning_effects.png}
-				\caption{Learning effects.}
-				\label{fig:learning-effects}
-			\end{wrapfigure}
 		\subsection{Memory Effects}
 		In this section we shift our focus to memory effects. We do so motivated by the fact that we deem it probable a priori that successive throws are more similar to each other than randomly selected ones. Indeed, one could imagine that after two same-side throws, the next could end being a same-side one two with a probability higher than the base rate. 
 		
