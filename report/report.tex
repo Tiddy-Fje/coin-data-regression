@@ -185,6 +185,23 @@
 				\label{fig:dev-resid-vs-covariates}
 			\end{figure}	
 		\subsection{Unusual Observations}
+		\begin{wrapfigure}[14]{r}{0.6\textwidth}
+			\vspace{-2em}
+			\centering
+			\includegraphics[width=0.55\textwidth]{unusual_coins.png}
+			\caption{Distribution inspection for estimated coin-parameters in the \texttt{1+person+coin} GLM model.}
+			\label{fig:unusual-coins}
+		\end{wrapfigure}
+		\lipsum[1-2]
+		\begin{wrapfigure}[14]{r}{0.6\textwidth}
+			\vspace{-2em}
+			\centering
+			\includegraphics[width=0.55\textwidth]{unusual_people.png}
+			\caption{Distribution inspection for estimated person-parameters in the \texttt{1+person+coin} GLM model.}
+			\label{fig:unusual-persons}
+		\end{wrapfigure}
+		\lipsum[1-2]
+
 
 		\subsection{Zoom on Learning Effects}
 			We now give a closer look at the learning effects associated to the \texttt{agg} term in the model. We do this by representing the observed and predicted person-averaged same-side rate as a function of the number of throws.  Note that the confidence interval on the prediction was derived in Monte Carlo fashion as the variance between people was found to be larger than that resulting from the uncertainty on the estimated coefficients. 
