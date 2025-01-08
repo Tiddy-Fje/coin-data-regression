@@ -111,26 +111,19 @@
 				\caption{Diagnostics for the selected WLS model.}
 				\label{fig:wls-diagnostic}
 			\end{figure}
-			
 			Results show that the AIC of the model \texttt{1+person+agg+coin+person:coin} is greater of the one of the model \texttt{1+person+agg+coin} by 95 points. We thus keep the model without interactions and make use of an ANOVA type II to analyse main effects. 
 
 			We consider different models and report their AIC values in \ref{tab:WLS_AIC} in addition to the output of the ANOVA (type II) for the \texttt{1+person+agg+coin} model. As we are only interested in their relative values, the minimum AIC value among the models compared is subtracted from all the other AIC values. 
-
-			The AIC table indicates that the best model is \texttt{1+C(person)+agg}. 
-
-			Table of comparison of the models using the likelihood ratio tests. 
-
-
-			Diagnostic plots for the model \texttt{1+person+agg} are reported in \ref{fig:wls-diagnostic} and \ref{fig:wls-diagnostic-time-coefs}. In \ref{fig:wls-diagnostic}, 1.5\% of the entries have a Cook's distance larger than the threshold fixed to be equal $8/(n-2*p)$. 
-
 			\begin{figure}[htb]
 				\centering
 				\includegraphics[width=0.85\textwidth]{wls_resid_vs_covariates.png}
 				\caption{Diagnostics for the selected WLS model.}
 				\label{fig:wls-diagnostic-time-coefs}
 			\end{figure}
+
+			Diagnostic plots for the model \texttt{1+person+agg} are reported in \ref{fig:wls-diagnostic} and \ref{fig:wls-diagnostic-time-coefs}. In \ref{fig:wls-diagnostic}, 1.5\% of the entries have a Cook's distance larger than the threshold fixed to $8/(n-2*p)$. 
 			\subsubsection{GLM Approach}
-			In this section, instead of relying on an approximation to fit a Least Squares models, we take into account the nature of the data by using a GLM. Indeed, given the binomial nature of aggregated data, using a binomial-response GLM seems natural. 
+			In this section, instead of relying on an approximation to fit a weighted least squares models, we take into account the nature of the data by fitting a GLM. Indeed, given the aggregated data is binomial, using a binomial-response GLM is natural. 
 			\begin{table}[htb]
 				\centering
 				\caption{Analysis of deviance comparing different GLM models.}
@@ -161,54 +154,47 @@
 				\bottomrule
 				\end{tabular}
 			\end{table}
-			As for the considered covariates, we follow what is done for the WLS approach. The only difference being in the interpretation of the coefficients and the in the fact that we omit the model with coins nested within people. Indeed, even the \texttt{0+person:coin} model did not give any signs of convergence after 100 IRLS iterations. We tried fitting it with BFGS, but did not succeed either as the hessian resulted to be non-full rank. The analysis of deviance and LRT tables for the models that converged are \ref{tab:glm-model-comparison} and \ref{tab:glm-lrt-comparison}.
+			As for the considered covariates, we follow what is done for the WLS approach. The only difference being in the interpretation of the coefficients and the fact that we omit the model with coins nested within people. Indeed, even the \texttt{0+person:coin} model did not give any signs of convergence after 100 IRLS iterations. We tried fitting it with BFGS, but did not succeed either as the hessian resulted to be singular. The analysis of deviance and LRTs for the models that converged are found in \ref{tab:glm-model-comparison} and \ref{tab:glm-lrt-comparison}.
 			\begin{figure}[htb]
 				\centering
-				\includegraphics[width=0.85\textwidth]{GLM_diagnostics.png}
+				\includegraphics[width=0.8\textwidth]{GLM_diagnostics.png}
 				\caption{Diagnostics for the selected GLM model. (a).}
 				\label{fig:glm-diagnostic}
 			\end{figure}
 			The diagnostic plots for the \texttt{1+person+agg+coin} model are in \ref{fig:glm-diagnostic} and \ref{fig:dev-resid-vs-covariates}. 
 			\begin{figure}[htb]
 				\centering
-				\includegraphics[width=0.95\textwidth]{dev_resid_vs_covariates.png}
+				\includegraphics[width=0.85\textwidth]{dev_resid_vs_covariates.png}
 				\caption{Dev-resid as a function of (a) person and (b) coin.}
 				\label{fig:dev-resid-vs-covariates}
 			\end{figure}	
-		\newpage
+		%\newpage
 		\subsection{Unusual Observations}
-		\begin{wrapfigure}[15]{r}{0.6\textwidth}
-			\vspace{-2em}
-			\centering
-			\includegraphics[width=0.55\textwidth]{unusual_people.png}
-			\caption{Distribution inspection for estimated person-parameters in the \texttt{1+person+coin} GLM model.}
-			\label{fig:unusual-persons}
-		\end{wrapfigure}
 		In this section we present the results whose goal is to provide answers to questions such as ``are there unusual coins or people ?''. 
 		
 		We considered ``unusual'' to mean that it seems to come from a different distribution compared to most of the other constituents of its population. We however recognise this is a broad question in principle, and could for example entail aspects such as ``do some people have really little same-side bias ?'' or ``are some people associated to surprisingly large (resp. small) variances between sequences ?''.
 
 		Given our interpretation of the question, we decided to compile normal QQ-plots for the coefficients, as well as box-plots to help identify outliers. The advantage of the box-plots is they allow for comparison under the assumption that the base distributions is not necessarily gaussian. 
-		\begin{wrapfigure}[16]{r}{0.6\textwidth}
-			\vspace{-1em}
+		\begin{figure}[htb]%{r}{0.6\textwidth}
+			\vspace{-4em}
 			\centering
-			\includegraphics[width=0.55\textwidth]{unusual_coins.png}
-			\caption{Distribution inspection for estimated coin-parameters in the \texttt{1+person+coin} GLM model.}
-			\label{fig:unusual-coins}
-		\end{wrapfigure}
+			\includegraphics[width=0.9\textwidth]{unusual_params.png}
+			\caption{Distribution inspection for estimated parameters in the \texttt{1+person+coin} GLM model.}
+			\label{fig:unusual-params}
+		\end{figure}
 		It also is advantageous in terms of the fact that it allows us to represent the uncertainty associated to the outliers, and therefore draw more accurate conclusions. Indeed, given the data is unbalanced, some outliers could be associated to much greater uncertainties, even as big as to make unwise to actually interpret them as outliers. 
 		
-		The plots are can be found in \ref{fig:unusual-persons} and \ref{fig:unusual-coins} for persons and coins respectively. Note we decided to include coins in the analysis because there could in principle still have been some that behaved differently from the rest (even if coins as a whole were found not to have much impact). 
+		The plots are found in \ref{fig:unusual-params}. Note we decided to include coins in the analysis because there could in principle still have been some that behaved differently from the rest (even if coins as a whole were found not to have much impact). 
 		Another important detail is that we did not require people (resp. coins) to have been associated to multiple coins (resp. people) for them to be considered in this analysis. Indeed, since no evidence was found for coins nested within people, even the same-side behaviour of a person with a single coin should tell us something about that person's peculiarity.
 		\subsection{Zoom on Learning Effects}
 			We now give a closer look at the learning effects associated to the \texttt{agg} term in the model. We do this by representing the observed and predicted person-averaged same-side rate as a function of the number of throws.  Note that the confidence interval on the prediction was derived in Monte Carlo fashion as the variance between people was found to be larger than that resulting from the uncertainty on the estimated coefficients. 
 			The corresponding figure is \ref{fig:learning-effects}. 
-			\begin{figure}[htb]
+			\begin{wrapfigure}[15]{r}{.6\textwidth}
 				\centering
 				\includegraphics[width=0.5\textwidth]{learning_effects.png}
 				\caption{Learning effects.}
 				\label{fig:learning-effects}
-			\end{figure}
+			\end{wrapfigure}
 		\subsection{Memory Effects}
 		In this section we shift our focus to memory effects. We do so motivated by the fact that we deem it probable a priori that successive throws are more similar to each other than randomly selected ones. Indeed, one could imagine that after two same-side throws, the next could end being a same-side one two with a probability higher than the base rate. 
 		
@@ -245,6 +231,8 @@
 		Likelihood ratio tests have also been reported (table \ref{tab:WLS_LRT}), leading to a different selection. On the other hand, LRT results show that model \texttt{1+person} is prefered compared to the constant model \texttt{1}, and the model \texttt{1+person+agg} is prefered to the model \texttt{1+Cperson}. The last line in \ref{tab:WLS_LRT} shows that the model including the coins {1+person+agg+coin} is rejected when tested against the restricted model {1+person+agg}. 
 		
 		??? inclure que lorseque j'ajoute coin dedans alors c'est significant ou pas ???
+		
+		The AIC table indicates that the best model is \texttt{1+C(person)+agg}. 
 
 		We now move to analysing the diagnostics of the selected model. Figures (a) and (b) in \ref{fig:wls-diagnostic} reveal healthy diagnostic plots. Indeed, the QQ plot shows a reasonably normal distriubtion of the residuals, with a small fat tail on the left for the smallest residuals. The plot (b) shows that no trend of residuals is observed with respect to the fitted values. 
 		Plot (c) shows the cooks distance of each entry.Only a small fraction of entries (1.5\%) have a Cook's distance exceeding the threshold. Analyzing the 10 entries with the highest Cook's distances reveals that they all belong to individuals with relatively few throws. Ranking individuals in descending order by their number of throws shows that the 15 largest Cook's distances are associated with the 10 lowest-ranked (in terms of number of throws) individuals. According to the definition of Cook's distance, it increases with leverage, which is higher for entries corresponding to individuals with fewer throws. This likely explains the large Cook's distances observed in these cases.
