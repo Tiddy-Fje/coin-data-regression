@@ -21,9 +21,9 @@ plt.rc('ytick', labelsize=MEDIUM_SIZE)    # fontsize of the tick labels
 plt.rc('legend', fontsize=MEDIUM_SIZE)    # legend fontsize
 plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
 #plt.rc('figure', labelsize=SMALL_SIZE)    # fontsize of the x and y labels
-plt.rc('figure',autolayout=True)
+plt.rc('figure', autolayout=True)
 plt.rc('lines', linewidth=2)
-plt.rc('lines', markersize=7)
+plt.rc('lines', markersize=5)
 
 
 def process_data( data_type = 'df-time-agg', drop_ingeborg = True, keep_coins=10, keep_persons=5, drop_lonely=False ):

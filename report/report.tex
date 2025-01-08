@@ -76,22 +76,25 @@
 			In this section, we consider the normal approximation for the binomial variable $R$ with denominator $m$. Having that the success probability is fairly close to 0.5 we get $p(1-p)$ approximately equal to 1/4. Hence we end up with: $R/m \sim N(p,1/(4m))$. 
 
 			We then make a linear fit using weighted least squares, where  weight associated to each entry is proportional to the inverse of the variance, that only depends on $m$.
+			
 
 			We consider different models and report their AIC values in table \ref{tab:WLS_AIC}. As we are only interested in their relative values, the minimimum AIC value among the models compared is substracted from all the other AIC values. 
+			
+
 
 			\begin{table}[htb]
 				\centering
-				\caption{Model comparison based on AIC values.}
+				\caption{ANOVA (type II)}
 				\label{tab:WLS_AIC}
-				\begin{tabular}{lc}
+				\begin{tabular}{lccccc}
 				\toprule
-				Model Formula (RHS) & AIC \\
+				Term & RSS & df & F & P($\ge F$) & Delta AIC \\
 				\midrule
-				\texttt{1} & 159.76 \\
-				\texttt{1 + C(person)} & 12.89 \\
-				\texttt{1 + C(person) + agg} & 0.00 \\
-				\texttt{1 + C(person) + agg + C(coin)} & 29.21 \\
-				\texttt{1 + C(person) + agg + C(person):C(coin)} & 123.98 \\
+				\texttt{1} & - & - & - & - & 159.76  \\
+				\texttt{person} & 213.78 & 46.00 & 4.31 & 4.47e-20 & 12.89 \\
+				\texttt{agg} & 7.65 & 1.00 & 7.10 & 7.75e-03 & 0.00 \\
+				\texttt{coin} & 57.95 & 42.00 & 1.28 & 1.07e-01 & 29.21 \\
+				\texttt{Residual} & 3576.62 & 3319.00 & - & - & 0.00 \\
 				\bottomrule
 				\end{tabular}
 			\end{table}
@@ -114,6 +117,26 @@
 				\bottomrule
 				\end{tabular}
 				\end{table}
+
+
+
+			Diagnostic plots for the model \texttt{1+person+agg} are reported in \ref{fig:wls-diagnostic} and \ref{fig:wls-diagnostic-time-coefs}. 
+
+			\begin{figure}[htb]
+				\centering
+				\includegraphics[width=0.85\textwidth]{WLS_diagnostics.png}
+				\caption{Diagnostics for the selected WLS model.}
+				\label{fig:wls-diagnostic}
+			\end{figure}
+
+			??? Rayan, replace by the right one here 
+
+			\begin{figure}[htb]
+				\centering
+				\includegraphics[width=0.85\textwidth]{WLS_diagnostics.png}
+				\caption{Diagnostics for the selected WLS model.}
+				\label{fig:wls-diagnostic-time-coefs}
+			\end{figure}
 
 			\subsubsection{GLM Approach}
 			In this section, instead of relying on an approximation to fit a Least Squares models, we take into account the nature of the data by using a GLM. Indeed, given the binomial nature of aggregated data, using a binomial-response GLM seems natural. 
