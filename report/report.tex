@@ -23,27 +23,18 @@
 	\section{Introduction}
 		Before diving into the analysis, we provide a brief overview of the datasets main features and the models we consider. Our exploratory analysis is available as a Jupyter notebook, and provides more detail. 
 
-		The dataset is composed of throws from 48 people using 44 coins in total. Given the study did not impose strict guidelines for coins to be used, the design is heavily unbalanced. Eighteen coins have only been thrown by a single person, while some of them have been thrown by more than 20 people. Also, more than half the people have only flipped 5 or less different coins, while someone threw 11 different ones. As for the the person-coin pairs, most have fewer or equal to 1000 throws, while some have around 10000 ones. This severe unbalance must be kept in mind during the study, given it can pose challenges during model interpretation. 
+		The dataset is composed of throws from 48 people using 44 coins in total. Given the study did not impose strict guidelines for coins to be used, the design is heavily unbalanced. Eighteen coins have only been thrown by a single person, while some of them have been thrown by more than 20 people. Also, more than half the people have only flipped 5 or fewer different coins, while someone threw 11 different ones. As for the the person-coin pairs, most have fewer or equal to 1000 throws, while some have around 10000 ones. This severe unbalance must be kept in mind during the study, given it restricts the methods that can be used and poses challenges during model interpretation. 
 
-		After plotting the same-side rates across people, coin and person-coin combinations, we deemed it relevant to investigate models considering both person and coin as covariates, as well as individual person-coin pairs. Following the advice given on the project statement, we also branched our analysis in Binomial-response GLM and WLS approaches. 
+		After plotting the same-side rates across people, coin and person-coin combinations, we deemed it relevant to investigate models considering both person and coin as covariates, as well as individual person-coin pairs. Following the advice given on the project statement, we also branched our analysis in Binomial-response GLM and WLS approaches, with the goal of comparing the results. 
 
-		Motivated by impacts of muscle-memory on the flipping, we additionally investigated aspects such as time-varying same-side rates and memory between successive throws.
+		Motivated by impacts of muscle-memory on the flipping, we additionally investigated time-varying same-side rates and memory between successive throws.
 	\section{Analysis}
 		\subsection{Model Comparison}
 			In this section, we introduce and compare different models for the same-side rate. 
 
-			Before thinking about models, we thought about whether transforming the response was needed. Given the same-side rates where clustered around 50\% with few changes by at most factors of locally 0.66 and 1.5, we did not see any reason a priori to apply a transformation to the response.
+			Before thinking about models, we thought about whether transforming the response was relevant. Given the same-side rates where clustered around 50\% with little change around it, we did not see any reason a priori to apply a transformation to the response. Diagnostic plots were of course later inspected to confirm this intuition.
 			
-			As for the covariates we considered in our models, we of course included the person throwing and the coin being thrown as categorical covariates. Due to the mention in the original paper of the existence of learning effects, and the potential we saw in these to alias with coin effects (see discussion in [ref section]), we also wanted to include time dependence in the dataset. This was done by considering the version of the data that is composed of ordered sequences of 100 (or so) throws at a time. Considering this data also allowed us to try and consider effects of coins nested within people, trying to capture subjectivity in how people perceive given coins. Indeed, doing this on the averaged data would have yielded a saturated model. 
-			%\begin{itemize}
-			%	\item \texttt{1}, corresponding to a constant model.
-			%	\item \texttt{1+C(person)}, corresponding to a model with the person as a covariate.
-			%	\item \texttt{1+C(person)+C(coin)}, corresponding to a model with the person and the coin as covariates.
-			%	\item \texttt{1+C(person)+C(coin)+C(person):C(coin)}, corresponding to a model with the person, the coin, and the interaction between the person and the coin as covariates.
-			%\end{itemize}
-			%* model 4 could seem redundant due to nesting-main effect, but we ....
-			
-			[explain why eliminated some covariates ...??]
+			As for the covariates we considered in our models, we of course included the person throwing and the coin being thrown as categorical covariates. Due to the potential we saw in time-effects to alias with coin effects (see discussion in [ref section]), we preferred including time in this analysis instead of relegating it to a small independent part. This was done by considering the version of the data that is composed of ordered sequences of 100 (or so) throws at a time. Considering this data also allowed us to try and consider effects of coins nested within people, trying to capture subjectivity in how people perceive given coins. Indeed, doing this on the averaged data would have yielded a saturated model. 
 
 			In the next section, we start by introducing the theory on which we base our model selection. 
 			\subsubsection{Tools For Selection}
@@ -53,7 +44,7 @@
 				\begin{gather}
 					\text{AIC}:=2p-2\ln(\hat L),
 				\end{gather}
-				with $p$ the number of degreas of freedom of the model and $\hat L$ the value of the maximised likelihood function for the model. By minimising AIC over candidate models, one is therefore rewarding model fit, while penalising by a $2p$ term to counter overfitting. Its goal is therefore to yield parsimonious predictive models. It does not make any assumption about models being of similar interpretation or nested. 
+				with $p$ the number of degrees of freedom of the model and $\hat L$ the value of the maximised likelihood function for the model. By minimising AIC over candidate models, one is therefore rewarding model fit, while penalising by a $2p$ term to avoid overfitting. Its goal is therefore to yield parsimonious predictive models. It does not make any assumption about compared models being of similar interpretation or nested. 
 
 				In contrast, LRT is specifically designed for comparing a model $A$ with a nested (or restricted) one $B$. It is based on the fact that 
 				\begin{gather}
@@ -62,9 +53,13 @@
 				\end{gather}
 				where $\Theta_A\supset\Theta_B$ respectively are the parameters spaces (of dimension $p_a>p_b$) associated to models $A$ and $B$, and $H_0$ is the null hypothesis : $\theta^*\in\Theta_B$. Given this definition, LRTs are used to shed light on whether extra degrees of freedom improve the model significantly better than chance. This has applications in explanatory models, but might be of limited use in the context of model selection due to being prone to overfitting. This is particularly true when testing many models, as tests become correlated and give rise to spurious results [cite davison slides ?].
 
-				[MAYBE MENTION DEVIANCE??]
+				Note that both differences of AIC and LRTs are tools that are often formulated in terms of difference of deviances associated to the models
+				\begin{gather}
+					\lambda_{LR} = 2\ln \sup_{\theta\in\Theta_A}\mathcal{L(\theta)} - 2 \sup_{\theta\in\Theta_B}\mathcal{L(\theta)} = D_B-D_A,\\
+					\Delta \text{AIC} = \text{AIC}_A - \text{AIC}_B = 2(p_A-p_B) - 2(D_B-D_A). 
+				\end{gather}
 			\subsubsection{Diagnostic Plots}
-				In this report, the diagnostics we decided to include where 
+				To asses the quality of the models, the diagnostics we decided to use are 
 				\begin{itemize}
 					\item A QQ plot to check normality of normalised residuals. Pearson studentized residuals were used for WLS models while the presented $r^*$ were used for GLM models. Normality corresponds to a roughly straight line, while outliers, skewness and heavy tails are easily spotted as deviations from it.
 					\item A scatter plot of residuals as a function of fitted values, to assess linearity and homoscedasticity. Pearson studentized residuals were used for WLS models, while deviance residuals where used for GLM models. Linearity corresponds to residuals that stay centred around 0 across the fitted values, while homoscedasticity corresponds to errors whose spread is constant across the fitted values.
