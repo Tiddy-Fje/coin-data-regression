@@ -5,7 +5,6 @@
 \begin{document} 
 %%%
 	\input{title_page} 
-	% Add titlepage
 	\clearpage
 	\tableofcontents
 	\thispagestyle{empty}
@@ -13,7 +12,6 @@
 	\section*{Abstract}
 		The paper that won the 2024 IgNobel Prize in Probability took a Bayesian approach to studying the statistics behind the coin-flipping process [1]. 
 		%Its main goal was to confirm a prediction made by a physical model of human coin tossing developed by Diaconis, Holmes, and Montgomery; i.e. that when people flip an ordinary coin, the probability of it landing on the same side it started is about 51\%. 
-		%It also revealed considerable between-people variation in the degree of this same-side bias, as well as its decrease as more coins were flipped. 
 
 		The goal of this report is to build on this by analysing the data associated to this paper with a regression approach. Among other things, we investigate similar questions to the original paper. We for example find strong evidence for between-person and learning effects, while no evidence in favour of between-coin effects (on prediction). In addition to that, we explore effects of muscle memory (through outcomes of recent flips) and investigate the differences between GLM and WLS regression models. We find that these give similar results across a broad spectrum of analyses. 
 		\begin{itemize}
@@ -133,7 +131,6 @@
 			where parameter $\alpha_0$ is a constant. To each person (resp. coin) is is associated a parameter
 			$\alpha_{\texttt{person}}$ (resp. $\alpha_{\texttt{coin}}$). To each person-coin pair is also associated a parameter $\alpha_{\texttt{person},\texttt{coin}}$. The coefficient $\alpha_{\texttt{agg}}$ represents the impact of time (number of the sequence). All other models are nested versions where some of the coefficients are imposed to be equal to 0.
 
-
 			
 			As explained in [3], if interaction terms are not present, one should consider ANOVA of type II when dealing with unbalanced datasets.
 
@@ -226,8 +223,6 @@
 			\label{fig:parameter_differences_boxplot}
 		\end{figure}
 
-
-
 		\subsection{Unusual Observations}
 		In this section we present the results whose goal is to provide answers to questions such as ``are there unusual coins or people ?''. 
 		\begin{figure}[h!]%{r}{0.6\textwidth}
@@ -238,8 +233,8 @@
 			\label{fig:unusual-params}
 		\end{figure}
 
-		We considered ``unusual'' to mean that it seems to come from a different distribution compared to most of the other constituents of its population. We however recognise this is a broad question in principle, and could for example entail aspects such as ``do some people have really little same-side bias ?'' or ``are some people associated to surprisingly large (resp. small) variances between sequences ?''.
-		%\newpage
+		We considered ``unusual'' to mean that it seems to come from a different distribution compared to most of the other constituents of its population. More specifically, we focused most of our attention on people or coins that were associated to big (positive or negative) same-side proportions.  
+		With more time, we would have also wanted to explore questions as  ``do some people have really little same-side bias ?'' or ``are some people associated to surprisingly large (resp. small) variances between sequences ?''.
 
 		Given our interpretation of the question, we decided to compile normal QQ-plots for the coefficients, as well as box-plots to help identify outliers. The advantage of the box-plots is they allow for comparison under the assumption that the base distributions is not necessarily gaussian. 
 		It also is advantageous in terms of the fact that it allows us to represent the uncertainty associated to the outliers, and therefore draw more accurate conclusions. Indeed, given the data is unbalanced, some outliers could be associated to much greater uncertainties, even as big as to make unwise to actually interpret them as outliers. 
@@ -256,7 +251,20 @@
 		The plots are found in \ref{fig:unusual-params}. Note we decided to include coins in the analysis because there could in principle still have been some that behaved differently from the rest (even if coins as a whole were found not to have much impact). 
 		Another important detail is that we did not require people (resp. coins) to have been associated to multiple coins (resp. people) for them to be considered in this analysis. Indeed, since no evidence was found for coins nested within people, even the same-side behaviour of a person with a single coin should tell us something about that person's peculiarity.
 
-		Note that these results are only presented for the GLM version of the model due to the results for the WLS equivalent being really similar. [WHY THE HECK WOULD THIS BE THE CASE ???]
+		Note that these results are only presented for the GLM version of the model due to the results for the WLS equivalent being really similar. This similarity could at first glance seem surprising, given that in the GLM approach the parameters express themselves through the non linear link function. It can however be understood as follows :
+		\begin{equation*}
+			p\approx 1/2 \implies 1 \approx \frac{p}{1-p} 
+									= e^{x^T \beta} \implies x^T\beta\approx 0,
+		\end{equation*}
+		which then gives (again to the first order)
+		\begin{equation*}
+			\frac{e^{x^T\beta}}{1+e^{x^T\beta}}\approx \frac{1+x^T\beta}{2+x^T\beta}
+								\approx (1+x^T\beta)(2-x^T\beta) \approx 2 + x^T\beta,
+		\end{equation*}
+		resulting for example for two arbitrary people \texttt{alice} and \texttt{bob} 
+		\begin{equation*}			
+			p_{\texttt{alice}}-p_{\texttt{bob}}=\alpha_{\texttt{alice}} - \alpha_{\texttt{bob}}=(2-2)+(\beta_{\texttt{alice}} - \beta_{\texttt{bob}}).
+		\end{equation*}
 		\subsection{Zoom on Learning Effects}
 			We now give a closer look at the learning effects associated to the \texttt{agg} term in the model. We do this by representing the observed and predicted person-averaged same-side rate as a function of the number of throws preceding the observation.  Note that the confidence interval on the prediction was derived in Monte Carlo fashion as the variance between people was found to be larger than that resulting from the uncertainty on the estimated coefficients. 
 			The corresponding figure is \ref{fig:learning-effects}.
@@ -305,7 +313,7 @@
 
 		\ref{fig:wls-diagnostic-time-coefs} displays Pearson residuals of the selected model as a function of the covariates.
 		Plot (a) shows no discernible trend in Pearson residuals relative to the number of preceding throws, supporting the assumption of linearity.
-		Similarly, if we exclude the already mentioned outliers associated to fitted values of $\approx 0.6$, plot (b) indicates that residuals are fairly uniform across individuals, with means close to zero and no standout anomalies. Plot (c) reveals slightly greater variability, with some means deviating further from zero but does not suggest strong differences among coins in our opinion.
+		Similarly, if we exclude the already mentioned outliers associated to fitted values of $\approx 0.6$, plot (b) indicates that residuals are fairly uniform across individuals, with means close to zero and no standout anomalies. Plot (c) reveals slightly greater variability, with some means deviating further from zero and some coins displaying more variations. It is however hard to spot clear patterns. This can be partly attributed to the unbalance of the study design, as box-plots are less robust when there are fewer points.
 		\subsubsection{GLM Approach}
 			We first consider the model comparison tables, \ref{tab:glm-model-comparison} and \ref{tab:glm-lrt-comparison}. 
 			Upon inspection of these, we see that the evidence for between-person variations is extremely strong. The deviance decreases by more than 5.5 points per degree of freedom on average, and the AIC drops by more than 170. There is also overwhelming evidence for time-dependence in the same-side bias. By itself, the term for example yields a deviance decrease of 15. A closer look at this contribution is given in the \ref{sec:disc-learning-effects}. 
@@ -313,21 +321,19 @@
 			Given these elements, one would definitely prefer the \texttt{1+person+agg} model for prediction purposes.  
 			The GLM model selection is therefore similar to that obtained through the WLS approach. 
 
-			We now move to analysing the diagnostics of the selected model. Looking at (a) and (b) of \ref{fig:glm-diagnostic}, we see that the residuals are for the most part appropriately normal and homoschedastic. %Slight anomalies are observed in the QQ plot for the largest and smallest residuals, as well as for the residuals associated to the largest fitted same-side rate. 
-			Looking up the entries associated to the largest Cooks distances, we notice these are associated to sequences of throws where [TO FILL]
-			\begin{itemize}
-				\item best model (AIC vs LRT) + interpretation of significance (wobble )
-				\item discussion of diagnostics 
-				\item (rational of including agg, presentation of used residuals with assumptions)
-				\item comparison with WLS (coefs ?? accuracy ?)
-			\end{itemize}
+			We now move to analysing the diagnostics of the selected model. In general, it seems that the results are qualitatively the same as in the WLS case but that small imperfections are slightly more pronounced in the GLM one. Indeed, in (a) of \ref{fig:glm-diagnostic}, we see that the tails of the QQ plot get further away from the diagonal, and for example in (c) of \ref{fig:dev-resid-vs-covariates} the variations across coins are larger.
+			%Slight anomalies are observed in the QQ plot for the largest and smallest residuals, as well as for the residuals associated to the largest fitted same-side rate. 
+			As for Cook's distances, they are associated to the same entries but change slightly in their values to to the mentioned slight changes in residuals.
+			This ``roughening'' of the diagnostics is surprising given the GLM approach avoids making the unperfect $p(1-p)\approx 1/4$ approximation. We did not find an explanation for it. 
 
+			[COMPARE THE AICS WITH WLS SINCE WE CAN !!]
 		\subsection{Unusual Observations}\label{sec:unusual-observations}
 			Looking at \ref{fig:unusual-persons} and \ref{fig:unusual-coins}, we immediately notice they look really different. Indeed, in the case of coins, the parameters align quite well on the QQ plot, showing that a gaussian could be a good match. In the box-plot, there is a single outlier (associated to 0.02 EUR) and it is not significant. In the person case however : the QQ plot displays really poor fit and  many outliers are present. The most significant are (in order) TianqiPeng, JanYang, and adamF. 
 
 			In general, the observed variation in the parameter uncertainties confirm our approach accounting for uncertainty was worth our time. 
 			%[COULD ADD EXAMPLE OF IMPACT in terms of flips]
-			%\item  person distribution being asymmetric (could be a thing ?)
+
+			In addition to being associated by far to the largest same-side bias, TianqiPeng was also associated to huge variations in the number of same-side throws within their sequences. Indeed, the outliers associated to big residuals and fitted values of around 0.6 are actually associated to two of their sequences. The number of same-side throws were in these cases and 42 and 78 (both times out of 100). 
 		\subsection{Zoom on Learning Effects}\label{sec:disc-learning-effects}
 			Analysing \ref{fig:learning-effects}, we see that the averaged same-side rate seems to start at a value around 51\%, and then decreases to reach values closer to 50\%. The observed uncertainty/spread can however no be neglected, given the limited number of people involved in the study. 
 			
