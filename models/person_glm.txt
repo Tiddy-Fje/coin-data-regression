@@ -1,15 +1,15 @@
 Iteration:3
-Deviance trajectory:[inf, np.float64(1018.0386350125018), np.float64(3676.207857099537), np.float64(3676.20166004114), np.float64(3676.2016600406732)]
+Deviance trajectory:[inf, np.float64(1047.327053741747), np.float64(3790.987640918094), np.float64(3790.9814247564195), np.float64(3790.981424755956)]
                      Generalized Linear Model Regression Results                      
 ======================================================================================
-Dep. Variable:     ['same_side', 'diff_side']   No. Observations:                 3409
-Model:                                    GLM   Df Residuals:                     3362
-Model Family:                        Binomial   Df Model:                           46
+Dep. Variable:     ['same_side', 'diff_side']   No. Observations:                 3494
+Model:                                    GLM   Df Residuals:                     3446
+Model Family:                        Binomial   Df Model:                           47
 Link Function:                          Logit   Scale:                          1.0000
-Method:                                  IRLS   Log-Likelihood:                -10452.
-Date:                        Thu, 09 Jan 2025   Deviance:                       3676.2
-Time:                                22:26:14   Pearson chi2:                 3.66e+03
-No. Iterations:                             3   Pseudo R-squ. (CS):            0.07504
+Method:                                  IRLS   Log-Likelihood:                -10724.
+Date:                        Thu, 09 Jan 2025   Deviance:                       3791.0
+Time:                                23:33:29   Pearson chi2:                 3.77e+03
+No. Iterations:                             3   Pseudo R-squ. (CS):            0.07336
 Covariance Type:                    nonrobust                                         
 =================================================================================================
                                     coef    std err          z      P>|z|      [0.025      0.975]
@@ -55,6 +55,7 @@ person[T.davidKL]                 0.0432      0.028      1.521      0.128      -
 person[T.davidV]                 -0.0391      0.028     -1.376      0.169      -0.095       0.017
 person[T.frantisekB]             -0.0427      0.027     -1.569      0.117      -0.096       0.011
 person[T.henrikG]                -0.0487      0.028     -1.750      0.080      -0.103       0.006
+person[T.ingeborgR]              -0.0426      0.032     -1.344      0.179      -0.105       0.020
 person[T.irmaT]                  -0.0479      0.079     -0.606      0.544      -0.203       0.107
 person[T.jillR]                  -0.0439      0.034     -1.290      0.197      -0.111       0.023
 person[T.jonasP]                 -0.0294      0.031     -0.957      0.338      -0.090       0.031

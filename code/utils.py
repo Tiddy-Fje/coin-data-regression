@@ -4,7 +4,6 @@ import statsmodels.formula.api as smf
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 import seaborn as sb
-import numpy as np
 
 FACTOR = 1.2
 SMALL_SIZE = 8 * FACTOR
@@ -24,7 +23,7 @@ plt.rc('lines', linewidth=2)
 plt.rc('lines', markersize=5)
 
 
-def process_data( data_type = 'df-time-agg', drop_ingeborg = True, keep_coins=10, keep_persons=5, drop_lonely=False ):
+def process_data( data_type = 'df-time-agg', drop_ingeborg = False, keep_coins=1, keep_persons=1, drop_lonely=False ):
     data_agg = pd.read_csv(f'../data/data-agg.csv')
 
     info = {}

@@ -1,65 +1,66 @@
 Iteration:3
-Deviance trajectory:[inf, np.float64(1018.0386350125018), np.float64(3660.293113195171), np.float64(3660.2869113544302), np.float64(3660.2869113539637)]
+Deviance trajectory:[inf, np.float64(1047.327053741747), np.float64(3775.591478909969), np.float64(3775.585250878773), np.float64(3775.5852508783073)]
                      Generalized Linear Model Regression Results                      
 ======================================================================================
-Dep. Variable:     ['same_side', 'diff_side']   No. Observations:                 3409
-Model:                                    GLM   Df Residuals:                     3361
-Model Family:                        Binomial   Df Model:                           47
+Dep. Variable:     ['same_side', 'diff_side']   No. Observations:                 3494
+Model:                                    GLM   Df Residuals:                     3445
+Model Family:                        Binomial   Df Model:                           48
 Link Function:                          Logit   Scale:                          1.0000
-Method:                                  IRLS   Log-Likelihood:                -10444.
-Date:                        Thu, 09 Jan 2025   Deviance:                       3660.3
-Time:                                22:26:14   Pearson chi2:                 3.64e+03
-No. Iterations:                             3   Pseudo R-squ. (CS):            0.07935
+Method:                                  IRLS   Log-Likelihood:                -10716.
+Date:                        Thu, 09 Jan 2025   Deviance:                       3775.6
+Time:                                23:33:34   Pearson chi2:                 3.75e+03
+No. Iterations:                             3   Pseudo R-squ. (CS):            0.07743
 Covariance Type:                    nonrobust                                         
 =================================================================================================
                                     coef    std err          z      P>|z|      [0.025      0.975]
 -------------------------------------------------------------------------------------------------
-Intercept                         0.0773      0.024      3.280      0.001       0.031       0.123
-person[T.AdrianKarami]           -0.0126      0.042     -0.303      0.762      -0.094       0.069
-person[T.AndreeaZetea]           -0.0990      0.038     -2.613      0.009      -0.173      -0.025
-person[T.AntonZoubek]            -0.0302      0.031     -0.982      0.326      -0.090       0.030
-person[T.ArneJohn]               -0.0826      0.040     -2.084      0.037      -0.160      -0.005
-person[T.BohanFu]                -0.0399      0.049     -0.821      0.412      -0.135       0.055
-person[T.ChrisGabrielIslam]      -0.0695      0.031     -2.265      0.024      -0.130      -0.009
-person[T.EJ]                     -0.0483      0.039     -1.240      0.215      -0.125       0.028
-person[T.FelipeFontanaVieira]    -0.0771      0.031     -2.512      0.012      -0.137      -0.017
-person[T.FranziskaAssion]         0.0941      0.040      2.349      0.019       0.016       0.173
-person[T.FranziskaNippold]       -0.0597      0.030     -1.972      0.049      -0.119      -0.000
-person[T.FrederikAust]           -0.0677      0.030     -2.228      0.026      -0.127      -0.008
-person[T.HannahArmstrong]        -0.0377      0.043     -0.870      0.384      -0.123       0.047
-person[T.JanYang]                 0.1889      0.054      3.475      0.001       0.082       0.295
-person[T.JasonNak]               -0.0624      0.034     -1.850      0.064      -0.129       0.004
-person[T.JoycePang]              -0.1142      0.048     -2.388      0.017      -0.208      -0.020
-person[T.KarolineH]              -0.0580      0.036     -1.628      0.103      -0.128       0.012
-person[T.KatharinaKarnbach]      -0.0500      0.038     -1.313      0.189      -0.125       0.025
-person[T.KoenDerks]               0.0040      0.034      0.116      0.908      -0.063       0.071
-person[T.MagdaMatetovici]        -0.0365      0.037     -0.994      0.320      -0.109       0.036
-person[T.MalteZoubek]            -0.0335      0.030     -1.111      0.267      -0.093       0.026
-person[T.MaraBialas]              0.0026      0.045      0.057      0.954      -0.085       0.090
-person[T.MichelleDonzallaz]       0.0004      0.038      0.011      0.991      -0.075       0.076
-person[T.RietvanBork]            -0.0687      0.041     -1.689      0.091      -0.148       0.011
-person[T.RoyMichaelMoore]         0.0026      0.040      0.065      0.948      -0.075       0.080
-person[T.SaraShabani]            -0.0481      0.031     -1.568      0.117      -0.108       0.012
-person[T.SjoerdTerpstra]         -0.0590      0.037     -1.611      0.107      -0.131       0.013
-person[T.TheresaLeidinger]       -0.0483      0.041     -1.176      0.239      -0.129       0.032
-person[T.ThomasBastelica]        -0.0350      0.037     -0.956      0.339      -0.107       0.037
-person[T.TianqiPeng]              0.3370      0.045      7.469      0.000       0.249       0.425
-person[T.TingPan]                 0.0019      0.042      0.044      0.965      -0.081       0.085
-person[T.VincentOtt]             -0.0468      0.037     -1.270      0.204      -0.119       0.025
-person[T.XiaochangZhao]           0.0776      0.041      1.881      0.060      -0.003       0.158
-person[T.XiaoyiLin]              -0.1239      0.055     -2.243      0.025      -0.232      -0.016
-person[T.adamF]                   0.0216      0.032      0.675      0.500      -0.041       0.084
-person[T.alexandraS]              0.0413      0.028      1.463      0.144      -0.014       0.097
-person[T.amirS]                  -0.0597      0.029     -2.081      0.037      -0.116      -0.003
-person[T.davidKL]                 0.0586      0.029      2.041      0.041       0.002       0.115
-person[T.davidV]                 -0.0242      0.029     -0.845      0.398      -0.080       0.032
-person[T.frantisekB]             -0.0171      0.028     -0.611      0.541      -0.072       0.038
-person[T.henrikG]                -0.0292      0.028     -1.035      0.301      -0.085       0.026
-person[T.irmaT]                  -0.0614      0.079     -0.776      0.438      -0.216       0.094
-person[T.jillR]                  -0.0460      0.034     -1.352      0.176      -0.113       0.021
-person[T.jonasP]                 -0.0244      0.031     -0.795      0.426      -0.085       0.036
-person[T.kaleemU]                -0.0779      0.029     -2.699      0.007      -0.134      -0.021
-person[T.madlenH]                 0.0250      0.033      0.751      0.453      -0.040       0.090
-person[T.pierreG]                -0.0453      0.029     -1.578      0.114      -0.101       0.011
-agg                              -0.0004      0.000     -3.989      0.000      -0.001      -0.000
+Intercept                         0.0770      0.024      3.266      0.001       0.031       0.123
+person[T.AdrianKarami]           -0.0124      0.042     -0.299      0.765      -0.094       0.069
+person[T.AndreeaZetea]           -0.0989      0.038     -2.609      0.009      -0.173      -0.025
+person[T.AntonZoubek]            -0.0303      0.031     -0.986      0.324      -0.090       0.030
+person[T.ArneJohn]               -0.0824      0.040     -2.080      0.038      -0.160      -0.005
+person[T.BohanFu]                -0.0397      0.049     -0.816      0.415      -0.135       0.056
+person[T.ChrisGabrielIslam]      -0.0697      0.031     -2.269      0.023      -0.130      -0.009
+person[T.EJ]                     -0.0482      0.039     -1.236      0.216      -0.125       0.028
+person[T.FelipeFontanaVieira]    -0.0772      0.031     -2.516      0.012      -0.137      -0.017
+person[T.FranziskaAssion]         0.0942      0.040      2.353      0.019       0.016       0.173
+person[T.FranziskaNippold]       -0.0598      0.030     -1.977      0.048      -0.119      -0.001
+person[T.FrederikAust]           -0.0679      0.030     -2.233      0.026      -0.127      -0.008
+person[T.HannahArmstrong]        -0.0375      0.043     -0.865      0.387      -0.122       0.047
+person[T.JanYang]                 0.1892      0.054      3.480      0.001       0.083       0.296
+person[T.JasonNak]               -0.0624      0.034     -1.849      0.065      -0.128       0.004
+person[T.JoycePang]              -0.1140      0.048     -2.383      0.017      -0.208      -0.020
+person[T.KarolineH]              -0.0579      0.036     -1.626      0.104      -0.128       0.012
+person[T.KatharinaKarnbach]      -0.0499      0.038     -1.310      0.190      -0.125       0.025
+person[T.KoenDerks]               0.0040      0.034      0.117      0.907      -0.063       0.071
+person[T.MagdaMatetovici]        -0.0364      0.037     -0.991      0.322      -0.108       0.036
+person[T.MalteZoubek]            -0.0336      0.030     -1.116      0.264      -0.093       0.025
+person[T.MaraBialas]              0.0028      0.045      0.062      0.950      -0.085       0.091
+person[T.MichelleDonzallaz]       0.0006      0.038      0.015      0.988      -0.075       0.076
+person[T.RietvanBork]            -0.0686      0.041     -1.685      0.092      -0.148       0.011
+person[T.RoyMichaelMoore]         0.0028      0.040      0.069      0.945      -0.075       0.080
+person[T.SaraShabani]            -0.0483      0.031     -1.572      0.116      -0.108       0.012
+person[T.SjoerdTerpstra]         -0.0589      0.037     -1.608      0.108      -0.131       0.013
+person[T.TheresaLeidinger]       -0.0481      0.041     -1.172      0.241      -0.129       0.032
+person[T.ThomasBastelica]        -0.0349      0.037     -0.953      0.341      -0.107       0.037
+person[T.TianqiPeng]              0.3372      0.045      7.474      0.000       0.249       0.426
+person[T.TingPan]                 0.0021      0.042      0.049      0.961      -0.081       0.085
+person[T.VincentOtt]             -0.0467      0.037     -1.267      0.205      -0.119       0.026
+person[T.XiaochangZhao]           0.0777      0.041      1.885      0.059      -0.003       0.159
+person[T.XiaoyiLin]              -0.1236      0.055     -2.238      0.025      -0.232      -0.015
+person[T.adamF]                   0.0215      0.032      0.674      0.500      -0.041       0.084
+person[T.alexandraS]              0.0408      0.028      1.447      0.148      -0.014       0.096
+person[T.amirS]                  -0.0600      0.029     -2.093      0.036      -0.116      -0.004
+person[T.davidKL]                 0.0582      0.029      2.029      0.042       0.002       0.114
+person[T.davidV]                 -0.0246      0.029     -0.857      0.392      -0.081       0.032
+person[T.frantisekB]             -0.0177      0.028     -0.632      0.527      -0.072       0.037
+person[T.henrikG]                -0.0297      0.028     -1.051      0.293      -0.085       0.026
+person[T.ingeborgR]              -0.0405      0.032     -1.276      0.202      -0.103       0.022
+person[T.irmaT]                  -0.0611      0.079     -0.772      0.440      -0.216       0.094
+person[T.jillR]                  -0.0460      0.034     -1.350      0.177      -0.113       0.021
+person[T.jonasP]                 -0.0245      0.031     -0.799      0.424      -0.085       0.036
+person[T.kaleemU]                -0.0782      0.029     -2.710      0.007      -0.135      -0.022
+person[T.madlenH]                 0.0250      0.033      0.752      0.452      -0.040       0.090
+person[T.pierreG]                -0.0456      0.029     -1.591      0.112      -0.102       0.011
+agg                              -0.0004      0.000     -3.924      0.000      -0.001      -0.000
 =================================================================================================
