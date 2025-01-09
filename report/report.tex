@@ -218,6 +218,20 @@
 				\label{fig:dev-resid-vs-covariates}
 			\end{figure}	
 		%\newpage
+		
+		\subsection{WLS vs GLM parameters}
+		[WRITE DISCUSSION]???
+
+		\begin{figure}[htb]
+			\vspace{-1em}
+			\centering
+			\includegraphics[width=0.85\textwidth]{parameter_differences_boxplot}
+			\caption{Pearson residuals as a function of covariates for the GLM \texttt{1+person+agg} model.}
+			\label{fig:parameter_differences_boxplot}
+		\end{figure}
+
+
+
 		\subsection{Unusual Observations}
 		In this section we present the results whose goal is to provide answers to questions such as ``are there unusual coins or people ?''. 
 		\begin{figure}[h!]%{r}{0.6\textwidth}
@@ -276,6 +290,7 @@
 
 			Note that these results are only presented for the GLM version of the model due to the results for the WLS equivalent being really similar. 
 			[DO WE WRITE THIS ?? IF WE DO, WE SHOULD RUN THE CELLS WITH THE ASSOCIATED WLS MODELS TOO !!]
+
 	\section{Discussion}
 		\subsection{Model Comparison}
 		\subsubsection{WLS Approach}
