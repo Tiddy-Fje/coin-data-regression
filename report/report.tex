@@ -78,6 +78,9 @@
 			\subsubsection{WLS Approach}
 			In this section, we consider the normal approximation for the binomial variable $R$ (the same-side flips within a sequence) with denominator $m$ (number of flips within a sequence). 
 			Having that the success probability is fairly close to 0.5 we get $p(1-p)\approx1/4$. Hence we end up with the approximation $R/m \sim N(p,1/(4m))$. 
+			
+
+
 			\begin{table}[htb]
 				\centering
 				% Top subtable
@@ -93,7 +96,7 @@
 					\texttt{person} & 213.78 & 46.00 & 4.31 & 4.47e-20 & 12.89 \\
 					\texttt{agg} & 7.65 & 1.00 & 7.10 & 7.75e-03 & 0.00 \\
 					\texttt{coin} & 57.95 & 42.00 & 1.28 & 1.07e-01 & 29.21 \\
-					\texttt{Residual} & 3576.62 & 3319.00 & - & - & 0.00 \\
+					\texttt{Residual} & 3576.62 & 3319.00 & - & - & - \\
 					\bottomrule
 					\end{tabular}
 				\end{subtable}
@@ -107,10 +110,10 @@
 					\toprule
 					Tested model & Restricted Model & p-value \\
 					\midrule
-					\texttt{1 + C(person)} & \texttt{1} & 0.00 \\
-					\texttt{1 + C(person) + agg} & \texttt{1 + C(person)} & 0.00 \\
-					\texttt{1 + C(person) + agg + C(coin)} & \texttt{1 + C(person) + agg} & 0.09 \\
-					\texttt{1 + C(person) + agg + C(person):C(coin)} & \texttt{1 + C(person) + agg} & 0.02 \\
+					\texttt{1+person} & \texttt{1} & 7.28e-28 \\
+					\texttt{1+person+agg} & \texttt{1+person} & 1.14e-4 \\
+					\texttt{1+person+agg+coin} & \texttt{1+person+agg} & 8.91e-2 \\
+					\texttt{1+person+agg+person:coin} & \texttt{1+person+agg} & 2.04e-2 \\
 					\bottomrule
 					\end{tabular}
 				\end{subtable}
@@ -118,7 +121,7 @@
 				%\label{tab:stacked_tables}
 			\end{table}	
 
-			[TABLES STILL HAVE C(PERSON) ETC, removing spaces between symbols can also make table more concise, no ?] [THE P-VALUES IN LRTS ARE NOT IN SCIENTIFIC NOTATION !!] We fit a linear model using weighted least squares, where the  weight associated to each entry is proportional to the inverse of the variance, that only depends on $m$. As the weights are only relevant up to a common factor, we normalise them by the average of the weights of all the entries. This does not change the result of the regression. 
+			 We fit a linear model using weighted least squares, where the  weight associated to each entry is proportional to the inverse of the variance, that only depends on $m$. As the weights are only relevant up to a common factor, we normalise them by the average of the weights of all the entries. This does not change the result of the regression. 
 			\begin{figure}[h!]
 				\centering
 				\includegraphics[width=0.8\textwidth]{WLS_diagnostics.png}
@@ -126,8 +129,20 @@
 				\label{fig:wls-diagnostic}
 			\end{figure}
 			
-			[FOR THE WLS, IT IS NO R STAR THAT IS USED IN (A), BUT RATHER, PEARSON RESIDUALS]
-			The models we consider in this part are all nested in the model \texttt{1+person+agg+coin+person:coin}. As explained in [3], if interaction terms are not present, one should consider ANOVA of type II when dealing with unbalanced datasets.
+			The models we consider in this part are all nested in the model \texttt{1+person+agg+coin+person:coin}.
+			This model can be explicitely written as: 
+
+			\begin{equation}
+				\label{eq:wls_model}
+				p(\texttt{person},\texttt{coin},\texttt{agg}) = \alpha_0 + \alpha_{\texttt{person}}+\alpha_{\texttt{coin}} +\alpha_{\texttt{agg}}\cdot\texttt{agg} +\alpha_{\texttt{person},\texttt{coin}} + \epsilon_{\texttt{person},\texttt{coin},\texttt{agg}}
+			\end{equation}
+
+			where parameter $\alpha_0$ is a constant. To each person (resp. coin) is is associated a parameter
+			$\alpha_{\texttt{person}}$ (resp. $\alpha_{\texttt{coin}}$). To each person-coin pair is also associated a parameter $\alpha_{\texttt{person},\texttt{coin}}$. The coefficient $\alpha_{\texttt{agg}}$ represents the impact of time (number of the sequence). All other models are nested versions where some of the coefficients are imposed to be equal to 0.
+
+
+			
+			As explained in [3], if interaction terms are not present, one should consider ANOVA of type II when dealing with unbalanced datasets.
 
 			Results show that the AIC of the model \texttt{1+person+agg+coin+person:coin} is greater than the one of model \texttt{1+person+agg+coin} by 95 points. We thus keep the model without interactions and make use of an ANOVA type II to analyse the main effects. 
 
@@ -179,6 +194,8 @@
 					\end{tabular}
 				\end{subtable}
 			\end{table}
+
+			[ADD INTERPRETATION OF THE MODEL AVEC EXP DU COEFF ET TOUT LE TRALALA]
 			More specifically, we consider a Logit link as it leads to easily interpretable results, meaning we model $\mathbb{E}[y\mid x]=\exp\left(\sum_i \beta_i x_i\right)$ with binomial response distribution. We expect this to lead to more accurate results than the WLS approximation, especially for entries having $R/M\approx 1/2$ to a poor extent.
 
 			As for the considered models, we follow what is done for the WLS approach. The only difference being in the interpretation of the coefficients and the fact that we omit the model with coins nested within people. Indeed, even the \texttt{0+person:coin} model did not give any signs of convergence after 100 IRLS iterations. We tried fitting it with BFGS, but did not succeed either as the hessian resulted to be singular. The analysis of deviance and LRTs for the models that converged are found in \ref{tab:glm-model-comparison} and \ref{tab:glm-lrt-comparison}.
@@ -257,13 +274,17 @@
 	\section{Discussion}
 		\subsection{Model Comparison}
 		\subsubsection{WLS Approach}
-		Examining \ref{tab:WLS-AIC}, we see that there is a drop of AIC by 3 points per degree of freedom on average when adding the term \texttt{person} to the constant model, which strongly suggests the existence of differences between people. Similarly, there is overwhelming evidence for time-dependence in the same-side bias. Indeed, the addition of the \text{agg} covariate allows a drop by 12 points in the AIC. When it comes to between-coin differences, the evidence is nowhere near as strong. Indeed, AIC increases by around 30 when compared to the \texttt{1+person+agg} model, reflecting clear overfitting. [THIS IS ALSO REFLECTED BY ANOVA SINCE ....]
+		Examining \ref{tab:WLS-AIC}, we see that there is a drop of AIC by 3 points per degree of freedom on average when adding the term \texttt{person} to the constant model, which strongly suggests the existence of differences between people. Similarly, there is overwhelming evidence for time-dependence in the same-side bias. Indeed, the addition of the \text{agg} covariate allows a drop by 12 points in the AIC. When it comes to between-coin differences, the evidence is nowhere near as strong. Indeed, AIC increases by around 30 when compared to the \texttt{1+person+agg} model, reflecting clear overfitting. This is also reflected by the ANOVA as the term \texttt{coin} has a non-significant associated p-value.
 
 		The same way, including the coefficients \texttt{person:coin} yields an increase in the AIC value of the model. 
 		Overall, among the models reported in \ref{tab:WLS-AIC}, the selection based on AIC leads to the model \texttt{1+person+agg}. 
-		The LRTs (\ref{tab:WLS-LRT}) also lead to the same selected model. Indeed, these suggest that model \texttt{1+person} is preferred compared to the constant model, and the model \texttt{1+person+agg} is preferred to the \texttt{1+person} one. The last line in \ref{tab:WLS-LRT} shows that the model including the coins is rejected when tested against {1+person+agg}. 
-		
-		Interestingly, the model \texttt{1+person+agg+person:coin} tested against \texttt{1+person+agg} yields a p-value of 0.02 meaning that person coin interaction effects might still help in explaining part of the variance, even though the AIC-based selection severly rejected them.
+		The LRTs (\ref{tab:WLS-LRT}) also lead to the same selected model. Indeed, these suggest that model \texttt{1+person} is preferred compared to the constant model, and the model \texttt{1+person+agg} is preferred to the \texttt{1+person} one. The last line in \ref{tab:WLS-LRT} shows that the model including the coins is rejected when tested against \texttt{1+person+agg}. The selected model explicitely writes as:  
+		\begin{equation}
+			\label{eq:wls_model}
+			p(\texttt{person},\texttt{coin},\texttt{agg}) = \alpha_0 + \alpha_{\texttt{person}}+\alpha_{\texttt{coin}} +\alpha_{\texttt{agg}}\cdot\texttt{agg} + \epsilon_{\texttt{person},\texttt{coin},\texttt{agg}}
+		\end{equation}   
+
+		Interestingly, the model \texttt{1+person+agg+person:coin} tested against \texttt{1+person+agg} yields a p-value of 2.04e-2 meaning that person coin interaction effects might still help in explaining part of the variance, even though the AIC-based selection severly rejected them. 
 
 		We now move to analysing the diagnostics of the selected model. Figures (a) and (b) in \ref{fig:wls-diagnostic} reveal healthy diagnostic plots. Indeed, the QQ plot shows a reasonably normal distriubtion of the residuals, with a small fat tail on the left for the smallest residuals. Plot (b) shows that no trend of residuals is observed with respect to the fitted values. 
 		Plot (c) shows Cook's distance of each entry. Only a small fraction of entries (1.5\%) have a Cook's distance exceeding the threshold. Analysing the 15 entries with the highest Cook's distances reveals that they all belong to individuals with relatively few throws. More precisely, ranking people in descending order by their number of throws shows that they are actually associated with the 10 lowest-ranks. This is due to Cook's distance being a quickly growing function of leverage, which is higher for entries corresponding to individuals with fewer throws\footnote{As it represents the ``novelty'' of the entry in terms of its position in the covariates space.}. This likely means the large Cook's distances observed in these cases are not problematic. Interestingly however, a prior analysis similar to the presented one allowed us to spot an unexpected entry in the \texttt{df-time-agg.csv} file. Indeed, the entry associated to \texttt{person=adamF,coin=0.05EUR,agg=84} was only associated to a single throw, and might have been due to a mistake in the data-processing of the researchers of the original paper. We therefore excluded it from our analyses upon discovery. 
