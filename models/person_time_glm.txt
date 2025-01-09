@@ -1,15 +1,26 @@
 Iteration:3
+<<<<<<< HEAD
 Deviance trajectory:[inf, np.float64(1047.327053741747), np.float64(3775.591478909969), np.float64(3775.585250878773), np.float64(3775.5852508783073)]
+=======
+Deviance trajectory:[inf, np.float64(1018.0386350125018), np.float64(3660.293113195171), np.float64(3660.286911354431), np.float64(3660.286911353964)]
+>>>>>>> b874afe2d12fc93b65d58e48f2a21d02a996680d
                      Generalized Linear Model Regression Results                      
 ======================================================================================
 Dep. Variable:     ['same_side', 'diff_side']   No. Observations:                 3494
 Model:                                    GLM   Df Residuals:                     3445
 Model Family:                        Binomial   Df Model:                           48
 Link Function:                          Logit   Scale:                          1.0000
+<<<<<<< HEAD
 Method:                                  IRLS   Log-Likelihood:                -10716.
 Date:                        Thu, 09 Jan 2025   Deviance:                       3775.6
 Time:                                23:33:34   Pearson chi2:                 3.75e+03
 No. Iterations:                             3   Pseudo R-squ. (CS):            0.07743
+=======
+Method:                                  IRLS   Log-Likelihood:                -10444.
+Date:                        Thu, 09 Jan 2025   Deviance:                       3660.3
+Time:                                23:12:26   Pearson chi2:                 3.64e+03
+No. Iterations:                             3   Pseudo R-squ. (CS):            0.07935
+>>>>>>> b874afe2d12fc93b65d58e48f2a21d02a996680d
 Covariance Type:                    nonrobust                                         
 =================================================================================================
                                     coef    std err          z      P>|z|      [0.025      0.975]
