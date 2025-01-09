@@ -125,7 +125,7 @@
 			This model can be explicitely written as: 
 			\begin{equation}
 				\label{eq:wls_model}
-				p(\texttt{person},\texttt{coin},\texttt{agg}) = \alpha_0 + \alpha_{\texttt{person}}+\alpha_{\texttt{coin}} +\alpha_{\texttt{agg}}\cdot\texttt{agg} +\alpha_{\texttt{person},\texttt{coin}} + \epsilon_{\texttt{person},\texttt{coin},\texttt{agg}},
+				R/m = \alpha_0 + \alpha_{\texttt{person}}+\alpha_{\texttt{coin}} +\alpha_{\texttt{agg}}\cdot\texttt{agg} +\alpha_{\texttt{person},\texttt{coin}} + \epsilon_{\texttt{person},\texttt{coin},\texttt{agg}},
 			\end{equation}
 			where parameter $\alpha_0$ is a constant. To each person (resp. coin) is is associated a parameter
 			$\alpha_{\texttt{person}}$ (resp. $\alpha_{\texttt{coin}}$). To each person-coin pair is also associated a parameter $\alpha_{\texttt{person},\texttt{coin}}$. The coefficient $\alpha_{\texttt{agg}}$ represents the impact of time (number of the sequence). $\epsilon_{\texttt{person},\texttt{coin},\texttt{agg}}$ is a normal error term. All other models are nested versions where some of the coefficients are imposed to be equal to 0.
@@ -297,7 +297,7 @@
 		The LRTs (\ref{tab:WLS-LRT}) also lead to the same selected model. Indeed, these suggest that model \texttt{1+person} is preferred compared to the constant model, and the model \texttt{1+person+agg} is preferred to the \texttt{1+person} one. The last line in \ref{tab:WLS-LRT} shows that the model including the coins is rejected when tested against \texttt{1+person+agg}. The selected model for the probability of sucess $p$ for a certain person, coin a sequence  explicitely writes as:  
 		\begin{equation}
 			\label{eq:wls_model}
-			p(\texttt{person},\texttt{coin},\texttt{agg}) = \alpha_0 + \alpha_{\texttt{person}}+\alpha_{\texttt{coin}} +\alpha_{\texttt{agg}}\cdot\texttt{agg} + \epsilon_{\texttt{person},\texttt{coin},\texttt{agg}}.
+			R/m = \alpha_0 + \alpha_{\texttt{person}}+\alpha_{\texttt{coin}} +\alpha_{\texttt{agg}}\cdot\texttt{agg} + \epsilon_{\texttt{person},\texttt{coin},\texttt{agg}}.
 		\end{equation}   
 
 		Interestingly, the model \texttt{1+person+agg+person:coin} tested against \texttt{1+person+agg} yields a p-value of 2.04e-2 meaning that person coin interaction effects might still help in explaining part of the variance, even though the AIC-based selection severely rejected them. 
@@ -326,7 +326,8 @@
 			This ``roughening'' of the diagnostics is surprising given the GLM approach avoids making the unperfect $p(1-p)\approx 1/4$ approximation. We did not find an explanation for it. 
 		
 
-		\subsection{WLS and GLM parameters}
+		\subsection{WLS vs GLM parameters}
+		After having performed the mentioned transformations of the parameters of the GLM model to match the analytical formulation of the parameters of the WLS model (i.e. a linear one for the success probability instead of the log odds), we obtained \ref{fig:parameter_differences_boxplot} that represents the relative difference between the coefficients. Notice that those relative difference are particularly small as the biggest absolute value does not exceed 0.5\%. Those results show that the normal approximation works well enough for the WLS model to be relevant in this case. The WLS linear model might be preferable for interpretability, as parameters directly represent a linear contribution to the response variable. However, the distribution shown by the boxplot shows some outlier persons for which the parameters of the two models differ more than the others showing that the normal approximation might not be well suited for all individuals. One might explore further in future work the specificities of those individuals.  
 
 		\subsection{Unusual Observations}\label{sec:unusual-observations}
 			Looking at \ref{fig:unusual-params}, we immediately notice they look really different. Indeed, in the case of coins, the parameters align quite well on the QQ plot, showing that a gaussian could be a good match. In the box-plot, there is a single outlier (associated to 0.02 EUR) and it is not significant. In the person case however : the QQ plot displays really poor fit and  many outliers are present. The most significant are (in order) TianqiPeng, JanYang, and adamF. 
