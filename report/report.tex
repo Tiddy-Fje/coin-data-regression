@@ -188,7 +188,7 @@
 			\begin{equation}
 				\label{eq:glm_model}
 				\frac{P(Y=1\mid \texttt{person},\texttt{coin},\texttt{agg})}{P(Y=0\mid \texttt{person},\texttt{coin},\texttt{agg})} = 
-				\exp(\alpha_0 + \alpha_{\texttt{person}}+\alpha_{\texttt{coin}} +\alpha_{\texttt{agg}}\cdot\texttt{agg}).
+				\exp(\beta_0 + \beta_{\texttt{person}}+\beta_{\texttt{coin}} +\beta_{\texttt{agg}}\cdot\texttt{agg}).
 			\end{equation}
 			
 			We expect this to lead to more accurate results than the WLS approximation, especially for entries having $R/M\approx 1/2$ to a poor extent.
@@ -212,12 +212,8 @@
 		%\newpage
 		
 		\subsection{WLS vs GLM parameters}
-		[WRITE DISCUSSION]??? 
-		explain how params of glm have been transformed
-		formule : expit
-		interpretation glm avec la slide 139
 
-		In this section we would like to compare the coefficients outputted by the GLM and the WLS models. This requires some transformations of the variables as the two models are formulated in different terms. Indeed, in the WLS model, the response is linear with respect to the coefficients, while in the GLM model it is the log odds that is linear in the parameters. Let's for now ignore the role of time in the model (for example by setting time to 0). Let's call $\alpha_{p,GLM}$ the coefficient corresponding to the person $p$ in the GLM model and $\alpha_{0,GLM}$ the constant term (intercept). Then the impact on the reponse of selecting the person $p$ as the person throwing the coin will be equal to $\tilde{\alpha}_{p,GLM}$=expit($\alpha_{0,GLM}$+$\alpha_{p,GLM}$)-expit($\alpha_{0,GLM}$), where expit is the reciprocal function of logit. Thus we have derived this quantity in order to compare it directly to the coefficients $\alpha_{p,WLS}$ that consitutes a linear contribution. \ref{fig:parameter_differences_boxplot} reports the boxplot of the relative differences between the WLS parameters $\alpha_{p,WLS}$ and the GLM transformed parameters $\tilde{\alpha}_{p,GLM}$. 
+		In this section we would like to compare the coefficients outputted by the GLM and the WLS models. This requires some transformations of the variables as the two models are formulated in different terms. Indeed, in the WLS model, the response is linear with respect to the coefficients, while in the GLM model it is the log odds that is linear in the parameters. Let's for now ignore the role of time in the model (for example by setting time to 0). Let's call $\beta_{p}$ the coefficient corresponding to the person $p$ in the GLM model and $\beta_{0}$ the constant term (intercept). Then the impact on the reponse of selecting the person $p$ as the person throwing the coin will be equal to $\tilde{\beta}_{p}$=expit($\beta_{0}$+$\beta_{p}$)-expit($\beta_{0}$), where expit is the reciprocal function of logit. Thus we have derived this quantity in order to compare it directly to the coefficient $\alpha_{p}$ of the WLS model that consitutes a linear contribution. \ref{fig:parameter_differences_boxplot} reports the boxplot of the relative differences between the WLS parameters $\alpha_{p}$ and the GLM transformed parameters $\tilde{\beta}_{p}$. 
 
 		\begin{figure}[htb]
 			\vspace{-1em}
@@ -313,6 +309,8 @@
 		\end{equation}   
 
 		Interestingly, the model \texttt{1+person+agg+person:coin} tested against \texttt{1+person+agg} yields a p-value of 2.04e-2 meaning that person coin interaction effects might still help in explaining part of the variance, even though the AIC-based selection severely rejected them. 
+		Now that we have selected the model, we can interpret the results and in particular the values of the coefficients. Given the definition of the GLM and the link formula used (a logit function), one can interpret the coefficients as follows. For example, the GLM model has an intercept of $\beta_0$ = 0.0773, and let's consider the person corresponding to the highest coefficient $\beta_{TianqiPeng}$ = 0.3370. The model says that if the  person thrwoing the coin is TianqiPeng, then the fitted probability of same-side throw at the first throw (\texttt{agg}=0) is expit($\beta_0+\beta_{TianqiPeng}$)= expit(0.0773+0.3370)= 0.602. After 100 throws (\texttt{agg}=100), the probability drops to ($\beta_0+\beta_{TianqiPeng}+100*$)= expit(0.0773+0.3370+100*(-0.0004))= 0.592.
+
 
 		We now move to analysing the diagnostics of the selected model. Figures (a) and (b) in \ref{fig:wls-diagnostic} reveal mostly healthy diagnostic plots. Indeed, the QQ plot shows a reasonably normal distribution of the residuals, with a small fat tail on the left for the smallest residuals. Plot (b) shows that no major trend of residuals is observed with respect to the fitted values. Only the residuals associated to the fitted values of $\approx 0.6$ seem to have a significantly larger variance (indeed the range is the same as for the rest of the data but with a number of samples that is much smaller). This seems to be a specificity of one of the throwers (see \ref{sec:unusual-observations} for more details.)
 		Plot (c) shows Cook's distance of each entry. Only a small fraction of entries (1.5\%) have a Cook's distance exceeding the threshold. Analysing the 15 entries with the highest Cook's distances reveals that they all belong to individuals with relatively few throws. More precisely, ranking people in descending order by their number of throws shows that they are actually associated with the 10 lowest-ranks. This is due to Cook's distance being a quickly growing function of leverage, which is higher for entries corresponding to individuals with fewer throws\footnote{As it represents the ``novelty'' of the entry in terms of its position in the covariates space.}. Upon inspection, two of the points were actually found to be the ones whose residuals are really large at the $\approx 0.6$ fitted value.
@@ -328,6 +326,7 @@
 			Between-coin differences are however not significant. Indeed, AIC increases by around 25 when compared to the \texttt{1+person+agg} model, reflecting overfitting. The associated LRT is around .05, meaning coin-effects might still help in explaining part of the deviance. A better evaluation of this could probably be obtained by considering a smaller scale, balanced-design study. Indeed, in the considered dataset, coin and time effects where aliased\footnote{Adding \texttt{coin} to the \texttt{1+person} model explained around 10 units of deviance more than when it was added in the \texttt{1+person+agg} model.}. This was a result of there being a strong time effect on same-side bias, and some coins being flipped many more times than others. 
 			Given these elements, one would definitely prefer the \texttt{1+person+agg} model for prediction purposes.  
 			The GLM model selection is therefore similar to that obtained through the WLS approach. 
+
 
 			We now move to analysing the diagnostics of the selected model. In general, it seems that the results are qualitatively the same as in the WLS case but that small imperfections are slightly more pronounced in the GLM one. Indeed, in (a) of \ref{fig:glm-diagnostic}, we see that the tails of the QQ plot get further away from the diagonal, and for example in (c) of \ref{fig:dev-resid-vs-covariates} the variations across coins are larger.
 			%Slight anomalies are observed in the QQ plot for the largest and smallest residuals, as well as for the residuals associated to the largest fitted same-side rate. 
