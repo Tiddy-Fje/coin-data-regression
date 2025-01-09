@@ -16,7 +16,6 @@
 		The goal of this report is to build on this by analysing the data associated to this paper with a regression approach. Among other things, we investigate similar questions to the original paper. We for example find strong evidence for between-person and learning effects, while no evidence in favour of between-coin effects (on prediction). In addition to that, we explore effects of muscle memory (through outcomes of recent flips) and investigate the differences between GLM and WLS regression models. We find that these give similar results across a broad spectrum of analyses. 
 		\begin{itemize}
 			\item add more interpretation of models ?? 
-			\item discussion for glm model comparison
 			\item ....
 		\end{itemize}
 	\clearpage
@@ -223,7 +222,7 @@
 		\begin{figure}[htb]
 			\vspace{-1em}
 			\centering
-			\includegraphics[width=0.65\textwidth]{parameter_differences_boxplot}
+			\includegraphics[width=0.5\textwidth]{parameter_differences_boxplot}
 			\caption{Relative differences between person coefficients given by WLS and GLM models (($\alpha_{p,WLS}$-$\tilde{\alpha}_{p,GLM}$)/$\alpha_{p,WLS}$).}
 			\label{fig:parameter_differences_boxplot}
 		\end{figure}
@@ -310,7 +309,7 @@
 		The LRTs (\ref{tab:WLS-LRT}) also lead to the same selected model. Indeed, these suggest that model \texttt{1+person} is preferred compared to the constant model, and the model \texttt{1+person+agg} is preferred to the \texttt{1+person} one. The last line in \ref{tab:WLS-LRT} shows that the model including the coins is rejected when tested against \texttt{1+person+agg}. The selected model explicitely writes as:  
 		\begin{equation}
 			\label{eq:wls_model}
-			p(\texttt{person},\texttt{coin},\texttt{agg}) = \alpha_0 + \alpha_{\texttt{person}}+\alpha_{\texttt{coin}} +\alpha_{\texttt{agg}}\cdot\texttt{agg} + \epsilon_{\texttt{person},\texttt{coin},\texttt{agg}}
+			p(\texttt{person},\texttt{coin},\texttt{agg}) = \alpha_0 + \alpha_{\texttt{person}}+\alpha_{\texttt{coin}} +\alpha_{\texttt{agg}}\cdot\texttt{agg} + \epsilon_{\texttt{person},\texttt{coin},\texttt{agg}}.
 		\end{equation}   
 
 		Interestingly, the model \texttt{1+person+agg+person:coin} tested against \texttt{1+person+agg} yields a p-value of 2.04e-2 meaning that person coin interaction effects might still help in explaining part of the variance, even though the AIC-based selection severely rejected them. 
@@ -337,7 +336,7 @@
 
 			[COMPARE THE AICS WITH WLS SINCE WE CAN !!]
 		\subsection{Unusual Observations}\label{sec:unusual-observations}
-			Looking at \ref{fig:unusual-persons} and \ref{fig:unusual-coins}, we immediately notice they look really different. Indeed, in the case of coins, the parameters align quite well on the QQ plot, showing that a gaussian could be a good match. In the box-plot, there is a single outlier (associated to 0.02 EUR) and it is not significant. In the person case however : the QQ plot displays really poor fit and  many outliers are present. The most significant are (in order) TianqiPeng, JanYang, and adamF. 
+			Looking at \ref{fig:unusual-params}, we immediately notice they look really different. Indeed, in the case of coins, the parameters align quite well on the QQ plot, showing that a gaussian could be a good match. In the box-plot, there is a single outlier (associated to 0.02 EUR) and it is not significant. In the person case however : the QQ plot displays really poor fit and  many outliers are present. The most significant are (in order) TianqiPeng, JanYang, and adamF. 
 
 			In general, the observed variation in the parameter uncertainties confirm our approach accounting for uncertainty was worth our time. 
 			%[COULD ADD EXAMPLE OF IMPACT in terms of flips]
@@ -346,7 +345,7 @@
 		\subsection{Zoom on Learning Effects}\label{sec:disc-learning-effects}
 			Analysing \ref{fig:learning-effects}, we see that the averaged same-side rate seems to start at a value around 51\%, and then decreases to reach values closer to 50\%. The observed uncertainty/spread can however no be neglected, given the limited number of people involved in the study. 
 			
-			This would be consistent with the fact that the physical model [CITATION NEEDED] predicts a same-side bias due to the ``wobble'' in people's throws. Indeed, we can imagine that with practice, participants progressively reduce the amount of ``wobble'', until they reach perfect throw, for which there is no bias. 
+			This would be consistent with the fact that, as explained in [1], the physical model predicts a same-side bias due to the ``wobble'' in people's throws. Indeed, we can imagine that with practice, participants progressively reduce the amount of ``wobble'', until they reach perfect throw, for which there is no bias. 
 
 			As for the type of dependence, the simple linear term at the exponential seems to provide a good fit.  
 		\subsection{Memory Effects}
@@ -357,15 +356,13 @@
 	\section{Conclusion}
 		In this report we built on the paper that won the 2024 IgNobel Prize in Probability by analysing the data associated to it with a regression approach. 
 		%Its main goal was to confirm a prediction made by a physical model of human coin tossing developed by Diaconis, Holmes, and Montgomery; i.e. that when people flip an ordinary coin, the probability of it landing on the same side it started is about 51\%. 
-		%It also revealed considerable between-people variation in the degree of this same-side bias, as well as its decrease as more coins were flipped. 
 		
 		Among other things, we investigated similar questions to the original paper. We for example found strong evidence for between-person and learning effects, while no evidence in favour of between-coin effects (on prediction). In addition to that, we explored effects of muscle memory (through outcomes of recent flips) and investigated the differences between GLM and WLS regression models. We found that these give similar results across a broad spectrum of analyses.
 	\section*{Acknowledgements}
 		\paragraph{Tara:}
-		I personally use Github Copilot for coding purposes, as it can gain me some time by auto-completing lines. I however never keep lines I don't understand or find not relevant. I also sometimes used Chat GPT to brainstorm ideas related to some problems I faced and did not have the right resources to tackle. In these cases I still kept a critical mindset and dug deeper in the directions that seemed promising.
+		I use Github Copilot for coding purposes, as it can gain me some time by auto-completing lines. I however never keep lines I don't understand or find not relevant. I also sometimes used Chat GPT to brainstorm ideas related to some problems I faced and did not have the right resources to tackle. In these cases I still kept a critical mindset and dug deeper in the directions that seemed promising.
 		\paragraph{Rayan:}
-		[CETTE PARTIE ETAIT CELLE DE AMAL POUR LE RAPPORT DE HPC, ADAPTE LA ;)]
-		ChatGPT was used to refine the English, generate code for the plots. Additionally, ChatGPT provided comments throughout the report and to the code to enhance readability.
+		I used ChatGPT to refine the English of some formulations for the report, as well as to help me generate code for the plots. I also used it more broadly to correct some python or package-specific syntaxes.
 	\section*{Reproducibility}
 		In the spirit of making our analysis reproducible, we created an \texttt{environment.yml} file containing the needed packages (with their versions) so that the appropriate virtual environment can be readily created. We also used \texttt{git} to do version control. This allows us to make the project repository public (after the submission deadline of course) for people to have easy and complete access to our work. 
 	\section*{References}
