@@ -213,15 +213,24 @@
 		%\newpage
 		
 		\subsection{WLS vs GLM parameters}
-		[WRITE DISCUSSION]???
+		[WRITE DISCUSSION]??? 
+		explain how params of glm have been transformed
+		formule : expit
+		interpretation glm avec la slide 139
+
+		In this section we would like to compare the coefficients outputted by the GLM and the WLS models. This requires some transformations of the variables as the two models are formulated in different terms. Indeed, in the WLS model, the response is linear with respect to the coefficients, while in the GLM model it is the log odds that is linear in the parameters. Let's for now ignore the role of time in the model (for example by setting time to 0). Let's call $\alpha_{p,GLM}$ the coefficient corresponding to the person $p$ in the GLM model and $\alpha_{0,GLM}$ the constant term (intercept). Then the impact on the reponse of selecting the person $p$ as the person throwing the coin will be equal to $\tilde{\alpha}_{p,GLM}$=expit($\alpha_{0,GLM}$+$\alpha_{p,GLM}$)-expit($\alpha_{0,GLM}$), where expit is the reciprocal function of logit. Thus we have derived this quantity in order to compare it directly to the coefficients $\alpha_{p,WLS}$ that consitutes a linear contribution. \ref{fig:parameter_differences_boxplot} reports the boxplot of the relative differences between the WLS parameters $\alpha_{p,WLS}$ and the GLM transformed parameters $\tilde{\alpha}_{p,GLM}$. 
 
 		\begin{figure}[htb]
 			\vspace{-1em}
 			\centering
-			\includegraphics[width=0.85\textwidth]{parameter_differences_boxplot}
-			\caption{Pearson residuals as a function of covariates for the GLM \texttt{1+person+agg} model.}
+			\includegraphics[width=0.65\textwidth]{parameter_differences_boxplot}
+			\caption{Relative differences between person coefficients given by WLS and GLM models (($\alpha_{p,WLS}$-$\tilde{\alpha}_{p,GLM}$)/$\alpha_{p,WLS}$).}
 			\label{fig:parameter_differences_boxplot}
 		\end{figure}
+
+		This comparison has been done with the persons parameters as in our models each person covariate can either take value 0 or 1, which makes the linearisation possible. However, the time covariate taking more values, its contribution becomes qualitatively different between the two models as it is linear in time in the WLS (meaning a constant slope of response wrt. time) model and non linear in the GLM model (meaning a varying slope of the response wrt. time). For this reason, the same procedure has not been performed. 
+
+
 
 		\subsection{Unusual Observations}
 		In this section we present the results whose goal is to provide answers to questions such as ``are there unusual coins or people ?''. 
