@@ -15,8 +15,10 @@
 
 		The goal of this report is to build on this by analysing the data associated to this paper with a regression approach. Among other things, we investigate similar questions to the original paper. We for example find strong evidence for between-person and learning effects, while no evidence in favour of between-coin effects (on prediction). In addition to that, we explore effects of muscle memory (through outcomes of recent flips) and investigate the differences between GLM and WLS regression models. We find that these give similar results across a broad spectrum of analyses. 
 		\begin{itemize}
-			\item add more interpretation of models ?? 
-			\item ....
+			\item replace figures well 
+			\item last reading to spot mistakes ??
+			\item download and rename final version of report 
+			\item ...
 		\end{itemize}
 	\clearpage
 	\pagenumbering{arabic}
@@ -333,13 +335,10 @@
 			%Slight anomalies are observed in the QQ plot for the largest and smallest residuals, as well as for the residuals associated to the largest fitted same-side rate. 
 			As for Cook's distances, they are associated to the same entries but change slightly in their values to to the mentioned slight changes in residuals.
 			This ``roughening'' of the diagnostics is surprising given the GLM approach avoids making the unperfect $p(1-p)\approx 1/4$ approximation. We did not find an explanation for it. 
-
-			[COMPARE THE AICS WITH WLS SINCE WE CAN !!]
 		\subsection{Unusual Observations}\label{sec:unusual-observations}
 			Looking at \ref{fig:unusual-params}, we immediately notice they look really different. Indeed, in the case of coins, the parameters align quite well on the QQ plot, showing that a gaussian could be a good match. In the box-plot, there is a single outlier (associated to 0.02 EUR) and it is not significant. In the person case however : the QQ plot displays really poor fit and  many outliers are present. The most significant are (in order) TianqiPeng, JanYang, and adamF. 
 
 			In general, the observed variation in the parameter uncertainties confirm our approach accounting for uncertainty was worth our time. 
-			%[COULD ADD EXAMPLE OF IMPACT in terms of flips]
 
 			In addition to being associated by far to the largest same-side bias, TianqiPeng was also associated to huge variations in the number of same-side throws within their sequences. Indeed, the outliers associated to big residuals and fitted values of around 0.6 are actually associated to two of their sequences. The number of same-side throws were in these cases and 42 and 78 (both times out of 100). 
 		\subsection{Zoom on Learning Effects}\label{sec:disc-learning-effects}
