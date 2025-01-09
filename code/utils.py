@@ -19,7 +19,7 @@ plt.rc('ytick', labelsize=MEDIUM_SIZE)    # fontsize of the tick labels
 plt.rc('legend', fontsize=MEDIUM_SIZE)    # legend fontsize
 plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
 #plt.rc('figure', labelsize=SMALL_SIZE)    # fontsize of the x and y labels
-plt.rc('figure', autolayout=True)
+#plt.rc('figure', autolayout=True)
 plt.rc('lines', linewidth=2)
 plt.rc('lines', markersize=5)
 
@@ -90,7 +90,7 @@ def deviance_analysis( data, formula, filename, summary=False, force=False ):
 
 def residual_vs_covariate( results, data, ax=None, is_wls=False ):
     if ax is None : 
-        fig = plt.figure(figsize=(15, 15), layout='tight')
+        fig = plt.figure(figsize=(15, 15))
 
         gs = GridSpec(11, 1, figure=fig, )
         ax1 = fig.add_subplot(gs[0:2,0])
