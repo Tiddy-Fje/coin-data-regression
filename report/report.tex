@@ -15,7 +15,7 @@
 		%Its main goal was to confirm a prediction made by a physical model of human coin tossing developed by Diaconis, Holmes, and Montgomery; i.e. that when people flip an ordinary coin, the probability of it landing on the same side it started is about 51\%. 
 		%It also revealed considerable between-people variation in the degree of this same-side bias, as well as its decrease as more coins were flipped. 
 
-		The goal of this report is to build on this by analysing the data associated to this paper with a regression approach. Among other things, we investigate similar questions to the original paper. We for example find strong evidence for between-person and learning effects, while no evidence in favour of between-coin effects (on prediction). In addition to that, we explore effects of muscle memory (through outcomes of recent flips) and investigate the differences between GLM and WLS regression models. We find that these give similar results across a broad spectrum of observations. 
+		The goal of this report is to build on this by analysing the data associated to this paper with a regression approach. Among other things, we investigate similar questions to the original paper. We for example find strong evidence for between-person and learning effects, while no evidence in favour of between-coin effects (on prediction). In addition to that, we explore effects of muscle memory (through outcomes of recent flips) and investigate the differences between GLM and WLS regression models. We find that these give similar results across a broad spectrum of analyses. 
 		\begin{itemize}
 			\item add more interpretation of models ?? 
 			\item discussion for glm model comparison
@@ -74,8 +74,6 @@
 			\subsubsection{WLS Approach}
 			In this section, we consider the normal approximation for the binomial variable $R$ (the same-side flips within a sequence) with denominator $m$ (number of flips within a sequence). 
 			Having that the success probability is fairly close to 0.5 we get $p(1-p)\approx1/4$. Hence we end up with the approximation $R/m \sim N(p,1/(4m))$. 
-			
-
 
 			\begin{table}[htb]
 				\centering
@@ -343,8 +341,8 @@
 		In this report we built on the paper that won the 2024 IgNobel Prize in Probability by analysing the data associated to it with a regression approach. 
 		%Its main goal was to confirm a prediction made by a physical model of human coin tossing developed by Diaconis, Holmes, and Montgomery; i.e. that when people flip an ordinary coin, the probability of it landing on the same side it started is about 51\%. 
 		%It also revealed considerable between-people variation in the degree of this same-side bias, as well as its decrease as more coins were flipped. 
-
-		The goal of this report is to build on this by analysing the data associated to this paper with a regression approach. Among other things, we investigate similar questions to the original paper. We for example find strong evidence for between-person and learning effects, while no evidence in favour of between-coin effects (on prediction). In addition to that, we explore effects of muscle memory (through outcomes of recent flips) and investigate the differences between GLM and WLS regression models. We find that these give similar results across a broad spectrum of observations.
+		
+		Among other things, we investigated similar questions to the original paper. We for example found strong evidence for between-person and learning effects, while no evidence in favour of between-coin effects (on prediction). In addition to that, we explored effects of muscle memory (through outcomes of recent flips) and investigated the differences between GLM and WLS regression models. We found that these give similar results across a broad spectrum of analyses.
 	\section*{Acknowledgements}
 		\paragraph{Tara:}
 		I personally use Github Copilot for coding purposes, as it can gain me some time by auto-completing lines. I however never keep lines I don't understand or find not relevant. I also sometimes used Chat GPT to brainstorm ideas related to some problems I faced and did not have the right resources to tackle. In these cases I still kept a critical mindset and dug deeper in the directions that seemed promising.
