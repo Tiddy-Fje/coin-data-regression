@@ -18,8 +18,6 @@
 		The goal of this report is to build on this by analysing the data associated to this paper with a regression approach. Among other things, we investigate similar questions to the original paper. We for example find strong evidence for between-person and learning effects, while no evidence in favour of between-coin effects (on prediction). In addition to that, we explore effects of muscle memory (through outcomes of recent flips) and investigate the differences between GLM and WLS regression models. We find that these give similar results across a broad spectrum of observations. 
 		\begin{itemize}
 			\item add more interpretation of models ?? 
-			\item work on abstract
-			\item derive conclusion from abstract 
 			\item discussion for glm model comparison
 			\item ....
 		\end{itemize}
@@ -287,10 +285,6 @@
 			To deal with the boundary effects between sequences of flips, we removed the two first entries of each sequence. 
 			
 			We then define the constant model \texttt{1}, the model including memory about the penultimate throw \texttt{1+hop1\_mem}, and the one including memory about the two previous throws \texttt{1+hop1\_mem+hop2\_mem}. The analysis of deviance associated to these models is found in \ref{tab:memory-model-comparison}. Given the uni-directionality of these results, no further analysis was made.  
-
-			Note that these results are only presented for the GLM version of the model due to the results for the WLS equivalent being really similar. 
-			[DO WE WRITE THIS ?? IF WE DO, WE SHOULD RUN THE CELLS WITH THE ASSOCIATED WLS MODELS TOO !!]
-
 	\section{Discussion}
 		\subsection{Model Comparison}
 		\subsubsection{WLS Approach}
