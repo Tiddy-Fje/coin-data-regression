@@ -11,14 +11,8 @@
 	\vspace{2cm}
 	\section*{Abstract}
 		The paper that won the 2024 IgNobel Prize in Probability took a Bayesian approach to studying the statistics behind the coin-flipping process [1]. 
-		%Its main goal was to confirm a prediction made by a physical model of human coin tossing developed by Diaconis, Holmes, and Montgomery; i.e. that when people flip an ordinary coin, the probability of it landing on the same side it started is about 51\%. 
 
 		The goal of this report is to build on this by analysing the data associated to this paper with a regression approach. Among other things, we investigate similar questions to the original paper. We for example find strong evidence for between-person and learning effects, while no evidence in favour of between-coin effects (on prediction). In addition to that, we explore effects of muscle memory (through outcomes of recent flips) and investigate the differences between GLM and WLS regression models. We find that these give similar results across a broad spectrum of analyses. 
-		\begin{itemize}
-			\item last reading to spot mistakes
-			\item download and rename final version of report 
-			\item ...
-		\end{itemize}
 	\clearpage
 	\pagenumbering{arabic}
 	\setcounter{page}{1}
@@ -301,16 +295,13 @@
 		\end{equation}   
 
 		Interestingly, the model \texttt{1+person+agg+person:coin} tested against \texttt{1+person+agg} yields a p-value of 2.04e-2 meaning that person coin interaction effects might still help in explaining part of the variance, even though the AIC-based selection severely rejected them. 
-		Now that we have selected the model, we can interpret the results and in particular the values of the coefficients. Given the definition of the GLM and the link formula used (a logit function), one can interpret the coefficients as follows. First, the GLM model has an intercept of $\beta_0$ = 0.0773. Now let's consider for example the person corresponding to the highest coefficient $\beta_{TianqiPeng}$ = 0.3370. The model says that if the  person throwing the coin is TianqiPeng, then the fitted probability of same-side throw at the first throw (\texttt{agg}=0) is expit($\beta_0+\beta_{TianqiPeng}$)= expit(0.0773+0.3370)= 0.602. After 10000 throws (\texttt{agg}=100), the probability drops to ($\beta_0+\beta_{TianqiPeng}+\beta_{agg}\cdot agg$)= expit(0.0773+0.3370+100*(-0.0004))= 0.592.
-
 
 		We now move to analysing the diagnostics of the selected model. Figures (a) and (b) in \ref{fig:wls-diagnostic} reveal mostly healthy diagnostic plots. Indeed, the QQ plot shows a reasonably normal distribution of the residuals, with a small fat tail on the left for the smallest residuals. Plot (b) shows that no major trend of residuals is observed with respect to the fitted values. Only the residuals associated to the fitted values of $\approx 0.6$ seem to have a significantly larger variance (indeed the range is the same as for the rest of the data but with a number of samples that is much smaller). This seems to be a specificity of one of the throwers (see \ref{sec:unusual-observations} for more details.)
 		Plot (c) shows Cook's distance of each entry. Only a small fraction of entries (1.5\%) have a Cook's distance exceeding the threshold. Analysing the 15 entries with the highest Cook's distances reveals that they all belong to individuals with relatively few throws. More precisely, ranking people in descending order by their number of throws shows that they are actually associated with the 10 lowest-ranks. This is due to Cook's distance being a quickly growing function of leverage, which is higher for entries corresponding to individuals with fewer throws\footnote{As it represents the ``novelty'' of the entry in terms of its position in the covariates space.}. Upon inspection, two of the points were actually found to be the ones whose residuals are really large at the $\approx 0.6$ fitted value.
 		%This likely means the large Cook's distances observed in these cases are not problematic. 
 		Interestingly, a prior analysis similar to the presented one allowed us to spot an unexpected entry in the \texttt{df-time-agg.csv} file. Indeed, the entry associated to \texttt{person=adamF,coin=0.05EUR,agg=84} was only associated to a single throw, and might have been due to a mistake in the data-processing of the researchers of the original paper. We therefore excluded it from our analyses upon discovery. 
 
-		\ref{fig:wls-diagnostic-time-coefs} displays Pearson residuals of the selected model as a function of the covariates.
-		Plot (a) shows no discernible trend in Pearson residuals relative to the number of preceding throws, supporting the assumption of linearity.
+		Turning now to \ref{fig:wls-diagnostic-time-coefs} we see that plot (a) shows no discernible trend in Pearson residuals relative to the number of preceding throws, supporting the assumption of linearity.
 		Similarly, if we exclude the already mentioned outliers associated to fitted values of $\approx 0.6$, plot (b) indicates that residuals are fairly uniform across individuals, with means close to zero and no standout anomalies. Plot (c) reveals slightly greater variability, with some means deviating further from zero and some coins displaying more variations. It is however hard to spot clear patterns. This can be partly attributed to the unbalance of the study design, as box-plots are less robust when there are fewer points.
 		\subsubsection{GLM Approach}
 			We first consider the model comparison tables, \ref{tab:glm-model-comparison} and \ref{tab:glm-lrt-comparison}. 
@@ -322,13 +313,13 @@
 
 			We now move to analysing the diagnostics of the selected model. In general, it seems that the results are qualitatively the same as in the WLS case but that small imperfections are slightly more pronounced in the GLM one. Indeed, in (a) of \ref{fig:glm-diagnostic}, we see that the tails of the QQ plot get further away from the diagonal, and for example in (c) of \ref{fig:dev-resid-vs-covariates} the variations across coins are larger.
 			%Slight anomalies are observed in the QQ plot for the largest and smallest residuals, as well as for the residuals associated to the largest fitted same-side rate. 
-			As for Cook's distances, they are associated to the same entries but change slightly in their values to to the mentioned slight changes in residuals.
-			This ``roughening'' of the diagnostics is surprising given the GLM approach avoids making the unperfect $p(1-p)\approx 1/4$ approximation. We did not find an explanation for it. 
+			As for Cook's distances, they are associated to the same entries but change slightly in their values due to the mentioned slight changes in residuals.
+			This ``roughening'' of the diagnostics is surprising given the GLM approach avoids making the unperfect $p(1-p)\approx 1/4$ approximation. We did not find a solid explanation for it. 
 		
 
 		\subsection{WLS vs GLM parameters}
-		After having performed the mentioned transformations of the parameters of the GLM model to match the analytical formulation of the parameters of the WLS model (i.e. a linear one for the success probability instead of the log odds), we obtained \ref{fig:parameter_differences_boxplot} that represents the relative difference between the coefficients. Notice that those relative difference are particularly small as the biggest absolute value does not exceed 0.5\%. Those results show that the normal approximation works well enough for the WLS model to be relevant in this case. The WLS linear model might be preferable for interpretability, as parameters directly represent a linear contribution to the response variable. However, the distribution shown by the boxplot shows some outlier persons for which the parameters of the two models differ more than the others showing that the normal approximation might not be well suited for all individuals. One might explore further in future work the specificities of those individuals.  
-
+			Analysing  \ref{fig:parameter_differences_boxplot}, we notice that the relative difference are small, as the biggest absolute value does not exceed 0.5\%. Those results show that the normal approximation works well enough for the WLS model to be relevant in this case. The WLS linear model might be preferable for interpretability, as parameters directly represent a linear contribution to the response variable. However, the distribution shown by the boxplot shows some outliers, showing that the normal approximation might not be well suited for all individuals. One might explore further in future work the specificities of those individuals.  
+			%Now that we have selected the model, we can interpret the results and in particular the values of the coefficients. Given the definition of the GLM and the link formula used (a logit function), one can interpret the coefficients as follows. First, the GLM model has an intercept of $\beta_0$ = 0.0773. Now let's consider for example the person corresponding to the highest coefficient $\beta_{TianqiPeng}$ = 0.3370. The model says that if the  person throwing the coin is TianqiPeng, then the fitted probability of same-side throw at the first throw (\texttt{agg}=0) is expit($\beta_0+\beta_{TianqiPeng}$)= expit(0.0773+0.3370)= 0.602. After 10000 throws (\texttt{agg}=100), the probability drops to ($\beta_0+\beta_{TianqiPeng}+\beta_{agg}\cdot agg$)= expit(0.0773+0.3370+100*(-0.0004))= 0.592.
 		\subsection{Unusual Observations}\label{sec:unusual-observations}
 			Looking at \ref{fig:unusual-params}, we immediately notice they look really different. Indeed, in the case of coins, the parameters align quite well on the QQ plot, showing that a gaussian could be a good match. In the box-plot, there is a single outlier (associated to 0.02 EUR) and it is not significant. In the person case however : the QQ plot displays really poor fit and  many outliers are present. The most significant are (in order) TianqiPeng, JanYang, and adamF. 
 
@@ -342,13 +333,12 @@
 
 			As for the type of dependence, the simple linear term at the exponential seems to provide a good fit.  
 		\subsection{Memory Effects}
-		Looking at \ref{tab:memory-model-comparison}, we see there is no support in favour of memory effects relative to the constant model. The deviance decreases by around .8 due to the introduction of the penultimate throw memory and only a further .2 when including memory of the antepenultimate throw. Another factor that shows this is the increase by $>$1 and $\approx 3$ respectively in AIC compared to the constant model.
+		Looking at \ref{tab:memory-model-comparison}, we see there is no support in favour of memory effects relative to the constant model. The deviance decreases by around 0.8 due to the introduction of the penultimate throw memory and only a further 0.2 when including memory of the antepenultimate throw. Another factor that shows this is the increase by $>$1 and $\approx 3$ respectively in AIC compared to the constant model.
 		The fact that memory about antepenultimate outcome seems to matter even less than memory about the penultimate outcome does make nonetheless intuitive sense. 
 
 		This (non-) finding can in itself be regarded as reassuring in a way. Specifically, it might contribute to rule out concerns of the authors of the original paper regarding the potential same-side bias induced by participants knowing about the goal of the study. Indeed it seems far-fetched that someone could bias their throws without relying on muscle memory. 
 	\section{Conclusion}
 		In this report we built on the paper that won the 2024 IgNobel Prize in Probability by analysing the data associated to it with a regression approach. 
-		%Its main goal was to confirm a prediction made by a physical model of human coin tossing developed by Diaconis, Holmes, and Montgomery; i.e. that when people flip an ordinary coin, the probability of it landing on the same side it started is about 51\%. 
 		
 		Among other things, we investigated similar questions to the original paper. We for example found strong evidence for between-person and learning effects, while no evidence in favour of between-coin effects (on prediction). In addition to that, we explored effects of muscle memory (through outcomes of recent flips) and investigated the differences between GLM and WLS regression models. We found that these give similar results across a broad spectrum of analyses.
 	\section*{Acknowledgements}
