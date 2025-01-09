@@ -11,18 +11,16 @@
 	\thispagestyle{empty}
 	\vspace{2cm}
 	\section*{Abstract}
-		context of the original paper (with their claims). The paper that won the 2024 IgNobel Prize in Probability took a Bayesian approach to studying the statistics behind the coin-flipping process. Its main goal was to confirm a prediction made by a physical model of human coin tossing developed by Diaconis, Holmes, and Montgomery (DHM; 2007); i.e. that when people flip an ordinary coin, the probability of it landing on the same side it started is about 51\%. 
-		It also revealed considerable between-people variation in the degree of this same-side bias, as well as its decrease as more coins were flipped. 
+		The paper that won the 2024 IgNobel Prize in Probability took a Bayesian approach to studying the statistics behind the coin-flipping process [1]. 
+		%Its main goal was to confirm a prediction made by a physical model of human coin tossing developed by Diaconis, Holmes, and Montgomery; i.e. that when people flip an ordinary coin, the probability of it landing on the same side it started is about 51\%. 
+		%It also revealed considerable between-people variation in the degree of this same-side bias, as well as its decrease as more coins were flipped. 
 
-		The goal of this report is two fold. On the one side, we aim to investigate similar questions with a regression approach : 
-		is there evidence for between-person, between-coin, or even person-coin pair differences ? To what extent does flipping experience affect the observed same-side bias ?
-		In addition, we also investigate the differences between GLM and WLS approaches; as well as muscle memory effects (through outcomes of recent flips). 
+		The goal of this report is to build on this by analysing the data associated to this paper with a regression approach. Among other things, we investigate similar questions to the original paper. We for example find strong evidence for between-person and learning effects, while no evidence in favour of between-coin effects (on prediction). In addition to that, we explore effects of muscle memory (through outcomes of recent flips) and investigate the differences between GLM and WLS regression models. We find that these give similar results across a broad spectrum of observations. 
 		\begin{itemize}
 			\item add more interpretation of models ?? 
 			\item work on abstract
 			\item derive conclusion from abstract 
 			\item discussion for glm model comparison
-			\item clean/delete irrelevant code-cells/files
 			\item ....
 		\end{itemize}
 	\clearpage
@@ -131,7 +129,6 @@
 			
 			The models we consider in this part are all nested in the model \texttt{1+person+agg+coin+person:coin}.
 			This model can be explicitely written as: 
-
 			\begin{equation}
 				\label{eq:wls_model}
 				p(\texttt{person},\texttt{coin},\texttt{agg}) = \alpha_0 + \alpha_{\texttt{person}}+\alpha_{\texttt{coin}} +\alpha_{\texttt{agg}}\cdot\texttt{agg} +\alpha_{\texttt{person},\texttt{coin}} + \epsilon_{\texttt{person},\texttt{coin},\texttt{agg}}
@@ -195,8 +192,14 @@
 				\end{subtable}
 			\end{table}
 
-			[ADD INTERPRETATION OF THE MODEL AVEC EXP DU COEFF ET TOUT LE TRALALA]
-			More specifically, we consider a Logit link as it leads to easily interpretable results, meaning we model $\mathbb{E}[y\mid x]=\exp\left(\sum_i \beta_i x_i\right)$ with binomial response distribution. We expect this to lead to more accurate results than the WLS approximation, especially for entries having $R/M\approx 1/2$ to a poor extent.
+			More specifically, we consider a Logit link as it leads to easily interpretable results in terms of 
+			\begin{equation}
+				\label{eq:glm_model}
+				\frac{P(Y=1\mid \texttt{person},\texttt{coin},\texttt{agg})}{P(Y=0\mid \texttt{person},\texttt{coin},\texttt{agg})} = 
+				\exp(\alpha_0 + \alpha_{\texttt{person}}+\alpha_{\texttt{coin}} +\alpha_{\texttt{agg}}\cdot\texttt{agg}).
+			\end{equation}
+			
+			We expect this to lead to more accurate results than the WLS approximation, especially for entries having $R/M\approx 1/2$ to a poor extent.
 
 			As for the considered models, we follow what is done for the WLS approach. The only difference being in the interpretation of the coefficients and the fact that we omit the model with coins nested within people. Indeed, even the \texttt{0+person:coin} model did not give any signs of convergence after 100 IRLS iterations. We tried fitting it with BFGS, but did not succeed either as the hessian resulted to be singular. The analysis of deviance and LRTs for the models that converged are found in \ref{tab:glm-model-comparison} and \ref{tab:glm-lrt-comparison}.
 			\begin{figure}[htb]
@@ -242,11 +245,13 @@
 		\end{figure}
 		The plots are found in \ref{fig:unusual-params}. Note we decided to include coins in the analysis because there could in principle still have been some that behaved differently from the rest (even if coins as a whole were found not to have much impact). 
 		Another important detail is that we did not require people (resp. coins) to have been associated to multiple coins (resp. people) for them to be considered in this analysis. Indeed, since no evidence was found for coins nested within people, even the same-side behaviour of a person with a single coin should tell us something about that person's peculiarity.
+
+		Note that these results are only presented for the GLM version of the model due to the results for the WLS equivalent being really similar. [WHY THE HECK WOULD THIS BE THE CASE ???]
 		\subsection{Zoom on Learning Effects}
 			We now give a closer look at the learning effects associated to the \texttt{agg} term in the model. We do this by representing the observed and predicted person-averaged same-side rate as a function of the number of throws preceding the observation.  Note that the confidence interval on the prediction was derived in Monte Carlo fashion as the variance between people was found to be larger than that resulting from the uncertainty on the estimated coefficients. 
 			The corresponding figure is \ref{fig:learning-effects}.
 			
-			Note that these results are only presented for the GLM version of the model due to the results for the WLS equivalent being really similar. 
+			Note that these results are only presented for the GLM version of the model due to the results for the WLS equivalent being really similar. Indeed, even if the interpretation of the time coefficient is really different in WLS and GLM approaches, due to the relatively slow effect of learning, both models give similar results (the exponential looks similar to a line).    
 		\subsection{Memory Effects}
 			In this section we shift our focus to memory effects. We do so motivated by the fact that we deem it probable a priori that successive throws are more similar to each other than randomly selected ones. Indeed, one could imagine that after two same-side throws, the next could end being a same-side one too with a probability higher than the base rate (e.g. because of muscle memory effects). 
 			\begin{table}[htb]
@@ -326,6 +331,11 @@
 
 		This (non-) finding can in itself be regarded as reassuring in a way. Specifically, it might contribute to rule out concerns of the authors of the original paper regarding the potential same-side bias induced by participants knowing about the goal of the study. Indeed it seems far-fetched that someone could bias their throws without relying on muscle memory. 
 	\section{Conclusion}
+		In this report we built on the paper that won the 2024 IgNobel Prize in Probability by analysing the data associated to it with a regression approach. 
+		%Its main goal was to confirm a prediction made by a physical model of human coin tossing developed by Diaconis, Holmes, and Montgomery; i.e. that when people flip an ordinary coin, the probability of it landing on the same side it started is about 51\%. 
+		%It also revealed considerable between-people variation in the degree of this same-side bias, as well as its decrease as more coins were flipped. 
+
+		The goal of this report is to build on this by analysing the data associated to this paper with a regression approach. Among other things, we investigate similar questions to the original paper. We for example find strong evidence for between-person and learning effects, while no evidence in favour of between-coin effects (on prediction). In addition to that, we explore effects of muscle memory (through outcomes of recent flips) and investigate the differences between GLM and WLS regression models. We find that these give similar results across a broad spectrum of observations.
 	\section*{Acknowledgements}
 		\paragraph{Tara:}
 		I personally use Github Copilot for coding purposes, as it can gain me some time by auto-completing lines. I however never keep lines I don't understand or find not relevant. I also sometimes used Chat GPT to brainstorm ideas related to some problems I faced and did not have the right resources to tackle. In these cases I still kept a critical mindset and dug deeper in the directions that seemed promising.
