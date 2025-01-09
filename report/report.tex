@@ -17,6 +17,13 @@
 		The goal of this report is two fold. On the one side, we aim to investigate similar questions with a regression approach : 
 		is there evidence for between-person, between-coin, or even person-coin pair differences ? To what extent does flipping experience affect the observed same-side bias ?
 		In addition, we also investigate the differences between GLM and WLS approaches; as well as muscle memory effects (through outcomes of recent flips). 
+		\begin{itemize}
+			\item add more interpretation of models ?? 
+			\item work on abstract
+			\item derive conclusion from abstract 
+			\item discussion for glm model comparison
+			\item ....
+		\end{itemize}
 	\clearpage
 	\pagenumbering{arabic}
 	\setcounter{page}{1}
@@ -114,10 +121,11 @@
 			\begin{figure}[h!]
 				\centering
 				\includegraphics[width=0.8\textwidth]{WLS_diagnostics.png}
-				\caption{Diagnostics for the selected WLS model.}
+				\caption{Main diagnostics for the WLS \texttt{1+person+agg} model.}
 				\label{fig:wls-diagnostic}
 			\end{figure}
-
+			
+			[FOR THE WLS, IT IS NO R STAR THAT IS USED IN (A), BUT RATHER, PEARSON RESIDUALS]
 			The models we consider in this part are all nested in the model \texttt{1+person+agg+coin+person:coin}. As explained in [3], if interaction terms are not present, one should consider ANOVA of type II when dealing with unbalanced datasets.
 
 			Results show that the AIC of the model \texttt{1+person+agg+coin+person:coin} is greater than the one of model \texttt{1+person+agg+coin} by 95 points. We thus keep the model without interactions and make use of an ANOVA type II to analyse the main effects. 
@@ -127,7 +135,7 @@
 				\vspace{-1em}
 				\centering
 				\includegraphics[width=0.85\textwidth]{wls_resid_vs_covariates.png}
-				\caption{Diagnostics for the selected WLS model.}
+				\caption{Pearson residuals as a function of covariates for the WLS \texttt{1+person+agg} model.}
 				\label{fig:wls-diagnostic-time-coefs}
 			\end{figure}
 
@@ -175,7 +183,7 @@
 			\begin{figure}[htb]
 				\centering
 				\includegraphics[width=0.8\textwidth]{glm_diagnostics.png}
-				\caption{Diagnostics for the selected GLM model. (a).}
+				\caption{Main diagnostics for the GLM \texttt{1+person+agg} model.}
 				\label{fig:glm-diagnostic}
 			\end{figure}
 
@@ -184,7 +192,7 @@
 				\vspace{-1em}
 				\centering
 				\includegraphics[width=0.85\textwidth]{glm_dev_resid_vs_covariates.png}
-				\caption{Dev-resid as a function of (a) person and (b) coin.}
+				\caption{Pearson residuals as a function of covariates for the GLM \texttt{1+person+agg} model.}
 				\label{fig:dev-resid-vs-covariates}
 			\end{figure}	
 		%\newpage
@@ -194,7 +202,7 @@
 			%\vspace{-4em}
 			\centering
 			\includegraphics[width=0.9\textwidth]{glm_unusual_params.png}
-			\caption{Distribution inspection for estimated parameters in the \texttt{1+person+coin} GLM model.}
+			\caption{Distribution inspection for estimated parameters of the \texttt{1+person+coin} GLM model.}
 			\label{fig:unusual-params}
 		\end{figure}
 
@@ -288,6 +296,11 @@
 		This (non-) finding can in itself be regarded as reassuring in a way. Specifically, it might contribute to rule out concerns of the authors of the original paper regarding the potential same-side bias induced by participants knowing about the goal of the study. Indeed it seems far-fetched that someone could bias their throws without relying on muscle memory. 
 	\section{Conclusion}
 	\section*{Acknowledgements}
+		\paragraph{Tara:}
+		I personally use Github Copilot for coding purposes, as it can gain me some time by auto-completing lines. I however never keep lines I don't understand or find not relevant. I also sometimes used Chat GPT to brainstorm ideas related to some problems I faced and did not have the right resources to tackle. In these cases I still kept a critical mindset and dug deeper in the directions that seemed promising.
+		\paragraph{Rayan:}
+		[CETTE PARTIE ETAIT CELLE DE AMAL POUR LE RAPPORT DE HPC, ADAPTE LA ;)]
+		ChatGPT was used to refine the English, generate code for the plots. Additionally, ChatGPT provided comments throughout the report and to the code to enhance readability.
 	\section*{References}
 		\noindent[1] F. Bartoš et al., `Fair coins tend to land on the same side they started: Evidence from 350,757 flips', Jun. 02, 2024, arXiv: arXiv:2310.04153. doi: 10.48550/arXiv.2310.04153.
 		\newline[2] Anthony Davison, `Regression Methods'. Accessed: Jan. 07, 2025. [Online]. Available: \url{https://moodle.epfl.ch/pluginfile.php/3309119/mod_resource/content/6/RMNotes.pdf}

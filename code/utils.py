@@ -19,7 +19,7 @@ plt.rc('ytick', labelsize=MEDIUM_SIZE)    # fontsize of the tick labels
 plt.rc('legend', fontsize=MEDIUM_SIZE)    # legend fontsize
 plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
 #plt.rc('figure', labelsize=SMALL_SIZE)    # fontsize of the x and y labels
-#plt.rc('figure', autolayout=True)
+plt.rc('figure', autolayout=True)
 plt.rc('lines', linewidth=2)
 plt.rc('lines', markersize=5)
 
