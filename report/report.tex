@@ -25,7 +25,7 @@
 	\section{Introduction}
 		Before diving into the analysis, we provide a brief overview of the datasets' main features and the models we consider. Our exploratory analysis is available as a Jupyter notebook, and provides more detail as well as the plots supporting our claims.
 
-		The dataset is composed of throws from 48 people using 44 coin types in total. Given the study did not impose strict guidelines for coins to be used, the design is heavily unbalanced. Eighteen coins have only been thrown by a single person, while some of them have been thrown by more than 20 people. Also, around two-thirds of the people have only flipped 5 or fewer different coins, while someone threw 11 different ones. As for the the person-coin pairs, most have 1000 throws or fewer, while some have around 10000. This severe unbalance must be kept in mind during the analysis, given it restricts the methods that can be used and poses challenges during model interpretation. 
+		The dataset is composed of throws from 48 people using 44 coin types in total. Given the study did not impose strict guidelines for coins to be used, the design is heavily unbalanced. 18 coins have only been thrown by a single person, while some of them have been thrown by more than 20 people. Also, around two-thirds of the people have only flipped five or fewer different coins, while someone threw 11 different ones. As for the the person-coin pairs, most have 1000 throws or fewer, while some have around 10000. This severe unbalance must be kept in mind during the analysis, given it restricts the methods that can be used and poses challenges during model interpretation. 
 
 		After plotting the same-side proportion across people, coin and person-coin combinations, we deemed it relevant to investigate models considering both person and coin as covariates, as well as individual person-coin pairs. Following the advice given on the project statement, we also branched our analysis in binomial-response GLM and WLS approaches, with the goal of comparing the results. 
 
@@ -53,7 +53,7 @@
 					\lambda_{LR}:=-2\ln\left[\frac{\sup_{\theta\in\Theta_B}\mathcal{L(\theta)}}{\sup_{\theta\in\Theta_A}\mathcal{L(\theta)}}\right]
 					\overset{H_0}{\sim} \chi^2_{p_A-p_B},
 				\end{gather}
-				where $\Theta_A\supset\Theta_B$ respectively are the parameters spaces (of dimension $p_a>p_b$) associated to models $A$ and $B$, and $H_0$ is the null hypothesis : the true optimal $\theta$ is in $\Theta_B$. Given this definition, LRTs are used to shed light on whether extra degrees of freedom improve the model significantly better than chance. This has applications in explanatory models, but might be of limited use in the context of model selection due to being prone to overfitting. This is particularly true when testing many models, as tests become correlated and give rise to spurious results (see slide 138 of [2]).
+				where $\Theta_A\supset\Theta_B$ respectively are the parameter spaces (of dimension $p_a>p_b$) associated to models $A$ and $B$, and $H_0$ is the null hypothesis : ``the true optimal $\theta$ is in $\Theta_B$". Given this definition, LRTs are used to shed light on whether extra degrees of freedom improve the model significantly better than chance. This has applications in explanatory models, but might be of limited use in the context of model selection due to being prone to overfitting. This is particularly true when testing many models, as tests become correlated and give rise to spurious results (see slide 138 of [2]).
 
 				Note that both differences of AIC and LRTs are tools that are often formulated in terms of difference of deviances associated to the models
 				\begin{gather}
@@ -64,7 +64,7 @@
 				To asses the quality of the models, the diagnostics we decided to use are 
 				\begin{itemize}
 					\item A QQ plot to check normality of normalised residuals. Pearson studentized residuals were used for WLS models while the $r_j^*=r_{D j}+r_{D j}^{-1} \log \left(r_{P j} / r_{D j}\right) \dot{\sim} N(0,1)$ residuals were used for GLM models (where $r_{P j},r_{D j}$ refer to normalised versions of Pearson and deviance residuals). Normality corresponds to a roughly straight line, while outliers, skewness and heavy tails are easily spotted as deviations from it.
-					\item A scatter plot of residuals as a function of fitted values, to assess linearity and homoscedasticity. Pearson studentized residuals were used for WLS models, while deviance residuals were used for GLM models. Linearity corresponds to residuals that stay centred around 0 across the fitted values, while homoscedasticity corresponds to residuals whose spread is constant across the fitted values.
+					\item A scatter plot of residuals as a function of fitted values, to assess linearity and homoscedasticity. Pearson studentized residuals were used for WLS models, while deviance residuals were used for GLM models. Linearity corresponds to residuals that stay centred around zero across the fitted values, while homoscedasticity corresponds to residuals whose spread is constant across the fitted values.
 					\item Cook's distance as a function of data index to reveal highly influential data points. Points over the $8/(n-2p)$ threshold are given a closer look (in order of importance). 
 					\item Scatter plots (resp. box-plots for categorical covariates) of Pearson residuals as a function of the covariates of interest. These are used to check for linearity. If there is fit is adequate, the residuals look uncorrelated with respect to the covariates. 
 				\end{itemize}
@@ -127,9 +127,8 @@
 				\label{eq:wls_model}
 				p(\texttt{person},\texttt{coin},\texttt{agg}) = \alpha_0 + \alpha_{\texttt{person}}+\alpha_{\texttt{coin}} +\alpha_{\texttt{agg}}\cdot\texttt{agg} +\alpha_{\texttt{person},\texttt{coin}} + \epsilon_{\texttt{person},\texttt{coin},\texttt{agg}},
 			\end{equation}
-			where parameter $\alpha_0$ is a constant. To each person (resp. coin) is is associated a parameter
-			$\alpha_{\texttt{person}}$ (resp. $\alpha_{\texttt{coin}}$). To each person-coin pair is also associated a parameter $\alpha_{\texttt{person},\texttt{coin}}$. The coefficient $\alpha_{\texttt{agg}}$ represents the impact of time (number of the sequence). $\epsilon_{\texttt{person},\texttt{coin},\texttt{agg}}$ is a normal error term. All other models are nested versions where some of the coefficients are imposed to be equal to 0.
-
+			where parameter $\alpha_0$ is a constant, to each person (resp. coin) is associated a parameter
+			$\alpha_{\texttt{person}}$ (resp. $\alpha_{\texttt{coin}}$), and to each person-coin pair is also associated a parameter $\alpha_{\texttt{person},\texttt{coin}}$. The coefficient $\alpha_{\texttt{agg}}$ represents the impact of time (number of the sequence). $\epsilon_{\texttt{person},\texttt{coin},\texttt{agg}}$ is a normal error term. All other models are nested versions where some of the coefficients are fixed to zero.
 			
 			As explained in [3], if interaction terms are not present, one should consider ANOVA of type II when dealing with unbalanced datasets.
 
@@ -187,10 +186,9 @@
 			More specifically, we consider a Logit link, leading to easily interpretable results in terms of 
 			\begin{equation}
 				\label{eq:glm_model}
-				\frac{P(Y=1\mid \texttt{person},\texttt{coin},\texttt{agg})}{P(Y=0\mid \texttt{person},\texttt{coin},\texttt{agg})} = 
+				\frac{P(Y=1)}{P(Y=0)} = 
 				\exp(\beta_0 + \beta_{\texttt{person}}+\beta_{\texttt{coin}} +\beta_{\texttt{agg}}\cdot\texttt{agg}).
 			\end{equation}
-			%We expect this to lead to more accurate results than the WLS approximation, especially for entries having $R/M\approx 1/2$ to a poor extent.
 			\begin{figure}[h!]
 				\centering
 				\includegraphics[width=0.8\textwidth]{glm_diagnostics.png}
@@ -210,15 +208,17 @@
 			\end{figure}	
 		%\newpage
 		\subsection{WLS vs GLM parameters}
-			In this section we would like to compare the coefficients outputted by the GLM and the WLS models. This requires a transformation of the coefficients as the two models are formulated in different terms. Indeed, in the WLS model, the response is linear with respect to the coefficients, while in the GLM model it is the log odds that is linear in the parameters. Let's for now ignore the role of time in the model (for example by setting time to 0). Let's call $\beta_{p}$ the coefficient corresponding to the person $p$ in the GLM model and $\beta_{0}$ the constant term (intercept). Then the impact on the reponse of selecting the person $p$ as the person throwing the coin will be equal to $\tilde{\beta}_{p}$=expit($\beta_{0}$+$\beta_{p}$)-expit($\beta_{0}$), where expit is the reciprocal function of logit. Thus we have derived this quantity in order to compare it directly to the coefficient $\alpha_{p}$ of the WLS model that consitutes a linear contribution to the predicted probability. \ref{fig:parameter_differences_boxplot} reports the boxplot of the relative differences between the WLS parameters $\alpha_{p}$ and the GLM transformed parameters $\tilde{\beta}_{p}$. 
+			In this section we would like to compare the coefficients outputted by the GLM and the WLS models. This requires a transformation of the coefficients as the two models are formulated in different terms. Indeed, in the WLS model, the response is linear with respect to the coefficients, while in the GLM model it is the log odds that is linear in the parameters. Let's for now ignore the role of \texttt{agg} in the model (for example by setting \texttt{agg} to 0). Let's call $\beta_{p}$ the coefficient corresponding to the person $p$ in the GLM model and $\beta_{0}$ the constant term (intercept). Then the impact on the reponse of selecting the person $p$ as the person throwing the coin will be equal to $\tilde{\beta}_{p}=\text{expit}(\beta_{0}$+$\beta_{p})-\text{expit}(\beta_{0}$), where expit is the reciprocal function of logit. 
+			
+			We derived this quantity in order to compare it directly to the coefficient $\alpha_{p}$ of the WLS model that constitutes a linear contribution to the predicted probability. \ref{fig:parameter_differences_boxplot} reports the box-plot of the relative differences between the WLS parameters $\alpha_{p}$ and the GLM transformed parameters $\tilde{\beta}_{p}$. 
 			\begin{figure}[htb]
 				\centering
 				\includegraphics[width=0.5\textwidth]{parameter_differences_boxplot}
-				\caption{Relative differences between person coefficients given by WLS and GLM models (($\alpha_{p}$-$\tilde{\beta}_{p}$)/$\alpha_{p}$).}
+				\caption{Relative differences between WLS and GLM person coefficients, i.e. ($\alpha_{p}$-$\tilde{\beta}_{p}$)/$\alpha_{p}$.}
 				\label{fig:parameter_differences_boxplot}
 			\end{figure}
 
-			This comparison has been done with the persons parameters as in our models each person covariate can either take value 0 or 1, which makes the linearisation possible. However, the time covariate taking more values, its contribution becomes qualitatively different between the two models as it is linear in time in the WLS (meaning a constant slope of response wrt. time) model and non linear in the GLM model (meaning a varying slope of the response wrt. time). For this reason, the same procedure of converting the GLM time parameter to a linear setting has not been performed. 
+			This comparison has been done with the person parameters as in our models each person covariate can either take value 0 or 1, which makes the linearisation possible. However, the \texttt{agg} covariate taking more values, its contribution becomes qualitatively different between the two models as it is linear in \texttt{agg} in the WLS (meaning a constant slope of response w.r.t. \texttt{agg}) model and non linear in the GLM model (meaning a varying slope of the response w.r.t. \texttt{agg}). For this reason, the same procedure of converting the GLM \texttt{agg} parameter to a linear setting has not been performed. 
 		\subsection{Unusual Observations}
 			In this section we present the results whose goal is to provide answers to questions such as ``are there unusual coins or people ?''. 
 
@@ -235,7 +235,7 @@
 				\label{fig:unusual-params}
 			\end{figure}
 
-			Note we decided to include coins in the analysis because there could in principle still have been some that behaved differently from the rest (even if coins as a whole were found not to have much impact). 
+			Note we decided to include coins in the analysis because it did not add complexity and provided us with another way to check for the significant of specific coins. 
 			Another important detail is that we did not require people (resp. coins) to have been associated to multiple coins (resp. people) for them to be considered in this analysis. Indeed, since no evidence was found for coins nested within people, even the same-side behaviour of a person with a single coin should tell us something about that person's peculiarity.
 
 			Note that these results are only presented for the GLM version of the model due to the results for the WLS equivalent being really similar. This similarity could at first glance seem surprising, given that in the GLM approach the parameters express themselves through the non linear link function. It can however be understood as follows :
@@ -265,7 +265,7 @@
 			%\end{wrapfigure}
 			\end{figure}
 			
-			Note that these results are only presented for the GLM version of the model due to the results for the WLS equivalent being really similar. Indeed, even if the interpretation of the time coefficient is really different in WLS and GLM approaches, due to the relatively slow effect of learning, both models give similar results (the exponential looks similar to a line).    
+			Note that these results are only presented for the GLM version of the model due to the results for the WLS equivalent being really similar. Indeed, even if the interpretation of the time coefficient is really different in WLS and GLM approaches, due to the relatively slow effect of learning, both models give similar results (the exponential looks linear).    
 		\subsection{Memory Effects}
 			In this section we shift our focus to memory effects. We do so motivated by the fact that we deem it probable a priori that successive throws are more similar to each other than randomly selected ones. Indeed, one could imagine that after two same-side throws, the next could end being a same-side one too with a probability higher than the base rate (e.g. because of muscle memory effects). 
 			\begin{table}[htb]
@@ -286,7 +286,7 @@
 			To test this we start by considering the data consisting of individual throw outcomes. To this, we add columns corresponding to same-side indicator variables, same-side indicator variables for the penultimate throw, and same-side indicator variables for the antepenultimate throw.
 			To deal with the boundary effects between sequences of flips, we removed the two first entries of each sequence. 
 			
-			We then define the constant model \texttt{1}, the model including memory about the penultimate throw \texttt{1+hop1\_mem}, and the one including memory about the two previous throws \texttt{1+hop1\_mem+hop2\_mem}. The analysis of deviance associated to these models is found in \ref{tab:memory-model-comparison}. Given the uni-directionality of these results, no further analysis was made.  
+			We then define the constant model, the model including memory about the penultimate throw \texttt{1+hop1\_mem}, and the one including memory about the two previous throws \texttt{1+hop1\_mem+hop2\_mem}. The analysis of deviance associated to these models is found in \ref{tab:memory-model-comparison}. Given the uni-directionality of these results, no further analysis was made.  
 	\section{Discussion}
 		\subsection{Model Comparison}
 		\subsubsection{WLS Approach}
@@ -294,7 +294,7 @@
 
 		The same way, including the coefficients \texttt{person:coin} yields an increase in the AIC value of the model. 
 		Overall, among the models reported in \ref{tab:WLS-AIC}, the selection based on AIC leads to the model \texttt{1+person+agg}. 
-		The LRTs (\ref{tab:WLS-LRT}) also lead to the same selected model. Indeed, these suggest that model \texttt{1+person} is preferred compared to the constant model, and the model \texttt{1+person+agg} is preferred to the \texttt{1+person} one. The last line in \ref{tab:WLS-LRT} shows that the model including the coins is rejected when tested against \texttt{1+person+agg}. The selected model for the probability of sucess $p$ for a certain person, coin a sequence  explicitely writes as:  
+		The LRTs (\ref{tab:WLS-LRT}) also lead to the same selected model. Indeed, these suggest that model \texttt{1+person} is preferred compared to the constant model, and the model \texttt{1+person+agg} is preferred to the \texttt{1+person} one. The last line in \ref{tab:WLS-LRT} shows that the model including the coins is rejected when tested against \texttt{1+person+agg}. The selected model for the same-side proportion $p$ explicitly writes as:  
 		\begin{equation}
 			\label{eq:wls_model}
 			p(\texttt{person},\texttt{coin},\texttt{agg}) = \alpha_0 + \alpha_{\texttt{person}}+\alpha_{\texttt{coin}} +\alpha_{\texttt{agg}}\cdot\texttt{agg} + \epsilon_{\texttt{person},\texttt{coin},\texttt{agg}}.
